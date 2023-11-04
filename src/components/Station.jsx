@@ -5,33 +5,36 @@ import exampleRecs2 from '../rec_example.json';
 
 
 function Station({accessToken, setStations, handleStationChange, station, handleStationListChanges}) {
-
+    // console.log("Loading", station.title, station.trackList.length)
     // const [trackList, setTrackList] = useState([])
     const [timeStamp, setTimeStamp] = useState() // check against timestamps to measure time passed
     const [currentTrack, setCurrentTrack] = useState(null) // set a currentSong for the station that can be used to compare against timestamp
 
 
-    function getTrackList(title, seeds) {
+    function getTrackList() {
         // fetch
-        // fetch(`https://api.spotify.com/v1/recommendations?seed_genres=${station.seeds.genres}&seed_artists=${station.seeds.artists}&seed_tracks=${station.seeds.tracks}
-        // `, {
-        //     headers: {
-        //         'Authorization': `Bearer ${accessToken}`
-        //     }
-        // }).then(res => res.json())
-        // .then((data) => {
-        //     console.log("RECOMMENDATIONS from Station", data)
-        //     setter(data)
-        // })
+        fetch(`https://api.spotify.com/v1/recommendations?seed_genres=${station.seeds.genres}&seed_artists=${station.seeds.artists}&seed_tracks=${station.seeds.tracks}
+        `, {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
+            }
+        }).then(res => res.json())
+        .then((data) => {
+            // console.log("RECOMMENDATIONS from Station", data, station.title)
+            handleStationListChanges(station.title, data.tracks)
+        })
         // MOCK
-        console.log("GETTING TRACKS FOR: ", title)
-        if(title === 'vgm') {
-            // setTrackList(exampleRecs.tracks)
-            handleStationListChanges(station.title, exampleRecs.tracks)
-        } else {
-            // setTrackList(exampleRecs2.tracks)
-            handleStationListChanges(station.title, exampleRecs2.tracks)
-        }
+
+
+        // console.log("GETTING TRACKS FOR: ", title)
+        // if(station.title === 'vgm') {
+        //     // setTrackList(exampleRecs.tracks)
+        //     handleStationListChanges(station.title, exampleRecs.tracks)
+        // } else {
+        //     // setTrackList(exampleRecs2.tracks)
+        //     handleStationListChanges(station.title, exampleRecs2.tracks)
+        // }
+        
         if(currentTrack === null) {
             setCurrentTrack(exampleRecs.tracks[0])
         } else {
@@ -40,13 +43,14 @@ function Station({accessToken, setStations, handleStationChange, station, handle
     }
 
     function checkCurrentTrackTime() {
-        console.log("CURRENT TRACK", currentTrack)
+        // console.log("CURRENT TRACK", currentTrack)
     }
 
     useEffect(() => {
 
         if(accessToken && station) {
             if(station.current === true) {
+                console.log("GETTING TRACKS")
                 getTrackList(station.title, station.seeds)
             }
         }

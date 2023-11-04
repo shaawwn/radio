@@ -16,10 +16,10 @@ import exampleRecs2 from './rec_example.json';
 import {getUser, getRecommendations} from './utils/spotifyGetters';
 
 function Dashboard({code}) {
-
+    // console.log("Loading dashboard")
     const accessToken = useAuth(code)
     const [user, setUser] = useState()
-
+    // console.log("ACCESS TOKEN", accessToken)
     // default stations
     const [stationList, setStationList] = useState([
         {title: 'vgm', trackList: [], seeds: {'genres': [], artists: [
@@ -41,6 +41,7 @@ function Dashboard({code}) {
 
     function handleStationChange(stationTitle) {
         // when a station is clicked, set it to the active station and handle all the playback changes, etc
+
         if(stationTitle === currentStation.title) {
             return false
         }
@@ -62,7 +63,7 @@ function Dashboard({code}) {
 
             return newStationObj
         })
-        console.log("NEW STATION: ", newStation)
+        // console.log("NEW STATION: ", newStation)
         setCurrentStation(newStation)
     }
 
@@ -76,12 +77,36 @@ function Dashboard({code}) {
         })
     }
 
-    function printTrackListLength() {
+    function displayStations() {
+        return(
+            <div className="station-container">
+            {stationList.length > 0 ? 
+            <>
+                {stationList.map((station) => {
+                    return <Station 
+                        key={station.title}
+                        accessToken={accessToken}
+                        handleStationChange={handleStationChange}
+                        station={station}
+                        handleStationListChanges={handleStationListChanges}
+                    />
+                })}
+                </>
+            :<p>No stations</p>
+            }
+            <div className="current-station">
+                {currentStation ?  <CurrentStation station={currentStation}/> : <p>No station set.</p>}
 
-        stationList.forEach((station) => {
-            console.log("TRACK LIST LENGTH: ", station.trackList.length)
-        })
+            </div>
+        </div>
+        )
     }
+    // function printTrackListLength() {
+
+    //     stationList.forEach((station) => {
+    //         console.log("TRACK LIST LENGTH: ", station.trackList.length)
+    //     })
+    // }
     useEffect(() => {
         if(accessToken) {
             getUser(accessToken, setUser)
@@ -89,15 +114,19 @@ function Dashboard({code}) {
         }
     }, [accessToken])
 
-    printTrackListLength()
+
     return(
         <div className="dashboard">
-            <p>Welcome {user ? ', ' + user.display_name : ''}</p>
+            <div className="dashboard-header">
+                <p>Welcome {user ? ', ' + user.display_name : ''}</p>
+            </div>
+
 
             {/* Some navbar with user information */}
 
             {/* Station Container, for holding station component, as well as viewing currentStation */}
-            <div className="station-container">
+            {accessToken ? displayStations() : <p>Loading stations...</p>}
+            {/* <div className="station-container">
                 {stationList.length > 0 ? 
                 <>
                     {stationList.map((station) => {
@@ -116,7 +145,7 @@ function Dashboard({code}) {
                     {currentStation ?  <CurrentStation station={currentStation}/> : <p>No station set.</p>}
 
                 </div>
-            </div>
+            </div> */}
 
             {/* Player for playing station content */}
             {accessToken ? <Webplayer 
@@ -130,12 +159,12 @@ function Dashboard({code}) {
 function CurrentStation({station}) { 
 
     useEffect(() => {
-        console.log("STATION", station)
+        // console.log("STATION", station)
     }, [station])
 
     return(
         <>
-        <p style={{'fontSize': '3rem'}}>{station.title}</p>
+        <p style={{'fontSize': '3rem'}}>Listening to {station.title}</p>
         </>
     )
 }

@@ -5,7 +5,9 @@ function useAuth(code) {
     const [refreshToken, setRefreshToken] = useState()
     const [expiresIn, setExpiresIn] = useState()
 
+    
     const codeRef = useRef()
+
     useEffect(() => {
 
         if(codeRef.current) {
@@ -13,6 +15,8 @@ function useAuth(code) {
         } else {
             codeRef.current = code
         }
+
+        // console.log("BEFORE FETCH", code)
         fetch('http://localhost:3000/radio/login', {
             method: "POST",
             headers: {
@@ -23,6 +27,7 @@ function useAuth(code) {
             })
         }).then((response) => response.json())
         .then((data) => {
+            // console.log("DATA", data)
             setAccessToken(data.accessToken)
             setRefreshToken(data.refreshToken)
             setExpiresIn(data.expiresIn)
@@ -31,14 +36,14 @@ function useAuth(code) {
         })
         .catch((err) => {
             window.location = '/'
+            console.log("ERR", err)
         })
-
     }, [code])
 
     useEffect(() => {
         if(!refreshToken || !expiresIn) return
         const interval = setInterval(() => {
-            fetch('http://localhost:3000/radio/refrsh', {
+            fetch('http://localhost:3000/radio/refresh', {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json'

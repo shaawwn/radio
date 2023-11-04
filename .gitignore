@@ -11,6 +11,9 @@ node_modules
 dist
 dist-ssr
 *.local
+tests
+__mocks__
+mocks
 
 # Editor directories and files
 .vscode/*
@@ -22,6 +25,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
 
 # misc
 rec_example.json
