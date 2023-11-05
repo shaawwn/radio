@@ -4,7 +4,7 @@ import exampleRecs from '../rec_example.json';
 import exampleRecs2 from '../rec_example2.json';
 
 
-function Station({accessToken, setStations, handleStationChange, station, handleStationListChanges, updateTrackList, updateCurrentPlaying, setCurrentStation}) {
+function Station({accessToken, setStations, handleStationChange, station, handleStationListChanges, updateTrackList, updateCurrentPlaying, setCurrentStation, handleStationChanges}) {
     // console.log("Loading", station.title, station.trackList)
     // const [trackList, setTrackList] = useState([])
     const [currentTrack, setCurrentTrack] = useState(null) // shoudl be {track: <SPOTIFYOBJ>, progress_ms: <genProgress()>}
@@ -47,7 +47,8 @@ function Station({accessToken, setStations, handleStationChange, station, handle
                 progress_ms: Math.floor(Math.random() * exampleRecs.tracks[0].duration_ms)
             }
             setCurrentTrack(_currentTrack)
-            handleStationListChanges(station.title, exampleRecs.tracks, _currentTrack)
+            // handleStationListChanges(station.title, exampleRecs.tracks, _currentTrack)
+            handleStationChanges(station.title, exampleRecs.tracks, _currentTrack)
             let ts = new Date().getTime()
             setTimestamp(ts) // this function runs the first time a station is switched to, so set a timestamp for when the currenTrack starts
             // handleStationListChanges(station.title, data.tracks)
@@ -64,7 +65,8 @@ function Station({accessToken, setStations, handleStationChange, station, handle
                 progress_ms: Math.floor(Math.random() * exampleRecs2.tracks[0].duration_ms)
             }
             setCurrentTrack(_currentTrack)
-            handleStationListChanges(station.title, exampleRecs2.tracks, _currentTrack)
+            // handleStationListChanges(station.title, exampleRecs2.tracks, _currentTrack)
+            handleStationChanges(station.title, exampleRecs2.tracks, _currentTrack)
             let ts = new Date().getTime()
             setTimestamp(ts) // this function runs the first time a station is switched to, so set a timestamp for when the currenTrack starts
             // handleStationListChanges(station.title, data.tracks)
@@ -104,18 +106,16 @@ function Station({accessToken, setStations, handleStationChange, station, handle
         }
 
         const timeStamp = new Date().getTime() // this will be used to check current track progress, and then set to the new timestamp
-
         if(currentTrack !== null && station.current === true) {
             let currentProg = currentTrack.progress_ms
             let timeElapsed = timeStamp - timestamp // time between old timestamp and current timestamp
             let timeLeft = currentTrack.track.duration_ms - (currentTrack.progress_ms + (timeElapsed))
-            console.log(currentTrack.track.name, timeElapsed, timeLeft)
-
+            // console.log(currentTrack.track.name, timeElapsed, timeLeft)
             if(timeLeft < 0) {
     
                 const track = station.trackList.find((track) => track.id === currentTrack.track.id)
                 const indexOf = station.trackList.indexOf(track)
-                console.log("Moving to next song", station.trackList[indexOf + 1].name)
+                console.log("Moving to next song", station.trackList[indexOf + 1].name, station.trackList[indexOf + 1].duration_ms)
 
                 // update the tracklist and set current song to the next song
                 let _currentTrack = {
@@ -125,12 +125,13 @@ function Station({accessToken, setStations, handleStationChange, station, handle
 
                 let updatedTrackList = [...station.trackList]
                 updatedTrackList = station.trackList.slice(indexOf + 1, station.trackList.length)
-                handleStationListChanges(station.title, updatedTrackList, _currentTrack)
+                // handleStationListChanges(station.title, updatedTrackList, _currentTrack)
+                handleStationChanges(station.title, updatedTrackList, _currentTrack)
                 setCurrentTrack(_currentTrack)
+                const ts = new Date().getTime()
+                setTimestamp(ts) // not setting this could be a way to just go through the list
             }
-        } else {
-            // console.log("No curren track", station.title, station.trackList)
-        }
+        } 
 
     }, [station.current])
 

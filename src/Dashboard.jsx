@@ -64,6 +64,19 @@ function Dashboard({code}) {
 
     }
 
+    function handleStationChanges(title, trackList, playing) {
+        // when station changes song, update the track list and playing attribntues
+        let stationToUpdate = stationList.find((station) => station.title === title)
+        let listCopy = [...stationList]
+        let stationCopy = {...stationToUpdate}
+        stationCopy['trackList'] = trackList
+        stationCopy['playing'] = playing
+
+        const index = stationList.indexOf(stationToUpdate)
+        listCopy[index] = stationCopy
+        setCurrentStation(stationCopy)
+        setStationList(listCopy)
+    }
 
     function handleStationListChanges(title, trackList, playing) {
         // console.log(title, stationList[0], playing)
@@ -79,21 +92,6 @@ function Dashboard({code}) {
         setCurrentStation(stationCopy)
         setStationList(listCopy)
     }
-    // function _handleStationListChanges(title, trackList) {
-    //     // console.log("Creating tracklist", trackList)
-    //     // update the stationList with changes to individual stations, mostly updating trackList or seeds
-    //     let stationToUpdate = stationList.find((station) => station.title === title)
-    //     let stationCopy = {...stationToUpdate}
-    //     let stationListCopy = [...stationList]
-    //     // console.log("STATION LIST COPY BEFORE", stationList)
-    //     let index = stationList.indexOf(stationToUpdate)
-    //     stationCopy['trackList'] = trackList
-    //     stationListCopy[index] = stationCopy
-    //     setStationList((prevStationList) => {
-    //         return prevStationList.map((station) => station.title === title ? stationCopy : station)
-    //     })
-    //     // setStationList(stationListCopy)
-    // }
 
     function updateCurrentPlaying(title, currentPlaying) {
         let stationListCopy = [...stationList]
@@ -107,6 +105,7 @@ function Dashboard({code}) {
         //     return prevStationList.map((station) => station.title === title ? stationToUpdate: station)
         // })
     }
+
     function updateTrackList(index, stationTitle) {
         // return a new trackList with the currentTrack at index 0, so if a song at index 3 is playing, the new TrackList woudl be length 17, this is for the purpose of passing it to webplayer, so that webplayer only has to play the index[0] song
             // This doesn't quite work, its not only setting the wrong station, but I think the setStation update re-renders everything
@@ -137,9 +136,10 @@ function Dashboard({code}) {
                         accessToken={accessToken}
                         handleStationChange={handleStationChange}
                         station={station}
-                        handleStationListChanges={handleStationListChanges}
-                        updateTrackList={updateTrackList}
-                        updateCurrentPlaying={updateCurrentPlaying}
+                        // handleStationListChanges={handleStationListChanges}
+                        handleStationChanges={handleStationChanges}
+                        // updateTrackList={updateTrackList}
+                        // updateCurrentPlaying={updateCurrentPlaying}
                         setCurrentStation={setCurrentStation}
                     />
                 })}
