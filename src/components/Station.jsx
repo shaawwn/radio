@@ -4,7 +4,7 @@ import exampleRecs from '../rec_example.json';
 import exampleRecs2 from '../rec_example2.json';
 
 
-function Station({accessToken, setStations, handleStationChange, station, handleStationListChanges, updateTrackList, updateCurrentPlaying, setCurrentStation, handleStationChanges}) {
+function Station({accessToken, setStations, handleStationChange, station, setCurrentStation, handleStationChanges}) {
     // console.log("Loading", station.title, station.trackList)
     // const [trackList, setTrackList] = useState([])
     const [currentTrack, setCurrentTrack] = useState(null) // shoudl be {track: <SPOTIFYOBJ>, progress_ms: <genProgress()>}

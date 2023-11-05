@@ -36,8 +36,6 @@ function Dashboard({code}) {
     ])
 
     const [currentStation, setCurrentStation] = useState()
-    const [currentTrack, setCurrentTrack] = useState()
-    const timestamp = useRef(new Date()) // init a time onload
     
     function handleStationChange(title) {
 
@@ -76,53 +74,6 @@ function Dashboard({code}) {
         listCopy[index] = stationCopy
         setCurrentStation(stationCopy)
         setStationList(listCopy)
-    }
-
-    function handleStationListChanges(title, trackList, playing) {
-        // console.log(title, stationList[0], playing)
-        let stationToUpdate = stationList.find((station) => station.title === title)
-        let listCopy = [...stationList]
-        let stationCopy = {...stationToUpdate}
-        stationCopy['trackList'] = trackList
-        stationCopy['playing'] = playing
-
-        const index = stationList.indexOf(stationToUpdate)
-        listCopy[index] = stationCopy
-        // console.log(stationCopy.trackList, index, title, listCopy)
-        setCurrentStation(stationCopy)
-        setStationList(listCopy)
-    }
-
-    function updateCurrentPlaying(title, currentPlaying) {
-        let stationListCopy = [...stationList]
-        let stationToUpdate = stationList.find((station) => station.title === title)
-        let stationCopy = {...stationToUpdate}
-        let index = stationList.indexOf(stationToUpdate)
-        stationCopy[currentPlaying] = currentPlaying
-        stationListCopy[index] = stationCopy
-        setStationList(stationListCopy)
-        // setStationList((prevStationList) => {
-        //     return prevStationList.map((station) => station.title === title ? stationToUpdate: station)
-        // })
-    }
-
-    function updateTrackList(index, stationTitle) {
-        // return a new trackList with the currentTrack at index 0, so if a song at index 3 is playing, the new TrackList woudl be length 17, this is for the purpose of passing it to webplayer, so that webplayer only has to play the index[0] song
-            // This doesn't quite work, its not only setting the wrong station, but I think the setStation update re-renders everything
-            const updatedStationList = [...stationList]
-
-            const stationToUpdate = stationList.find((station) => station.title = stationTitle)
-            const stationCopy = {...stationToUpdate}
-            let updatedTrackList = stationCopy.trackList.slice(index + 1, stationCopy.trackList.length)
-
-            const stationIndex = stationList.indexOf(stationToUpdate)
-            console.log("STATION INDEX", stationIndex, stationTitle, stationList)
-            stationCopy['trackList'] = updatedTrackList
-
-            updatedStationList[stationIndex] = stationCopy
-
-            console.log(stationCopy.trackList.length, stationToUpdate.trackList.length)
-            setStationList(updatedStationList)
     }
     
     function displayStations() {
