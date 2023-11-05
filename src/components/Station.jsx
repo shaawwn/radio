@@ -4,7 +4,7 @@ import exampleRecs from '../rec_example.json';
 import exampleRecs2 from '../rec_example2.json';
 
 
-function Station({accessToken, setStations, handleStationChange, station, handleStationListChanges, updateTrackList, updateCurrentPlaying}) {
+function Station({accessToken, setStations, handleStationChange, station, handleStationListChanges, updateTrackList, updateCurrentPlaying, setCurrentStation}) {
     // console.log("Loading", station.title, station.trackList)
     // const [trackList, setTrackList] = useState([])
     const [currentTrack, setCurrentTrack] = useState(null) // shoudl be {track: <SPOTIFYOBJ>, progress_ms: <genProgress()>}
@@ -41,7 +41,7 @@ function Station({accessToken, setStations, handleStationChange, station, handle
 
         if(station.title === 'vgm') {
             // setTrackList(exampleRecs.tracks)
-            handleStationListChanges(station.title, exampleRecs.tracks)
+            // handleStationListChanges(station.title, exampleRecs.tracks)
             const _currentTrack = {
                 track: exampleRecs.tracks[0],
                 progress_ms: Math.floor(Math.random() * exampleRecs.tracks[0].duration_ms)
@@ -109,30 +109,27 @@ function Station({accessToken, setStations, handleStationChange, station, handle
             let currentProg = currentTrack.progress_ms
             let timeElapsed = timeStamp - timestamp // time between old timestamp and current timestamp
             let timeLeft = currentTrack.track.duration_ms - (currentTrack.progress_ms + (timeElapsed))
-            console.log(currentTrack.track.name, currentProg, timeElapsed, timeLeft)
+            console.log(currentTrack.track.name, timeElapsed, timeLeft)
 
             if(timeLeft < 0) {
-                // skip to next song in trackList with get indexOf
+    
                 const track = station.trackList.find((track) => track.id === currentTrack.track.id)
-                const indexOf = station.trackList.indexOf(track) // check against length of tracklist
-                // console.log("Skipping to next track", station.trackList[indexOf + 1].name)
+                const indexOf = station.trackList.indexOf(track)
+                console.log("Moving to next song", station.trackList[indexOf + 1].name)
+
+                // update the tracklist and set current song to the next song
                 let _currentTrack = {
                     track: station.trackList[indexOf + 1],
-                    progress_ms: Math.abs(timeLeft)
+                    progress_ms: Math.floor(Math.random() * station.trackList[indexOf + 1].duration_ms)
                 }
+
+                let updatedTrackList = [...station.trackList]
+                updatedTrackList = station.trackList.slice(indexOf + 1, station.trackList.length)
+                handleStationListChanges(station.title, updatedTrackList, _currentTrack)
                 setCurrentTrack(_currentTrack)
-
-                // set new Timestamp
-                setTimestamp(timeStamp)
-                updateTrackList(indexOf, station.title)
-                // updateCurrentPlaying(station.title, _currentTrack)
-                // because I'm setting new index, I think I may need to reset trackList or at least how its passed to webplayer so it plays the right track
-
-            } else {
-                console.log("Stay", timeLeft)
             }
         } else {
-            console.log("No curren track", station.title, station.trackList)
+            // console.log("No curren track", station.title, station.trackList)
         }
 
     }, [station.current])
