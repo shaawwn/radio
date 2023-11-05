@@ -19,64 +19,139 @@ function Dashboard({code}) {
     // console.log("Loading dashboard")
     const accessToken = useAuth(code)
     const [user, setUser] = useState()
-    // console.log("ACCESS TOKEN", accessToken)
+
     // default stations
     const [stationList, setStationList] = useState([
         {title: 'vgm', trackList: [], seeds: {'genres': [], artists: [
             '3V79CTgRnsDdJSTqKitROv',
         ], tracks: []
-    }, current: true}, 
+    }, current: true, playing: {track: {name: 'radioStatic'}}}, 
         {title: 'rock', trackList: [], seeds: {'genres': [], artists: [
             '6dOnTTVTbQlFWF6yfD4Vw5',
             '7cGkvEcOOYVtNdfkf3s1tK',
             '63JXuvboeORZFlNVoivVLT',
             '0oSGxfWSnnOXhD2fKuz2Gy'], tracks: []
-    }, current: false}
+    }, current: false, playing: {track: {name: "radioStatic"}}}
     ])
 
-
     const [currentStation, setCurrentStation] = useState()
-    const time = useRef(0)
-
-
-    function handleStationChange(stationTitle) {
-        // when a station is clicked, set it to the active station and handle all the playback changes, etc
-
-        if(stationTitle === currentStation.title) {
-            return false
+    const [currentTrack, setCurrentTrack] = useState()
+    const timestamp = useRef(new Date()) // init a time onload
+    
+    function handleStationChange(title) {
+        if(title === currentStation.title) {
+            return false // do nothing
         }
-        setCurrentStation(stationList.find((station) => station.title === stationTitle))
-        // set Current station to false
 
-        // set new station to current
-        let currentCopy = {...currentStation}
-        currentCopy.current = false
+        let currentStationCopy = {...currentStation}
+        currentStationCopy.current = false
 
-        let newStation = stationList.find((station) => station.title === stationTitle)
-        newStation.current = true
+        let newCurrent = stationList.find((station) => station.title === title)
+        newCurrent.current = true 
 
-        setStationList((prevStationList) => {
-            let newStationObj = [...prevStationList]
+        let stationListCopy = [...stationList]
 
-            newStationObj.map((station) => station.title === currentCopy.title ? currentCopy : station)
-            newStationObj.map((station) => station.title === newStation.title ? newStation: station)
+        const indexCurrent = stationList.indexOf(currentStation)
+        const indexNew = stationList.indexOf(newCurrent)
 
-            return newStationObj
-        })
-        // console.log("NEW STATION: ", newStation)
-        setCurrentStation(newStation)
+        stationListCopy[indexCurrent] = currentStationCopy
+        stationListCopy[indexNew] = newCurrent
+
+        setCurrentStation(newCurrent)
+        setStationList(stationListCopy)
+
     }
+    // function _handleStationChange(stationTitle) {
+    //     // when a station is clicked, set it to the active station and handle all the playback changes, etc
+    //     if(stationTitle === currentStation.title) {
+    //         return false
+    //     }
+
+    //     // set new station to current
+    //     let currentCopy = {...currentStation}
+    //     currentCopy.current = false
+        
+    //     let newStation = stationList.find((station) => station.title === stationTitle)
+
+    //     let newStationCopy = {...newStation}
+    //     newStationCopy.current = true
+    //     let stationListCopy = [...stationList]
 
 
-    function handleStationListChanges(title, trackList) {
-        // update the stationList with changes to individual stations, mostly updating trackList or seeds
+    //     const updatedStationList = stationListCopy.map((station) => {
+    //         if (station.title === currentCopy.title) {
+    //           return currentCopy;
+    //         } else if (station.title === newStationCopy.title) {
+    //           return newStationCopy;
+    //         }
+    //         return station; // Return unchanged station for other cases
+    //       });
+
+    //     // update the station list to with the station updates
+    //     setStationList(updatedStationList)
+    //     setCurrentStation(newStationCopy)
+    // }
+
+    function handleStationListChanges(title, trackList, playing) {
+        console.log(title, stationList[0], playing)
         let stationToUpdate = stationList.find((station) => station.title === title)
-        stationToUpdate['trackList'] = trackList
-        setStationList((prevStationList) => {
-            return prevStationList.map((station) => station.title === title ? stationToUpdate : station)
-        })
-    }
+        let listCopy = [...stationList]
+        let stationCopy = {...stationToUpdate}
+        stationCopy['trackList'] = trackList
+        stationCopy['playing'] = playing
 
+        const index = stationList.indexOf(stationToUpdate)
+        listCopy[index] = stationCopy
+        console.log(stationCopy.trackList, index, title, listCopy)
+        setStationList(listCopy)
+    }
+    // function _handleStationListChanges(title, trackList) {
+    //     // console.log("Creating tracklist", trackList)
+    //     // update the stationList with changes to individual stations, mostly updating trackList or seeds
+    //     let stationToUpdate = stationList.find((station) => station.title === title)
+    //     let stationCopy = {...stationToUpdate}
+    //     let stationListCopy = [...stationList]
+    //     // console.log("STATION LIST COPY BEFORE", stationList)
+    //     let index = stationList.indexOf(stationToUpdate)
+    //     stationCopy['trackList'] = trackList
+    //     stationListCopy[index] = stationCopy
+    //     setStationList((prevStationList) => {
+    //         return prevStationList.map((station) => station.title === title ? stationCopy : station)
+    //     })
+    //     // setStationList(stationListCopy)
+    // }
+
+    function updateCurrentPlaying(title, currentPlaying) {
+        let stationListCopy = [...stationList]
+        let stationToUpdate = stationList.find((station) => station.title === title)
+        let stationCopy = {...stationToUpdate}
+        let index = stationList.indexOf(stationToUpdate)
+        stationCopy[currentPlaying] = currentPlaying
+        stationListCopy[index] = stationCopy
+        setStationList(stationListCopy)
+        // setStationList((prevStationList) => {
+        //     return prevStationList.map((station) => station.title === title ? stationToUpdate: station)
+        // })
+    }
+    function updateTrackList(index, stationTitle) {
+        // return a new trackList with the currentTrack at index 0, so if a song at index 3 is playing, the new TrackList woudl be length 17, this is for the purpose of passing it to webplayer, so that webplayer only has to play the index[0] song
+            // This doesn't quite work, its not only setting the wrong station, but I think the setStation update re-renders everything
+            const updatedStationList = [...stationList]
+
+            const stationToUpdate = stationList.find((station) => station.title = stationTitle)
+            const stationCopy = {...stationToUpdate}
+            let updatedTrackList = stationCopy.trackList.slice(index + 1, stationCopy.trackList.length)
+
+            const stationIndex = stationList.indexOf(stationToUpdate)
+            console.log("STATION INDEX", stationIndex, stationTitle, stationList)
+            stationCopy['trackList'] = updatedTrackList
+
+            updatedStationList[stationIndex] = stationCopy
+
+            console.log(stationCopy.trackList.length, stationToUpdate.trackList.length)
+            setStationList(updatedStationList)
+    }
+    
     function displayStations() {
         return(
             <div className="station-container">
@@ -89,6 +164,8 @@ function Dashboard({code}) {
                         handleStationChange={handleStationChange}
                         station={station}
                         handleStationListChanges={handleStationListChanges}
+                        updateTrackList={updateTrackList}
+                        updateCurrentPlaying={updateCurrentPlaying}
                     />
                 })}
                 </>
@@ -101,20 +178,14 @@ function Dashboard({code}) {
         </div>
         )
     }
-    // function printTrackListLength() {
 
-    //     stationList.forEach((station) => {
-    //         console.log("TRACK LIST LENGTH: ", station.trackList.length)
-    //     })
-    // }
     useEffect(() => {
         if(accessToken) {
             getUser(accessToken, setUser)
             setCurrentStation(stationList[0])
         }
     }, [accessToken])
-
-
+    
     return(
         <div className="dashboard">
             <div className="dashboard-header">
@@ -159,12 +230,12 @@ function Dashboard({code}) {
 function CurrentStation({station}) { 
 
     useEffect(() => {
-        // console.log("STATION", station)
+        console.log("STATION", station.playing.track.name)
     }, [station])
 
     return(
         <>
-        <p style={{'fontSize': '3rem'}}>Listening to {station.title}</p>
+        <p style={{'fontSize': '3rem'}}>Listening to {station.playing.track.name} on {station.title}</p>
         </>
     )
 }
