@@ -11,8 +11,24 @@ function CurrentStation({station}) {
             </section>
         )
     }
+
+    function displayTrackDetails() {
+        return(
+            <section className="current-station__track-details">
+            <p>Listening to {station.playing.track.name} on {station.title}</p>
+            {station.playing ?  // triple check for album image
+                <img className="current-station__track-details__image" src={station.playing.track.album.images[1].url} alt={station.playing.track.name} />
+            :
+            <div className="no-image">
+                <img className="current-station__track-details__image" src="//:0" alt={station.playing.track.name} />
+            </div>
+            }
+
+        </section>
+        )
+    }
     useEffect(() => {
-        console.log("STATION", station)
+        // console.log("STATION", station)
     }, [station.playing])
 
     return(
@@ -26,14 +42,8 @@ function CurrentStation({station}) {
                 <p>Pull random stuff from wikipedia about current artist, or just some quotes</p>
             </section>
 
-            <section className="current-station__track-details">
-                <p>Listening to {station.playing.track.name} on {station.title}</p>
-                {/* {station.playing.album.images ? 
-                    <img src={station.playing.track.album.images[1].url} alt={station.playing.track.name} />
-                :<p>No image</p>
-                } */}
-
-            </section>
+            {/* {displayTrackDetails()} */}
+            {station.playing.track.name === 'radioStatic' ? displaySkeleton : displayTrackDetails()}
         </article>
     )
 }

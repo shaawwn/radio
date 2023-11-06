@@ -2,7 +2,8 @@ import {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import exampleRecs from '../rec_example.json';
 import exampleRecs2 from '../rec_example2.json';
-
+import punk from '../punk.json';
+import rap from '../rap.json';
 
 function Station({accessToken, setStations, handleStationChange, station, qsetCurrentStation, handleStationChanges}) {
     // console.log("Loading", station.title, station.trackList)
@@ -20,13 +21,31 @@ function Station({accessToken, setStations, handleStationChange, station, qsetCu
             handleStationChanges(station.title, exampleRecs.tracks, _currentTrack)
             let ts = new Date().getTime()
             setTimestamp(ts) // this function runs the first time a station is switched to, so set a timestamp for when the currenTrack starts
-        } else {
+        } else if(station.title === 'rock') {
             const _currentTrack = {
                 track: exampleRecs2.tracks[0],
                 progress_ms: Math.floor(Math.random() * exampleRecs2.tracks[0].duration_ms)
             }
             setCurrentTrack(_currentTrack)
             handleStationChanges(station.title, exampleRecs2.tracks, _currentTrack)
+            let ts = new Date().getTime()
+            setTimestamp(ts) // this function runs the first time a station is switched to, so set a timestamp for when the 
+        } else if(station.title === 'KPNK') {
+            const _currentTrack = {
+                track: punk.tracks[0],
+                progress_ms: Math.floor(Math.random() * punk.tracks[0].duration_ms)
+            }
+            setCurrentTrack(_currentTrack)
+            handleStationChanges(station.title, punk.tracks, _currentTrack)
+            let ts = new Date().getTime()
+            setTimestamp(ts) // this function runs the first time a station is switched to, so set a timestamp for when the 
+        } else if(station.title === 'KRAP') {
+            const _currentTrack = {
+                track: punk.tracks[0],
+                progress_ms: Math.floor(Math.random() * punk.tracks[0].duration_ms)
+            }
+            setCurrentTrack(_currentTrack)
+            handleStationChanges(station.title, punk.tracks, _currentTrack)
             let ts = new Date().getTime()
             setTimestamp(ts) // this function runs the first time a station is switched to, so set a timestamp for when the 
         }

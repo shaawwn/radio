@@ -1,4 +1,4 @@
-{
+export const defaultStations = [
     {
         "name": "KRPG",
         "desc": "Mix of new and old JRPG music",
@@ -101,4 +101,4 @@
             }
         }
     },
-}
+]

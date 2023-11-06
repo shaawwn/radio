@@ -12,12 +12,122 @@ import CurrentStation from './components/CurrentStation';
 // mocks
 import exampleRecs from './rec_example.json';
 import exampleRecs2 from './rec_example.json';
-
+import punk from './punk.json';
+import rap from './rap.json';
 
 import {getUser, getRecommendations} from './utils/spotifyGetters';
 
+
+let DEFAULT_STATIONS = [
+        {
+            "title": "KRPG",
+            "desc": "Mix of new and old JRPG music",
+            "trackList": [],
+            "seeds": {
+                "genres": [],
+                "artists": ["3V79CTgRnsDdJSTqKitROv"],
+                "tracks": []
+            },
+            "current": false,
+            "playing": {
+                "track": {
+                    "name": "radioStatic",
+                    "progress_ms": 0
+                }
+            }
+        },
+        {
+            "title": "KHRD",
+            "desc": "Hard rock and metal",
+            "trackList": [],
+            "seeds": {
+                "genres": [],
+                "artists": ['6dOnTTVTbQlFWF6yfD4Vw5',
+                '7cGkvEcOOYVtNdfkf3s1tK',
+                '63JXuvboeORZFlNVoivVLT',
+                '0oSGxfWSnnOXhD2fKuz2Gy'],
+                "tracks": []
+            },
+            "current": false,
+            "playing": {
+                "track": {
+                    "name": "radioStatic",
+                    "progress_ms": 0
+                }
+            }
+        },
+        {
+            "title": "KRAP",
+            "desc": "90s rap",
+            "trackList": [],
+            "seeds": {
+                "genres": [],
+                "artists": [],
+                "tracks": []
+            },
+            "current": false,
+            "playing": {
+                "track": {
+                    "name": "radioStatic",
+                    "progress_ms": 0
+                }
+            }
+        },
+        {
+            "title": "KPNK",
+            "desc": "Harcore Punk",
+            "trackList": [],
+            "seeds": {
+                "genres": [],
+                "artists": [],
+                "tracks": []
+            },
+            "current": false,
+            "playing": {
+                "track": {
+                    "name": "radioStatic",
+                    "progress_ms": 0
+                }
+            }
+        },
+        {
+            "title": "KUNT",
+            "desc": "Classic Country",
+            "trackList": [],
+            "seeds": {
+                "genres": [],
+                "artists": [],
+                "tracks": []
+            },
+            "current": false,
+            "playing": {
+                "track": {
+                    "name": "radioStatic",
+                    "progress_ms": 0
+                }
+            }
+        },
+        {
+            "title": "KUST",
+            "desc": "Custom user created station",
+            "trackList": [],
+            "seeds": {
+                "genres": [],
+                "artists": [],
+                "tracks": []
+            },
+            "current": false,
+            "playing": {
+                "track": {
+                    "name": "radioStatic",
+                    "progress_ms": 0
+                }
+            }
+        },
+    ]
+
 function Dashboard({code}) {
-    // console.log("Loading dashboard")
+    // console.log("Loading dashboard", code)
     const accessToken = useAuth(code)
     const [user, setUser] = useState()
 
@@ -34,6 +144,8 @@ function Dashboard({code}) {
             '0oSGxfWSnnOXhD2fKuz2Gy'], tracks: []
     }, current: false, playing: {track: {name: "radioStatic"}}}
     ])
+
+    // const [stationList, setStationList] = useState(DEFAULT_STATIONS)
 
     const [currentStation, setCurrentStation] = useState()
     
@@ -103,7 +215,7 @@ function Dashboard({code}) {
 
     useEffect(() => {
         if(accessToken) {
-            console.log("ACCESS TOKEN", accessToken)
+            // console.log("ACCESS TOKEN", accessToken)
             getUser(accessToken, setUser)
             // setCurrentStation(stationList[0]) 
         }
