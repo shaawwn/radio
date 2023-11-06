@@ -78,7 +78,7 @@ function Dashboard({code}) {
     
     function displayStations() {
         return(
-            <div className="station-container">
+            <nav className="station-container">
             {stationList.length > 0 ? 
             <>
                 {stationList.map((station) => {
@@ -94,59 +94,42 @@ function Dashboard({code}) {
                 </>
             :<p>No stations</p>
             }
-            <div className="current-station">
+            {/* <div className="current-station">
                 {currentStation ?  <CurrentStation station={currentStation}/> : <p>No station set.</p>}
-
-            </div>
-        </div>
+            </div> */}
+        </nav>
         )
     }
 
     useEffect(() => {
         if(accessToken) {
+            console.log("ACCESS TOKEN", accessToken)
             getUser(accessToken, setUser)
             // setCurrentStation(stationList[0]) 
         }
     }, [accessToken])
     
     return(
-        <div className="dashboard">
-            <div className="dashboard-header">
+        <main className="dashboard">
+            <header className="dashboard-header">
+                <p>Radio</p>
                 <p>Welcome {user ? ', ' + user.display_name : ''}</p>
-            </div>
-
-
-            {/* Some navbar with user information */}
+            </header>
+            {/*  */}
 
             {/* Station Container, for holding station component, as well as viewing currentStation */}
-            {accessToken ? displayStations() : <p>Loading stations...</p>}
-            {/* <div className="station-container">
-                {stationList.length > 0 ? 
-                <>
-                    {stationList.map((station) => {
-                        return <Station 
-                            key={station.title}
-                            accessToken={accessToken}
-                            handleStationChange={handleStationChange}
-                            station={station}
-                            handleStationListChanges={handleStationListChanges}
-                        />
-                    })}
-                    </>
-                :<p>No stations</p>
-                }
-                <div className="current-station">
-                    {currentStation ?  <CurrentStation station={currentStation}/> : <p>No station set.</p>}
 
-                </div>
-            </div> */}
+            {accessToken ? displayStations() : <p>Loading stations...</p>}
+
+            {currentStation ? <CurrentStation station={currentStation}/> :<p>No station set.</p>}
+
 
             {/* Player for playing station content */}
             {accessToken ? <Webplayer 
                 accessToken={accessToken}
             />
             :null}
-        </div>
+        </main>
     )
 }
 

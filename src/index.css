@@ -19,12 +19,42 @@ body {
 
 }
 
-h1 {
-
+h1, p {
+  margin: 0;
 }
 
+.flex-wrapper {
+  display: flex;
+}
 
+.dashboard {
+  display: flex;
+  flex-direction: column;
+}
 
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+/* || STATION */
+.station-container {
+  display: flex;
+  justify-content: center;
+}
+
+.current-station {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.current-station__track-details {
+  font-size: 2rem;
+  width: 30%;
+}
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;

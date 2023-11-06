@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 function Login({authUrl}) {
 
     return(
-        <div className="login">
+        <main className="login">
             
             <a href={authUrl}>
                 <p>Get Started</p>
             </a>
-        </div>
+        </main>
     )
 }
 
