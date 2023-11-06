@@ -5,14 +5,14 @@ import exampleRecs2 from '../rec_example2.json';
 import punk from '../punk.json';
 import rap from '../rap.json';
 
-function Station({accessToken, setStations, handleStationChange, station, qsetCurrentStation, handleStationChanges}) {
-    // console.log("Loading", station.title, station.trackList)
+function Station({accessToken, setStations, handleStationChange, station, setCurrentStation, handleStationChanges}) {
     // const [trackList, setTrackList] = useState([])
     const [currentTrack, setCurrentTrack] = useState(null) // shoudl be {track: <SPOTIFYOBJ>, progress_ms: <genProgress()>}
     const [timestamp, setTimestamp] = useState()
 
     function mockGetTrackList() {
-        if(station.title === 'vgm') {
+        console.log("GETTING TRACKS", station.title)
+        if(station.title === 'KRPG') {
             const _currentTrack = {
                 track: exampleRecs.tracks[0],
                 progress_ms: Math.floor(Math.random() * exampleRecs.tracks[0].duration_ms)
@@ -21,7 +21,7 @@ function Station({accessToken, setStations, handleStationChange, station, qsetCu
             handleStationChanges(station.title, exampleRecs.tracks, _currentTrack)
             let ts = new Date().getTime()
             setTimestamp(ts) // this function runs the first time a station is switched to, so set a timestamp for when the currenTrack starts
-        } else if(station.title === 'rock') {
+        } else if(station.title === 'KHRD') {
             const _currentTrack = {
                 track: exampleRecs2.tracks[0],
                 progress_ms: Math.floor(Math.random() * exampleRecs2.tracks[0].duration_ms)
@@ -41,8 +41,8 @@ function Station({accessToken, setStations, handleStationChange, station, qsetCu
             setTimestamp(ts) // this function runs the first time a station is switched to, so set a timestamp for when the 
         } else if(station.title === 'KRAP') {
             const _currentTrack = {
-                track: punk.tracks[0],
-                progress_ms: Math.floor(Math.random() * punk.tracks[0].duration_ms)
+                track: rap.tracks[0],
+                progress_ms: Math.floor(Math.random() * rap.tracks[0].duration_ms)
             }
             setCurrentTrack(_currentTrack)
             handleStationChanges(station.title, punk.tracks, _currentTrack)
@@ -53,84 +53,33 @@ function Station({accessToken, setStations, handleStationChange, station, qsetCu
 
     function getTrackList() {
         // all initialization stuff when the station first loads
-        // fetch(`https://api.spotify.com/v1/recommendations?seed_genres=${station.seeds.genres}&seed_artists=${station.seeds.artists}&seed_tracks=${station.seeds.tracks}
-        // `, {
-        //     headers: {
-        //         'Authorization': `Bearer ${accessToken}`
-        //     }
-        // }).then(res => res.json())
-        // .then((data) => {
-        //     // console.log("RECOMMENDATIONS from Station", data.tracks, station)
+        fetch(`https://api.spotify.com/v1/recommendations?seed_genres=${station.seeds.genres}&seed_artists=${station.seeds.artists}&seed_tracks=${station.seeds.tracks}
+        `, {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
+            }
+        }).then(res => res.json())
+        .then((data) => {
+            console.log("RECOMMENDATIONS from Station", data.tracks, station)
 
-        //     // however, only set the track if there is no existing track
-        //     if(currentTrack !== null) {
-        //         checkCurrentTrackAgainstTimestamp()
-        //     }
-        //     setCurrentTrack({
-        //         track: data.tracks[0],
-        //         progress_ms: Math.floor(Math.random() * data.tracks[0].duration_ms)
-        //     })
-        //     let ts = new Date().getTime()
-        //     setTimestamp(ts) // this function runs the first time a station is switched to, so set a timestamp for when the currenTrack starts
-        //     handleStationListChanges(station.title, data.tracks)
-        // })
-
-
-        // MOCK
-
-
-        if(station.title === 'vgm') {
-            // setTrackList(exampleRecs.tracks)
-            // handleStationListChanges(station.title, exampleRecs.tracks)
             const _currentTrack = {
-                track: exampleRecs.tracks[0],
-                progress_ms: Math.floor(Math.random() * exampleRecs.tracks[0].duration_ms)
+                track: data.tracks[0],
+                progress_ms: Math.floor(Math.random() * data.tracks[0].duration_ms)
             }
             setCurrentTrack(_currentTrack)
-            // handleStationListChanges(station.title, exampleRecs.tracks, _currentTrack)
-            handleStationChanges(station.title, exampleRecs.tracks, _currentTrack)
+            handleStationChanges(station.title, data.tracks, _currentTrack)
             let ts = new Date().getTime()
-            setTimestamp(ts) // this function runs the first time a station is switched to, so set a timestamp for when the currenTrack starts
-            // handleStationListChanges(station.title, data.tracks)
-            // if(currentTrack === null) {
-            //     setCurrentTrack({
-            //         track: exampleRecs.tracks[0],
-            //         progress_ms: Math.floor(Math.random() * exampleRecs.tracks[0].duration_ms)
-            //     })
-            // }
-        } else {
-            // setTrackList(exampleRecs2.tracks)
-            const _currentTrack = {
-                track: exampleRecs2.tracks[0],
-                progress_ms: Math.floor(Math.random() * exampleRecs2.tracks[0].duration_ms)
-            }
-            setCurrentTrack(_currentTrack)
-            // handleStationListChanges(station.title, exampleRecs2.tracks, _currentTrack)
-            handleStationChanges(station.title, exampleRecs2.tracks, _currentTrack)
-            let ts = new Date().getTime()
-            setTimestamp(ts) // this function runs the first time a station is switched to, so set a timestamp for when the currenTrack starts
-            // handleStationListChanges(station.title, data.tracks)
-            // if(currentTrack === null) {
-            //     setCurrentTrack({
-            //         track: exampleRecs2.tracks[0],
-            //         progress_ms: Math.floor(Math.random() * exampleRecs2.tracks[0].duration_ms)
-            //     })
-            // }
-        }
-        
-        // if(currentTrack === null) {
-        //     setCurrentTrack(exampleRecs.tracks[0])
-        // } else {
-        //     // there will be a currentTrack already in state
-        //     // checkCurrentTrackTime()
-        // }
+            setTimestamp(ts) 
+        })
     }
 
     useEffect(() => {
         if(station.current === true) {
             if(station.trackList.length === 0) {
+                console.log('.....')
                 // getTrackList(station.title, station.seeds)
                 mockGetTrackList()
+                // getTrackList()
             }
         }
 

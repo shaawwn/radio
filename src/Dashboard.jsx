@@ -28,7 +28,7 @@ let DEFAULT_STATIONS = [
                 "artists": ["3V79CTgRnsDdJSTqKitROv"],
                 "tracks": []
             },
-            "current": false,
+            "current": true,
             "playing": {
                 "track": {
                     "name": "radioStatic",
@@ -62,7 +62,7 @@ let DEFAULT_STATIONS = [
             "trackList": [],
             "seeds": {
                 "genres": [],
-                "artists": [],
+                "artists": ["5me0Irg2ANcsgc93uaYrpb", "20qISvAhX20dpIbOOzGK3q", "5Rzqmz1zAszembFHGZQuAt", "6ns6XAOsw4B0nDUIovAOUO", "2WKdxPFRD7IqZvlIAvhMgY"],
                 "tracks": []
             },
             "current": false,
@@ -79,7 +79,7 @@ let DEFAULT_STATIONS = [
             "trackList": [],
             "seeds": {
                 "genres": [],
-                "artists": [],
+                "artists": ["0mGyXXKzoR5KAAh4Mkef2W","54NqjhP2rT524Mi2GicG4K","5Sn4sDRaxbilWiTNmuUuqU", "30U8fYtiNpeA5KH6H87QUV", "5105k1OIV9BdhuB3rxtHYb"],
                 "tracks": []
             },
             "current": false,
@@ -90,40 +90,40 @@ let DEFAULT_STATIONS = [
                 }
             }
         },
-        {
-            "title": "KUNT",
-            "desc": "Classic Country",
-            "trackList": [],
-            "seeds": {
-                "genres": [],
-                "artists": [],
-                "tracks": []
-            },
-            "current": false,
-            "playing": {
-                "track": {
-                    "name": "radioStatic",
-                    "progress_ms": 0
-                }
-            }
-        },
-        {
-            "title": "KUST",
-            "desc": "Custom user created station",
-            "trackList": [],
-            "seeds": {
-                "genres": [],
-                "artists": [],
-                "tracks": []
-            },
-            "current": false,
-            "playing": {
-                "track": {
-                    "name": "radioStatic",
-                    "progress_ms": 0
-                }
-            }
-        },
+        // {
+        //     "title": "KUNT",
+        //     "desc": "Classic Country",
+        //     "trackList": [],
+        //     "seeds": {
+        //         "genres": [],
+        //         "artists": [],
+        //         "tracks": []
+        //     },
+        //     "current": false,
+        //     "playing": {
+        //         "track": {
+        //             "name": "radioStatic",
+        //             "progress_ms": 0
+        //         }
+        //     }
+        // },
+        // {
+        //     "title": "KUST",
+        //     "desc": "Custom user created station",
+        //     "trackList": [],
+        //     "seeds": {
+        //         "genres": [],
+        //         "artists": [],
+        //         "tracks": []
+        //     },
+        //     "current": false,
+        //     "playing": {
+        //         "track": {
+        //             "name": "radioStatic",
+        //             "progress_ms": 0
+        //         }
+        //     }
+        // },
     ]
 
 function Dashboard({code}) {
@@ -132,20 +132,9 @@ function Dashboard({code}) {
     const [user, setUser] = useState()
 
     // default stations
-    const [stationList, setStationList] = useState([
-        {title: 'vgm', trackList: [], seeds: {'genres': [], artists: [
-            '3V79CTgRnsDdJSTqKitROv',
-        ], tracks: []
-    }, current: true, playing: {track: {name: 'radioStatic'}}}, 
-        {title: 'rock', trackList: [], seeds: {'genres': [], artists: [
-            '6dOnTTVTbQlFWF6yfD4Vw5',
-            '7cGkvEcOOYVtNdfkf3s1tK',
-            '63JXuvboeORZFlNVoivVLT',
-            '0oSGxfWSnnOXhD2fKuz2Gy'], tracks: []
-    }, current: false, playing: {track: {name: "radioStatic"}}}
-    ])
 
-    // const [stationList, setStationList] = useState(DEFAULT_STATIONS)
+
+    const [stationList, setStationList] = useState(DEFAULT_STATIONS)
 
     const [currentStation, setCurrentStation] = useState()
     
