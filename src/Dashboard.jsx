@@ -87,10 +87,7 @@ function Dashboard({code}) {
                         accessToken={accessToken}
                         handleStationChange={handleStationChange}
                         station={station}
-                        // handleStationListChanges={handleStationListChanges}
                         handleStationChanges={handleStationChanges}
-                        // updateTrackList={updateTrackList}
-                        // updateCurrentPlaying={updateCurrentPlaying}
                         setCurrentStation={setCurrentStation}
                     />
                 })}

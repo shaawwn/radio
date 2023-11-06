@@ -4,12 +4,33 @@ import exampleRecs from '../rec_example.json';
 import exampleRecs2 from '../rec_example2.json';
 
 
-function Station({accessToken, setStations, handleStationChange, station, setCurrentStation, handleStationChanges}) {
+function Station({accessToken, setStations, handleStationChange, station, qsetCurrentStation, handleStationChanges}) {
     // console.log("Loading", station.title, station.trackList)
     // const [trackList, setTrackList] = useState([])
     const [currentTrack, setCurrentTrack] = useState(null) // shoudl be {track: <SPOTIFYOBJ>, progress_ms: <genProgress()>}
     const [timestamp, setTimestamp] = useState()
 
+    function mockGetTrackList() {
+        if(station.title === 'vgm') {
+            const _currentTrack = {
+                track: exampleRecs.tracks[0],
+                progress_ms: Math.floor(Math.random() * exampleRecs.tracks[0].duration_ms)
+            }
+            setCurrentTrack(_currentTrack)
+            handleStationChanges(station.title, exampleRecs.tracks, _currentTrack)
+            let ts = new Date().getTime()
+            setTimestamp(ts) // this function runs the first time a station is switched to, so set a timestamp for when the currenTrack starts
+        } else {
+            const _currentTrack = {
+                track: exampleRecs2.tracks[0],
+                progress_ms: Math.floor(Math.random() * exampleRecs2.tracks[0].duration_ms)
+            }
+            setCurrentTrack(_currentTrack)
+            handleStationChanges(station.title, exampleRecs2.tracks, _currentTrack)
+            let ts = new Date().getTime()
+            setTimestamp(ts) // this function runs the first time a station is switched to, so set a timestamp for when the 
+        }
+    }
 
     function getTrackList() {
         // all initialization stuff when the station first loads
@@ -86,22 +107,11 @@ function Station({accessToken, setStations, handleStationChange, station, setCur
         // }
     }
 
-
-    // useEffect(() => {
-    //     if(accessToken && station) {
-    //         if(station.current === true) {
-    //             // console.log("ACCESS TOKEN GET TRACKS", station.title)
-    //             // gets defauly station tracks onload
-    //             getTrackList(station.title, station.seeds)
-    //         }
-    //     }
-    // }, [accessToken])
-
-
     useEffect(() => {
         if(station.current === true) {
             if(station.trackList.length === 0) {
-                getTrackList(station.title, station.seeds)
+                // getTrackList(station.title, station.seeds)
+                mockGetTrackList()
             }
         }
 
@@ -164,5 +174,6 @@ Station.propTypes = {
         current: PropTypes.bool.isRequired,
     })
 }
+
 export default Station;
 

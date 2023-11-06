@@ -5,8 +5,6 @@ import PropTypes from 'prop-types'
 function CurrentStation({station}) { 
 
     useEffect(() => {
-        // console.log("STATION", station.playing.track.name)
-        // console.log("CurrentStation.playing", station.playing)
     }, [station.playing])
 
     return(
