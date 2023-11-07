@@ -37,7 +37,8 @@ function Webplayer({accessToken, station}) {
                 'Authorization': `Bearer ${accessToken}`
             },
             body: JSON.stringify({
-                'uris': uris
+                'uris': uris,
+                'position_ms': station.playing.progress_ms
             })
         }).then((response) => {
             if(!response.ok) {

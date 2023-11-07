@@ -73,6 +73,12 @@ function Station({accessToken, setStations, handleStationChange, station, setCur
         })
     }
 
+    function setNewTimestamp() {
+        // so the timestamp isn't being changed when you switch to a new station, I don't doubt the song would change eventually, but the timestamp needs to be adjusted EVERY time the station is switched to
+        const ts = new Date().getTime()
+        setTimestamp(ts)
+    }
+
     function checkTimestamp() {
         // check the song timestamp against current UTC time to determing if the song would have ended
         
@@ -91,9 +97,27 @@ function Station({accessToken, setStations, handleStationChange, station, setCur
             }
 
             let updatedTrackList = [...station.trackList]
-            updatedTrackList = station.trackList.slice(IDBIndex + 1, station.trackList.length)
+            updatedTrackList = station.trackList.slice(index + 1, station.trackList.length)
             handleStationChanges(station.title, updatedTrackList, _currentTrack)
             setCurrentTrack(_currentTrack)
+            const ts = new Date().getTime()
+            setTimestamp(ts) 
+        } else {
+            // just set a new timestamp
+            const track = station.trackList.find((track) => track.id === currentTrack.track.id)
+            const index = station.trackList.indexOf(track);
+            
+            let _currentTrack = {
+                track: station.trackList[index],
+                progress_ms: station.playing.progress_ms + timeElapsed,
+            }
+
+            let updatedTrackList = [...station.trackList]
+            // updatedTrackList = station.trackList.slice(index + 1, station.trackList.length)
+            handleStationChanges(station.title, updatedTrackList, _currentTrack)
+            setCurrentTrack(_currentTrack)
+
+
             const ts = new Date().getTime()
             setTimestamp(ts) 
         }
