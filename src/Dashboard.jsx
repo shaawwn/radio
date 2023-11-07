@@ -127,7 +127,7 @@ let DEFAULT_STATIONS = [
     ]
 
 function Dashboard({code}) {
-    // console.log("Loading dashboard", code)
+    // console.log("Loading dashboard")
     const accessToken = useAuth(code)
     const [user, setUser] = useState()
 
@@ -139,7 +139,7 @@ function Dashboard({code}) {
     const [currentStation, setCurrentStation] = useState()
     
     function handleStationChange(title) {
-
+        // this changes what the current station is nothing more
         if(title === currentStation.title) {
             return false // do nothing
         }
@@ -158,9 +158,8 @@ function Dashboard({code}) {
         stationListCopy[indexCurrent] = currentStationCopy
         stationListCopy[indexNew] = newCurrent
 
-        setCurrentStation(newCurrent)
+        // setCurrentStation(newCurrent)  // THIS WAS CAUSING RE-RENDER
         setStationList(stationListCopy)
-
     }
 
     function handleStationChanges(title, trackList, playing) {
@@ -168,12 +167,13 @@ function Dashboard({code}) {
         let stationToUpdate = stationList.find((station) => station.title === title)
         let listCopy = [...stationList]
         let stationCopy = {...stationToUpdate}
+
         stationCopy['trackList'] = trackList
         stationCopy['playing'] = playing
 
         const index = stationList.indexOf(stationToUpdate)
         listCopy[index] = stationCopy
-        setCurrentStation(stationCopy)
+        setCurrentStation(stationCopy) // setting to this?
         setStationList(listCopy)
     }
     
@@ -224,9 +224,7 @@ function Dashboard({code}) {
 
             {currentStation ? <CurrentStation station={currentStation}/> :<p>No station set.</p>}
 
-
-            {/* Player for playing station content */}
-            {accessToken ? <Webplayer 
+            {accessToken && currentStation ? <Webplayer 
                 accessToken={accessToken}
                 station={currentStation}
             />

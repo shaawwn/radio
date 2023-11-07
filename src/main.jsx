@@ -7,7 +7,7 @@ const urlParams = new URLSearchParams(window.location.search);
 const code = urlParams.get('code');
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <App code={code}/>
-  </React.StrictMode>
+  //</React.StrictMode>
 )

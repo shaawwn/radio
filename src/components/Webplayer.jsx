@@ -3,11 +3,8 @@ import {getDeviceId} from '../utils/spotifyGetters'
 
 
 function Webplayer({accessToken, station}) {
-    // console.log("CURRENT STATION IN WEBPLAYER", station)
     const [is_paused, setPaused] = useState(false);
     const [is_active, setActive] = useState(false);
-
-
     const [deviceId, setDeviceId] = useState()
     const [currenTrack, setCurrentTrack] = useState()
 
@@ -20,7 +17,6 @@ function Webplayer({accessToken, station}) {
     }
 
     function getTrackUris(tracks) {
-        // tracks is an array of objects, the uri is track.uri
         let uris = []
         tracks.forEach((track) => {
             uris.push(track['uri'])
@@ -28,9 +24,10 @@ function Webplayer({accessToken, station}) {
         return uris
     }
     
+
     function startPlayback() {
         const uris = getTrackUris(station.trackList)
-        console.log("Starting playing on ", station.title, station.playing.track.name)
+        // console.log("RSTARTING PLAYBACK AT: ", station.playing.progress_ms)
         fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
             method: "PUT",
             headers: {
@@ -46,18 +43,13 @@ function Webplayer({accessToken, station}) {
             }
         })
         .then(() => {
-            console.log("starting playback")
+            console.log("starting playback at ", station.playing.progress_ms)
         }).catch((err) => {
             console.log("Error:", err)
         })
     }
-    /**
-     * 
-     * DONT ACTUALLY CONNECT THE PLAYER FOR THE TIME BEING JUST LOAD IT WITH PROPS
-     */
 
     useEffect(() => {
-
         if(player.current) {
             // so the problem here is that player doesn't exist in react, but it still has a spotify isntance on the spotify servers
             disconnectPlayer()
@@ -88,7 +80,6 @@ function Webplayer({accessToken, station}) {
             });
 
             player.current.addListener('player_state_changed', ( state => {
-
                 if (!state) {
                     return;
                 }
@@ -119,26 +110,22 @@ function Webplayer({accessToken, station}) {
     }, []);
 
     useEffect(() => {
-        if(station && deviceId) {
-            // probably switch palyback to new station here
-            console.log(`Switching to: ${station.title}`, station.playing.track.name)
+        // console.log("STATION", station.title, station.playing, station.playing.progress_ms)
+        const timeLeft = station.playing.track.duration_ms - station.playing.progress_ms
+        // console.log("IN WEBPLAYER", station.playing.track.name,  "progress", station.playing.progress_ms, "timeleft", timeLeft)
+        if(station && station.trackList.length > 0 && deviceId) {
             startPlayback()
-        } else {
-            console.log("Not ready to start playback", deviceId, station)
         }
-    }, [station])
 
-    useEffect(() => {
-        if(station && deviceId) {
-            startPlayback()
-        }
-    }, [deviceId])
+    }, [deviceId, station])
+
+
 
     return(
         <div className="webplayer">
             <p>Webplayer</p>
             {station ? <p>{station.title} loaded in webplayer</p> : <p>Empty webplayer</p>}
-            {deviceId? <p>Device id set: {deviceId}</p> :<p>device not set</p>}
+            {/* {deviceId? <p>Device id set: {deviceId}</p> :<p>device not set</p>} */}
         </div>
     )
 }
