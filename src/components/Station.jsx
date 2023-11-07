@@ -45,7 +45,7 @@ function Station({accessToken, setStations, handleStationChange, station, setCur
                 progress_ms: Math.floor(Math.random() * rap.tracks[0].duration_ms)
             }
             setCurrentTrack(_currentTrack)
-            handleStationChanges(station.title, punk.tracks, _currentTrack)
+            handleStationChanges(station.title, rap.tracks, _currentTrack)
             let ts = new Date().getTime()
             setTimestamp(ts) // this function runs the first time a station is switched to, so set a timestamp for when the 
         }
@@ -60,7 +60,7 @@ function Station({accessToken, setStations, handleStationChange, station, setCur
             }
         }).then(res => res.json())
         .then((data) => {
-            console.log("RECOMMENDATIONS from Station", data.tracks, station)
+            // console.log("RECOMMENDATIONS from Station", data.tracks, station)
 
             const _currentTrack = {
                 track: data.tracks[0],
@@ -73,10 +73,34 @@ function Station({accessToken, setStations, handleStationChange, station, setCur
         })
     }
 
+    function checkTimestamp() {
+        // check the song timestamp against current UTC time to determing if the song would have ended
+        
+        const currentTime = new Date().getTime()
+        const timeElapsed = currentTime - timestamp;
+        const timeLeft = currentTrack.track.duration_ms - (currentTrack.progress_ms + timeElapsed)
+
+        if(timeLeft < 0) {
+            console.log("Changing station")
+            const track = station.trackList.find((track) => track.id === currentTrack.track.id)
+            const index = station.trackList.indexOf(track);
+            
+            let _currentTrack = {
+                track: station.trackList[index + 1],
+                progress_ms: Math.floor(Math.random() * station.trackList[index + 1].duration_ms)
+            }
+
+            let updatedTrackList = [...station.trackList]
+            updatedTrackList = station.trackList.slice(IDBIndex + 1, station.trackList.length)
+            handleStationChanges(station.title, updatedTrackList, _currentTrack)
+            setCurrentTrack(_currentTrack)
+            const ts = new Date().getTime()
+            setTimestamp(ts) 
+        }
+    }
     useEffect(() => {
         if(station.current === true) {
             if(station.trackList.length === 0) {
-                console.log('.....')
                 // getTrackList(station.title, station.seeds)
                 mockGetTrackList()
                 // getTrackList()
@@ -85,30 +109,31 @@ function Station({accessToken, setStations, handleStationChange, station, setCur
 
         const timeStamp = new Date().getTime() // this will be used to check current track progress, and then set to the new timestamp
         if(currentTrack !== null && station.current === true) {
-            let currentProg = currentTrack.progress_ms
-            let timeElapsed = timeStamp - timestamp // time between old timestamp and current timestamp
-            let timeLeft = currentTrack.track.duration_ms - (currentTrack.progress_ms + (timeElapsed))
-            // console.log(currentTrack.track.name, timeElapsed, timeLeft)
-            if(timeLeft < 0) {
+            checkTimestamp()
+            // let currentProg = currentTrack.progress_ms
+            // let timeElapsed = timeStamp - timestamp // time between old timestamp and current timestamp
+            // let timeLeft = currentTrack.track.duration_ms - (currentTrack.progress_ms + (timeElapsed))
+            // // console.log(currentTrack.track.name, timeElapsed, timeLeft)
+            // if(timeLeft < 0) {
     
-                const track = station.trackList.find((track) => track.id === currentTrack.track.id)
-                const indexOf = station.trackList.indexOf(track)
-                console.log("Moving to next song", station.trackList[indexOf + 1].name, station.trackList[indexOf + 1].duration_ms)
+            //     const track = station.trackList.find((track) => track.id === currentTrack.track.id)
+            //     const indexOf = station.trackList.indexOf(track)
+            //     console.log("Moving to next song", station.trackList[indexOf + 1].name, station.trackList[indexOf + 1].duration_ms)
 
-                // update the tracklist and set current song to the next song
-                let _currentTrack = {
-                    track: station.trackList[indexOf + 1],
-                    progress_ms: Math.floor(Math.random() * station.trackList[indexOf + 1].duration_ms)
-                }
+            //     // update the tracklist and set current song to the next song
+            //     let _currentTrack = {
+            //         track: station.trackList[indexOf + 1],
+            //         progress_ms: Math.floor(Math.random() * station.trackList[indexOf + 1].duration_ms)
+            //     }
 
-                let updatedTrackList = [...station.trackList]
-                updatedTrackList = station.trackList.slice(indexOf + 1, station.trackList.length)
-                // handleStationListChanges(station.title, updatedTrackList, _currentTrack)
-                handleStationChanges(station.title, updatedTrackList, _currentTrack)
-                setCurrentTrack(_currentTrack)
-                const ts = new Date().getTime()
-                setTimestamp(ts) // not setting this could be a way to just go through the list
-            }
+            //     let updatedTrackList = [...station.trackList]
+            //     updatedTrackList = station.trackList.slice(indexOf + 1, station.trackList.length)
+            //     // handleStationListChanges(station.title, updatedTrackList, _currentTrack)
+            //     handleStationChanges(station.title, updatedTrackList, _currentTrack)
+            //     setCurrentTrack(_currentTrack)
+            //     const ts = new Date().getTime()
+            //     setTimestamp(ts) // not setting this could be a way to just go through the list
+            // }
         } 
 
     }, [station.current])

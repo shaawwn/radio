@@ -43,7 +43,7 @@ function CurrentStation({station}) {
             </section>
 
             {/* {displayTrackDetails()} */}
-            {station.playing.track.name === 'radioStatic' ? displaySkeleton : displayTrackDetails()}
+            {station.playing.track.name === 'radioStatic' ? displaySkeleton() : displayTrackDetails()}
         </article>
     )
 }
