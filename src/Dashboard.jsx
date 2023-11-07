@@ -228,7 +228,7 @@ function Dashboard({code}) {
             {/* Player for playing station content */}
             {accessToken ? <Webplayer 
                 accessToken={accessToken}
-                currentStation={currentStation}
+                station={currentStation}
             />
             :null}
         </main>

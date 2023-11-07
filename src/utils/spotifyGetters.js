@@ -49,9 +49,14 @@ function getRecommendations(accessToken, seeds, setter) {
     })
 }
 
+function getDeviceId() {
+    //
+}
+
 export {
     getUser,
     getUserTopArtists,
     getUserTopTracks,
-    getRecommendations
+    getRecommendations,
+    getDeviceId,
 }
