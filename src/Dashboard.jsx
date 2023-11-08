@@ -16,6 +16,7 @@ import punk from './punk.json';
 import rap from './rap.json';
 
 import {getUser, getRecommendations} from './utils/spotifyGetters';
+import { faBedPulse } from '@fortawesome/free-solid-svg-icons';
 
 
 let DEFAULT_STATIONS = [
@@ -137,7 +138,13 @@ function Dashboard({code}) {
     const [stationList, setStationList] = useState(DEFAULT_STATIONS)
 
     const [currentStation, setCurrentStation] = useState()
-    
+    const currentStationRef = useRef()
+    const currentTrackRef = useRef({track: null, progress_ms: null, timestamp: 0}) // used to webplayer track changes
+    const stationRef = useRef({title: ''})
+    const timestampRef = useRef()
+    const toSync = useRef(false)
+
+
     function handleStationChange(title) {
         // this changes what the current station is nothing more
         if(title === currentStation.title) {
@@ -164,25 +171,42 @@ function Dashboard({code}) {
 
     function handleStationChanges(title, trackList, playing) {
         // when station changes song, update the track list and playing attribntues
-        console.log('handling station change')
+        // this only runs when station is changed, not on track change
+
+        // therefore, if tracks have been running via webplayer, on station change need to log the changes between when the stationList was last updated with what the track list and track currently are at, this is done in updateStationOnChange
+        
+        // but only updateStationOnChange for the previous station
+        // console.log("Changing to: ", title)
+
         let stationToUpdate = stationList.find((station) => station.title === title)
-        // if(playing.track.id === stationToUpdate.playing.track.id) {
-        //     console.log('returning false')
-        //     return false
-        // }
-        // let stationToUpdate = stationList.find((station) => station.title === title)
         let listCopy = [...stationList]
         let stationCopy = {...stationToUpdate}
 
         stationCopy['trackList'] = trackList
         stationCopy['playing'] = playing
-
+        // stationCopy['current'] = true
         const index = stationList.indexOf(stationToUpdate)
         listCopy[index] = stationCopy
+        // console.log("Station copy: ", stationCopy.title)
+        if(toSync.current === true) { // this gets set regardless
+                    const currentStationObj = stationList.find((station) => station.title === currentStation.title)
+                    const toUpdate = updateStationOnChange() // a copy of the currentStation BEFORE settign to the new station (KRPG -> KHRD, it copies KRPG)
+                    // toUpdate['current'] = false
+                    const updateIndex = stationList.indexOf(currentStationObj)
+                    listCopy[updateIndex] = toUpdate
+                    toSync.current = false
+                    // console.log("toUpdate", toUpdate.title, stationCopy.title)
+                    // stationCopy should be KHRD, where toUpdate should be KRPG
+
+
+        }
+
+        // console.log("Setting current to: ", stationCopy.title)
         setCurrentStation(stationCopy) // setting to this?
         setStationList(listCopy)
     }
     
+
     function displayStations() {
         return(
             <nav className="station-container">
@@ -196,6 +220,8 @@ function Dashboard({code}) {
                         station={station}
                         handleStationChanges={handleStationChanges}
                         setCurrentStation={setCurrentStation}
+                        timestampRef={timestampRef}
+                        toSync={toSync}
                     />
                 })}
                 </>
@@ -207,6 +233,34 @@ function Dashboard({code}) {
         </nav>
         )
     }
+
+
+    function updateStationOnChange() {
+        // eg if user listening to station for x amount of songs, the staitonList is actually not updating as of now.
+        // isntead, maybe on station change to a different station, record that station status (check the current song playing, log the progress, update the state list), then change to the new station, or include it as part of the stationlist update
+        // use currentTrackRef which is the song from the station that was last changed
+        let toUpdate = {...currentStation}
+        const currentTime = new Date().getTime()
+        const timeElapsed = currentTime - timestampRef.current
+        let track;
+        try {
+            track = toUpdate.trackList.find((track) => track.id === currentTrackRef.current.track.id)
+            if(!track) {
+                track = toUpdate.find((track) => track.name === currentTrackRef.current.track.name)
+            }
+        } catch {
+            // do nothing
+            return toUpdate
+        }
+        const index = toUpdate.trackList.indexOf(track)
+        toUpdate.trackList = toUpdate.trackList.slice(index, toUpdate.trackList.length)
+        toUpdate['playing'] = {
+            track: track,
+            progress_ms: timeElapsed 
+        }
+        return toUpdate
+    }
+
 
     useEffect(() => {
         if(accessToken) {
@@ -234,6 +288,9 @@ function Dashboard({code}) {
                 accessToken={accessToken}
                 station={currentStation}
                 handleStationChanges={handleStationChanges}
+                currentTrackRef={currentTrackRef}
+                timestampRef={timestampRef}
+                toSync={toSync}
             />
             :null}
         </main>

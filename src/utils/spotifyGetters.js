@@ -53,10 +53,21 @@ function getDeviceId() {
     //
 }
 
+function getCurrentlyPlaying(accessToken) {
+    fetch(`https://api.spotify.com/v1/me/currently-playing`, {
+        headers: {
+            'Authorization': `Bearer ${accessToken}`
+        }
+    }).then((response) => response.json())
+    .then((data) => {
+        console.log("CURRENT TO UPDATE", data)
+    })
+}
 export {
     getUser,
     getUserTopArtists,
     getUserTopTracks,
     getRecommendations,
     getDeviceId,
+    getCurrentlyPlaying
 }

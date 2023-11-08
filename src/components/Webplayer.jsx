@@ -2,7 +2,8 @@ import {useState, useEffect, useRef} from 'react';
 import {getDeviceId} from '../utils/spotifyGetters'
 
 
-function Webplayer({accessToken, station, handleStationChanges}) {
+function Webplayer({accessToken, station, handleStationChanges, currentTrackRef, timestampRef, toSync}) {
+    console.log("WEBPLAYER", station.playing)
     const [is_paused, setPaused] = useState(false);
     const [is_active, setActive] = useState(false);
     const [deviceId, setDeviceId] = useState()
@@ -73,7 +74,6 @@ function Webplayer({accessToken, station, handleStationChanges}) {
     
     function startPlayback() {
         const uris = getTrackUris(station.trackList)
-        // console.log("RSTARTING PLAYBACK AT: ", station.playing.progress_ms)
         fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
             method: "PUT",
             headers: {
@@ -89,7 +89,8 @@ function Webplayer({accessToken, station, handleStationChanges}) {
             }
         })
         .then(() => {
-            console.log("starting playback at ", station.playing.progress_ms)
+            // console.log("starting playback at ", station.playing.progress_ms)
+            
         }).catch((err) => {
             console.log("Error:", err)
         })
@@ -131,6 +132,10 @@ function Webplayer({accessToken, station, handleStationChanges}) {
                 }
 
                 setCurrentTrack(state.track_window.current_track);
+                currentTrackRef.current.track = state.track_window.current_track
+                currentTrackRef.current.progress_ms = 0
+                timestampRef.current = new Date().getTime()
+                console.log("playback change", station.title, state.track_window.current_track.name) // when you change from webplayer, that station is not changing
                 setPaused(state.paused);
                 player.current.getCurrentState().then( state => { 
                     // (!state)? setActive(false) : setActive(true)
@@ -155,24 +160,32 @@ function Webplayer({accessToken, station, handleStationChanges}) {
     }, []);
 
     useEffect(() => {
-        const timeLeft = station.playing.track.duration_ms - station.playing.progress_ms
+        // const timeLeft = station.playing.track.duration_ms - station.playing.progress_ms
         if(station && station.trackList.length > 0 && deviceId) {
-            startPlayback()
+            if(currentTrack) {
+                if(station.playing.track.name === currentTrack.name) {
+                    // do nothing because webpalyer is running
+
+                } else {
+                    console.log("Not the same station")
+                    startPlayback()
+                }
+            }
+            if(!currentTrackRef.current.track) {
+                startPlayback()
+            }
           }
 
-        // if(currentTrack && currentTrack.id) {
-        //     if(currentTrack.id !== station.playing.track.id) {
-        //         startPlayback()
-        //     }
-        // }
-    }, [deviceId, station.playing.track.id])
+    }, [deviceId, station])
 
     useEffect(() => {
         // when currentTrack changes, updated
         if(currentTrack) {
             // console.log("CURRENT", currentTrack.name)
-            if(currentTrack.id !== station.playing.id) {
-                console.log("Set station from ", station.playing.track.name, " to ", currentTrack.name)
+            if(currentTrack.id !== station.playing.track.id) {
+                // console.log("Set station from ", station.playing.track.name, " to ", currentTrack.name)
+                toSync.current = true
+                // console.log(currentTrack.id, station.playing.id)
             }
         }
         

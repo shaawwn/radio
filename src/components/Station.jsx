@@ -5,7 +5,7 @@ import exampleRecs2 from '../rec_example2.json';
 import punk from '../punk.json';
 import rap from '../rap.json';
 
-function Station({accessToken, setStations, handleStationChange, station, setCurrentStation, handleStationChanges}) {
+function Station({accessToken, setStations, handleStationChange, station, setCurrentStation, handleStationChanges, timestampRef}) {
     const [timestamp, setTimestamp] = useState()
 
     function mockGetTrackList() {
@@ -91,7 +91,9 @@ function Station({accessToken, setStations, handleStationChange, station, setCur
         // const timeLeft = currentTrack.track.duration_ms - (currentTrack.progress_ms + timeElapsed)
         const timeLeft = station.playing.track.duration_ms - (station.playing.progress_ms + timeElapsed)
         // _printTimeDetails(station.playing, currentTime)
+
         if(timeLeft < 0) {
+            // change song
             const track = station.trackList.find((track) => track.id === station.playing.track.id)
             const index = station.trackList.indexOf(track);
             let _currentTrack = {
@@ -114,12 +116,17 @@ function Station({accessToken, setStations, handleStationChange, station, setCur
             }
 
             let updatedTrackList = [...station.trackList] // because the tracklist is going to be the same
+            console.log("CHANGING FROM ", station)
             handleStationChanges(station.title, updatedTrackList, _currentTrack)
 
 
             const ts = new Date().getTime()
             setTimestamp(ts) 
         }
+    }
+
+    function _handleStationChange() {
+        checkTimestamp()
     }
 
     useEffect(() => {
