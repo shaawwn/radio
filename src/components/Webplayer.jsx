@@ -2,13 +2,60 @@ import {useState, useEffect, useRef} from 'react';
 import {getDeviceId} from '../utils/spotifyGetters'
 
 
-function Webplayer({accessToken, station}) {
+function Webplayer({accessToken, station, handleStationChanges}) {
     const [is_paused, setPaused] = useState(false);
     const [is_active, setActive] = useState(false);
     const [deviceId, setDeviceId] = useState()
-    const [currenTrack, setCurrentTrack] = useState()
+    const [currentTrack, setCurrentTrack] = useState()
 
+    const ct = useRef()
     const player = useRef(null)
+
+    function displaySkeleton() {
+        return(
+            <section>
+                <p>Listening to {station.playing.track.name} on {station.title}</p>
+            </section>
+        )
+    }
+
+    function _displayTrackDetails() {
+        return(
+            <section className="current-station__track-details">
+            <p>Listening to {station.playing.track.name} on {station.title}</p>
+            {station.playing ?  // triple check for album image
+                <img className="current-station__track-details__image" src={station.playing.track.album.images[1].url} alt={station.playing.track.name} />
+            :
+            <div className="no-image">
+                <img className="current-station__track-details__image" src="//:0" alt={station.playing.track.name} />
+            </div>
+            }
+
+        </section>
+        )
+    }
+
+    function displayTrackDetails() {
+        return(
+            <section className="current-station__track-details">
+            {currentTrack ? 
+                <>
+                    <p>Listening to {currentTrack.name} on {station.title}</p>
+                    {currentTrack ?  // triple check for album image
+                        <img className="current-station__track-details__image" src={currentTrack.album.images[1].url} alt={currentTrack.name} />
+                    :
+                    <div className="no-image">
+                        <img className="current-station__track-details__image" src="//:0" alt={currentTrack.track.name} />
+                    </div>
+                    }
+                </>
+            :null
+            }
+
+        </section>
+        )
+    }
+
 
     function disconnectPlayer() {
         player.current.removeListener('ready', player._eventListeners.ready[0])
@@ -24,7 +71,6 @@ function Webplayer({accessToken, station}) {
         return uris
     }
     
-
     function startPlayback() {
         const uris = getTrackUris(station.trackList)
         // console.log("RSTARTING PLAYBACK AT: ", station.playing.progress_ms)
@@ -84,15 +130,14 @@ function Webplayer({accessToken, station}) {
                     return;
                 }
 
+                setCurrentTrack(state.track_window.current_track);
                 setPaused(state.paused);
-            
                 player.current.getCurrentState().then( state => { 
                     // (!state)? setActive(false) : setActive(true)
                     if(state === null) {
                         setActive(false)
                     } else if(state !== null) {
-                        setActive(true)
-                        setCurrentTrack(state.track_window.current_track)
+                        setActive(true) 
                     }
                 });
             
@@ -110,23 +155,45 @@ function Webplayer({accessToken, station}) {
     }, []);
 
     useEffect(() => {
-        // console.log("STATION", station.title, station.playing, station.playing.progress_ms)
         const timeLeft = station.playing.track.duration_ms - station.playing.progress_ms
-        // console.log("IN WEBPLAYER", station.playing.track.name,  "progress", station.playing.progress_ms, "timeleft", timeLeft)
         if(station && station.trackList.length > 0 && deviceId) {
             startPlayback()
-        }
+          }
 
-    }, [deviceId, station])
+        // if(currentTrack && currentTrack.id) {
+        //     if(currentTrack.id !== station.playing.track.id) {
+        //         startPlayback()
+        //     }
+        // }
+    }, [deviceId, station.playing.track.id])
+
+    useEffect(() => {
+        // when currentTrack changes, updated
+        if(currentTrack) {
+            // console.log("CURRENT", currentTrack.name)
+            if(currentTrack.id !== station.playing.id) {
+                console.log("Set station from ", station.playing.track.name, " to ", currentTrack.name)
+            }
+        }
+        
+    }, [currentTrack])
 
 
 
     return(
-        <div className="webplayer">
-            <p>Webplayer</p>
-            {station ? <p>{station.title} loaded in webplayer</p> : <p>Empty webplayer</p>}
-            {/* {deviceId? <p>Device id set: {deviceId}</p> :<p>device not set</p>} */}
-        </div>
+        <article className="current-station">
+            {/* Station name */}
+
+            {/* Text Trivia or something */}
+
+            {/* Sonng Title/Artist and Album */}
+            <section className="current-station__trivia">
+                <p>Pull random stuff from wikipedia about current artist, or just some quotes</p>
+            </section>
+
+            {/* {displayTrackDetails()} */}
+            {station.playing.track.name === 'radioStatic' ? displaySkeleton() : displayTrackDetails()}
+        </article>
     )
 }
 

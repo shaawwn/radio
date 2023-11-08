@@ -92,7 +92,6 @@ function Station({accessToken, setStations, handleStationChange, station, setCur
         const timeLeft = station.playing.track.duration_ms - (station.playing.progress_ms + timeElapsed)
         // _printTimeDetails(station.playing, currentTime)
         if(timeLeft < 0) {
-            console.log("Changing track because its over")
             const track = station.trackList.find((track) => track.id === station.playing.track.id)
             const index = station.trackList.indexOf(track);
             let _currentTrack = {
@@ -122,6 +121,7 @@ function Station({accessToken, setStations, handleStationChange, station, setCur
             setTimestamp(ts) 
         }
     }
+
     useEffect(() => {
         if(station.current === true) {
             if(station.trackList.length === 0) {

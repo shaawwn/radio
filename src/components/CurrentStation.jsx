@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 
 function CurrentStation({station}) { 
-    console.log("RENDERING CURRENTSTATION", station.playing.progress_ms)
+    console.log("RENDERING CURRENTSTATION", station.title)
     function displaySkeleton() {
         return(
             <section>

@@ -164,7 +164,13 @@ function Dashboard({code}) {
 
     function handleStationChanges(title, trackList, playing) {
         // when station changes song, update the track list and playing attribntues
+        console.log('handling station change')
         let stationToUpdate = stationList.find((station) => station.title === title)
+        // if(playing.track.id === stationToUpdate.playing.track.id) {
+        //     console.log('returning false')
+        //     return false
+        // }
+        // let stationToUpdate = stationList.find((station) => station.title === title)
         let listCopy = [...stationList]
         let stationCopy = {...stationToUpdate}
 
@@ -222,11 +228,12 @@ function Dashboard({code}) {
 
             {accessToken ? displayStations() : <p>Loading stations...</p>}
 
-            {currentStation ? <CurrentStation station={currentStation}/> :<p>No station set.</p>}
+            {/* {currentStation ? <CurrentStation station={currentStation}/> :<p>No station set.</p>} */}
 
             {accessToken && currentStation ? <Webplayer 
                 accessToken={accessToken}
                 station={currentStation}
+                handleStationChanges={handleStationChanges}
             />
             :null}
         </main>
