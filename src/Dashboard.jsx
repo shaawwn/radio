@@ -275,8 +275,6 @@ function Dashboard({code}) {
 
             {accessToken ? displayStations() : <p>Loading stations...</p>}
 
-            {/* {currentStation ? <CurrentStation station={currentStation}/> :<p>No station set.</p>} */}
-
             {accessToken && currentStation ? <Webplayer 
                 accessToken={accessToken}
                 station={currentStation}

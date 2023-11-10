@@ -15,7 +15,7 @@ function Webplayer({accessToken, station, currentTrackRef, timestampRef, toSync}
     function displaySkeleton() {
         return(
             <section>
-                <p>Listening to {station.playing.track.name} on {station.title}</p>
+                <p>radioStatic</p>
             </section>
         )
     }
@@ -163,11 +163,14 @@ function Webplayer({accessToken, station, currentTrackRef, timestampRef, toSync}
         // const timeLeft = station.playing.track.duration_ms - station.playing.progress_ms
         if(station && station.trackList.length > 0 && deviceId) {
             if(currentTrack) {
-                if(station.playing.track.name === currentTrack.name) {
-                    // do nothing because webpalyer is running
+                // if(station.playing.track.name === currentTrack.name) {
+                //     // do nothing because webpalyer is running
 
-                } else {
-                    console.log("Not the same station")
+                // } else {
+                //     console.log("Not the same station")
+                //     startPlayback()
+                // }
+                if(station.playing.track.name !== currentTrack.name) {
                     startPlayback()
                 }
             }
