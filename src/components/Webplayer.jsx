@@ -186,8 +186,11 @@ function Webplayer({accessToken, station, currentTrackRef, timestampRef, toSync}
         if(currentTrack) {
             // console.log("CURRENT", currentTrack.name)
             if(currentTrack.id !== station.playing.track.id) {
+                if(currentTrack.name !== station.playing.track.name) {
+                    toSync.current = true
+                }
                 // console.log("Set station from ", station.playing.track.name, " to ", currentTrack.name)
-                toSync.current = true
+                // toSync.current = true
                 // console.log(currentTrack.id, station.playing.id)
             }
         }

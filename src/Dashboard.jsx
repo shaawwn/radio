@@ -142,7 +142,7 @@ function Dashboard({code}) {
     const stationRef = useRef({title: ''})
     const timestampRef = useRef()
     const toSync = useRef(false)
-    const webplayerTimestamp = useRef()
+    const webplayerTimestamp = useRef([])
 
 
     function handleStationChange(title) {
@@ -187,16 +187,16 @@ function Dashboard({code}) {
         stationCopy['current'] = true
         const index = stationList.indexOf(stationToUpdate)
         listCopy[index] = stationCopy
-        if(toSync.current === true) { // this gets set regardless
-                    const currentStationObj = stationList.find((station) => station.title === currentStation.title)
-                    const toUpdate = updateStationOnChange() // a copy of the currentStation BEFORE settign to the new station (KRPG -> KHRD, it copies KRPG)
-                    toUpdate['current'] = false
-
-                    const updateIndex = stationList.indexOf(currentStationObj)
-                    listCopy[updateIndex] = toUpdate
-                    toSync.current = false
+        if(toSync.current === true) { // this gets set regardless, if there are two sync stations
+            const currentStationObj = stationList.find((station) => station.title === currentStation.title)
+            const toUpdate = updateStationOnChange() 
+            toUpdate['current'] = false
+            const updateIndex = stationList.indexOf(currentStationObj)
+            listCopy[updateIndex] = toUpdate
+            console.log("TO UPDATE", toUpdate)
+            toSync.current = false
+            console.log("SETTING TO SYNC", toSync.current)
         } 
-        console.log('change to: ', stationCopy.title)
         setCurrentStation(stationCopy) // currentStation should be KRPG, but change to KHRD here, the problem is if toSync, it stays on KRPG
         setStationList(listCopy)
     }
@@ -233,14 +233,16 @@ function Dashboard({code}) {
     function updateStationOnChange() {
         let toUpdate = {...currentStation}
         const currentTime = new Date().getTime()
-        webplayerTimestamp.current = {title: toUpdate.title, timestamp: currentTime}
+        webplayerTimestamp.current.push({title: toUpdate.title, timestamp: currentTime})
+        // webplayerTimestamp.current = {title: toUpdate.title, timestamp: currentTime} // this sets the timestamp for the song (because it doesn't get set in station)
         const timeElapsed = currentTime - timestampRef.current // this is being reset when a new song plays
         let track;
         try {
             track = toUpdate.trackList.find((track) => track.id === currentTrackRef.current.track.id)
             if(!track) {
-                track = toUpdate.find((track) => track.name === currentTrackRef.current.track.name)
+                track = toUpdate.trackList.find((track) => track.name === currentTrackRef.current.track.name)
             }
+            console.log("TRACK TO UPDATE", track.name)
         } catch {
             // do nothing
             return toUpdate

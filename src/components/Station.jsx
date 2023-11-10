@@ -84,10 +84,13 @@ function Station({accessToken, setStations, handleStationChange, station, setCur
     }
 
     function checkWebplayerTimestamp() {
+        let found = webplayerTimestamp.current.find((webplayerStation) => webplayerStation.title === station.title)
+        let index = webplayerTimestamp.current.indexOf(found)
+        // console.log("INDEX", index)
         const currentTime = new Date().getTime()
-        const timeElapsed = currentTime - webplayerTimestamp.current.timestamp;
+        const timeElapsed = currentTime - found.timestamp;
         const timeLeft = station.playing.track.duration_ms - (station.playing.progress_ms + timeElapsed)
-        console.log("TIME ELAPSED FROM WEBPLAYER TIMESTAMP", timeElapsed)
+        // console.log("TIME ELAPSED FROM WEBPLAYER TIMESTAMP", timeElapsed)
         if(timeLeft < 0) {
             // change song
             const track = station.trackList.find((track) => track.id === station.playing.track.id)
@@ -115,7 +118,10 @@ function Station({accessToken, setStations, handleStationChange, station, setCur
             const ts = new Date().getTime()
             setTimestamp(ts) 
         }
-        webplayerTimestamp.current = undefined;
+
+        webplayerTimestamp.current.splice(index, 1)
+        // console.log("UPDATED WBTS", webplayerTimestamp.current)
+        // webplayerTimestamp.current = undefined;
     }
 
 
@@ -162,15 +168,24 @@ function Station({accessToken, setStations, handleStationChange, station, setCur
     useEffect(() => {
         if(station.current === true) {
             if(station.trackList.length === 0) {
-                mockGetTrackList()
-                // getTrackList()
+                // mockGetTrackList()
+                getTrackList()
             }
         }
 
         // const timeStamp = new Date().getTime() // this will be used to check current track progress, and then set to the new timestamp
         if(station.playing.track.name !== 'radioStatic' && station.current === true) {
-            if(webplayerTimestamp.current && (station.title === webplayerTimestamp.current.title)) { 
-                checkWebplayerTimestamp()
+            // if(webplayerTimestamp.current && (station.title === webplayerTimestamp.current.title)) { 
+            //     // there is always going to be a timestamp, but the condition is that if the timestamp matches current station, then it signals that the song change has happened via webplayer not station change
+       
+            //     checkWebplayerTimestamp()
+            if(webplayerTimestamp.current.length > 0) {
+                let found = webplayerTimestamp.current.find((webplayerStation) => webplayerStation.title === station.title) 
+                if(found) {
+                    checkWebplayerTimestamp()
+                } else {
+                    checkTimestamp()
+                }
             } else {
                 checkTimestamp()
             }
