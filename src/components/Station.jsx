@@ -5,7 +5,7 @@ import exampleRecs2 from '../rec_example2.json';
 import punk from '../punk.json';
 import rap from '../rap.json';
 
-function Station({accessToken, setStations, handleStationChange, station, setCurrentStation, handleStationChanges, timestampRef}) {
+function Station({accessToken, setStations, handleStationChange, station, setCurrentStation, handleStationChanges, timestampRef, webplayerTimestamp}) {
     const [timestamp, setTimestamp] = useState()
 
     function mockGetTrackList() {
@@ -85,12 +85,11 @@ function Station({accessToken, setStations, handleStationChange, station, setCur
 
     function checkTimestamp() {
         // check the song timestamp against current UTC time to determing if the song would have ended
-        
         const currentTime = new Date().getTime()
         const timeElapsed = currentTime - timestamp;
         // const timeLeft = currentTrack.track.duration_ms - (currentTrack.progress_ms + timeElapsed)
         const timeLeft = station.playing.track.duration_ms - (station.playing.progress_ms + timeElapsed)
-        // _printTimeDetails(station.playing, currentTime)
+
 
         if(timeLeft < 0) {
             // change song
@@ -109,18 +108,17 @@ function Station({accessToken, setStations, handleStationChange, station, setCur
             // just set a new timestamp but dont change the song
             const track = station.trackList.find((track) => track.id === station.playing.track.id)
             const index = station.trackList.indexOf(track);
-            
+            // console.log("PLAYING", station.playing.track.name, station.playing.progress_ms, 'elapsed: ', timeElapsed)
+            // its using the previous station timestamp since it isn't being set
             let _currentTrack = {
                 track: station.trackList[index],
                 progress_ms: station.playing.progress_ms + timeElapsed,
             }
 
             let updatedTrackList = [...station.trackList] // because the tracklist is going to be the same
-            console.log("CHANGING FROM ", station)
             handleStationChanges(station.title, updatedTrackList, _currentTrack)
-
-
             const ts = new Date().getTime()
+            // console.log("SETTING TIMESAMPE", ts)
             setTimestamp(ts) 
         }
     }
@@ -140,7 +138,48 @@ function Station({accessToken, setStations, handleStationChange, station, setCur
 
         const timeStamp = new Date().getTime() // this will be used to check current track progress, and then set to the new timestamp
         if(station.playing.track.name !== 'radioStatic' && station.current === true) {
-            checkTimestamp()
+            if(webplayerTimestamp.current && (station.title === webplayerTimestamp.current.title)) { // only check the timestamp here if it is the stame staion
+                
+                const currentTime = new Date().getTime()
+                const timeElapsed = currentTime - webplayerTimestamp.current.timestamp;
+                // const timeLeft = currentTrack.track.duration_ms - (currentTrack.progress_ms + timeElapsed)
+                const timeLeft = station.playing.track.duration_ms - (station.playing.progress_ms + timeElapsed)
+                console.log("TIME ELAPSED FROM WEBPLAYER TIMESTAMP", timeElapsed)
+                if(timeLeft < 0) {
+                    // change song
+                    const track = station.trackList.find((track) => track.id === station.playing.track.id)
+                    const index = station.trackList.indexOf(track);
+                    let _currentTrack = {
+                        track: station.trackList[index + 1],
+                        progress_ms: timeLeft * -1 // abs of time left
+                    }
+                    let updatedTrackList = [...station.trackList]
+                    updatedTrackList = station.trackList.slice(index + 1, station.trackList.length)
+                    handleStationChanges(station.title, updatedTrackList, _currentTrack)
+                    const ts = new Date().getTime()
+                    setTimestamp(ts) 
+                } else {
+                    // just set a new timestamp but dont change the song
+                    const track = station.trackList.find((track) => track.id === station.playing.track.id)
+                    const index = station.trackList.indexOf(track);
+                    // console.log("PLAYING", station.playing.track.name, station.playing.progress_ms, 'elapsed: ', timeElapsed)
+                    // its using the previous station timestamp since it isn't being set
+                    let _currentTrack = {
+                        track: station.trackList[index],
+                        progress_ms: station.playing.progress_ms + timeElapsed,
+                    }
+        
+                    let updatedTrackList = [...station.trackList] // because the tracklist is going to be the same
+                    handleStationChanges(station.title, updatedTrackList, _currentTrack)
+                    const ts = new Date().getTime()
+                    // console.log("SETTING TIMESAMPE", ts)
+                    setTimestamp(ts) 
+                }
+                webplayerTimestamp.current = undefined
+            } else {
+                checkTimestamp()
+            }
+            // checkTimestamp()
         } 
 
 

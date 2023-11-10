@@ -2,8 +2,8 @@ import {useState, useEffect, useRef} from 'react';
 import {getDeviceId} from '../utils/spotifyGetters'
 
 
-function Webplayer({accessToken, station, handleStationChanges, currentTrackRef, timestampRef, toSync}) {
-    console.log("WEBPLAYER", station.playing)
+function Webplayer({accessToken, station, currentTrackRef, timestampRef, toSync}) {
+    // console.log("WEBPLAYER", station.playing)
     const [is_paused, setPaused] = useState(false);
     const [is_active, setActive] = useState(false);
     const [deviceId, setDeviceId] = useState()
@@ -43,7 +43,7 @@ function Webplayer({accessToken, station, handleStationChanges, currentTrackRef,
                 <>
                     <p>Listening to {currentTrack.name} on {station.title}</p>
                     {currentTrack ?  // triple check for album image
-                        <img className="current-station__track-details__image" src={currentTrack.album.images[1].url} alt={currentTrack.name} />
+                        <img className="current-station__track-details__image" src={currentTrack.album.images[0].url} alt={currentTrack.name} />
                     :
                     <div className="no-image">
                         <img className="current-station__track-details__image" src="//:0" alt={currentTrack.track.name} />
@@ -135,7 +135,7 @@ function Webplayer({accessToken, station, handleStationChanges, currentTrackRef,
                 currentTrackRef.current.track = state.track_window.current_track
                 currentTrackRef.current.progress_ms = 0
                 timestampRef.current = new Date().getTime()
-                console.log("playback change", station.title, state.track_window.current_track.name) // when you change from webplayer, that station is not changing
+                // console.log("playback change", station.title, state.track_window.current_track.name) // when you change from webplayer, that station is not changing
                 setPaused(state.paused);
                 player.current.getCurrentState().then( state => { 
                     // (!state)? setActive(false) : setActive(true)

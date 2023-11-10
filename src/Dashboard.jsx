@@ -26,7 +26,7 @@ let DEFAULT_STATIONS = [
             "trackList": [],
             "seeds": {
                 "genres": [],
-                "artists": ["3V79CTgRnsDdJSTqKitROv"],
+                "artists": ["3V79CTgRnsDdJSTqKitROv,7cGkvEcOOYVtNdfkf3s1tK,6dOnTTVTbQlFWF6yfD4Vw5,6RGKuqMApf175q5IulAD9z,63JXuvboeORZFlNVoivVLT"],
                 "tracks": []
             },
             "current": true,
@@ -43,10 +43,7 @@ let DEFAULT_STATIONS = [
             "trackList": [],
             "seeds": {
                 "genres": [],
-                "artists": ['6dOnTTVTbQlFWF6yfD4Vw5',
-                '7cGkvEcOOYVtNdfkf3s1tK',
-                '63JXuvboeORZFlNVoivVLT',
-                '0oSGxfWSnnOXhD2fKuz2Gy'],
+                "artists": ['2ye2Wgw4gimLv2eAKyk1NB,3qm84nBOXUEQ2vnTfUTTFC,1DFr97A9HnbV3SKTJFu62M,14pVkFUHDL207LzLHtSA18,5M52tdBnJaKSvOpJGz8mfZ'],
                 "tracks": []
             },
             "current": false,
@@ -63,7 +60,7 @@ let DEFAULT_STATIONS = [
             "trackList": [],
             "seeds": {
                 "genres": [],
-                "artists": ["5me0Irg2ANcsgc93uaYrpb", "20qISvAhX20dpIbOOzGK3q", "5Rzqmz1zAszembFHGZQuAt", "6ns6XAOsw4B0nDUIovAOUO", "2WKdxPFRD7IqZvlIAvhMgY"],
+                "artists": ["34EP7KEpOjXcM2TCat1ISk,20qISvAhX20dpIbOOzGK3q,5me0Irg2ANcsgc93uaYrpb,099tLNCZZvtjC7myKD0mFp,6Mo9PoU6svvhgEum7wh2Nd"],
                 "tracks": []
             },
             "current": false,
@@ -91,23 +88,23 @@ let DEFAULT_STATIONS = [
                 }
             }
         },
-        // {
-        //     "title": "KUNT",
-        //     "desc": "Classic Country",
-        //     "trackList": [],
-        //     "seeds": {
-        //         "genres": [],
-        //         "artists": [],
-        //         "tracks": []
-        //     },
-        //     "current": false,
-        //     "playing": {
-        //         "track": {
-        //             "name": "radioStatic",
-        //             "progress_ms": 0
-        //         }
-        //     }
-        // },
+        {
+            "title": "KUNT",
+            "desc": "Classic Country",
+            "trackList": [],
+            "seeds": {
+                "genres": [],
+                "artists": ["1FClsNYBUoNFtGgzeG74dW,6kACVPfCOnqzgfEF5ryl0x,1RP2UpEaRzkF0Id3JigqD8,4xcYVPssil6vbG6tq3W43S,7wCjDgV6nqBsHguQXPAaIM"],
+                "tracks": []
+            },
+            "current": false,
+            "playing": {
+                "track": {
+                    "name": "radioStatic",
+                    "progress_ms": 0
+                }
+            }
+        },
         // {
         //     "title": "KUST",
         //     "desc": "Custom user created station",
@@ -138,11 +135,14 @@ function Dashboard({code}) {
     const [stationList, setStationList] = useState(DEFAULT_STATIONS)
 
     const [currentStation, setCurrentStation] = useState()
+
+    // const [stationList, currentStation, handleStationChanges, currentTrackRef, changeStation] = useStations(accessToken)
     const currentStationRef = useRef()
     const currentTrackRef = useRef({track: null, progress_ms: null, timestamp: 0}) // used to webplayer track changes
     const stationRef = useRef({title: ''})
     const timestampRef = useRef()
     const toSync = useRef(false)
+    const webplayerTimestamp = useRef()
 
 
     function handleStationChange(title) {
@@ -184,25 +184,20 @@ function Dashboard({code}) {
 
         stationCopy['trackList'] = trackList
         stationCopy['playing'] = playing
-        // stationCopy['current'] = true
+        stationCopy['current'] = true
         const index = stationList.indexOf(stationToUpdate)
         listCopy[index] = stationCopy
-        // console.log("Station copy: ", stationCopy.title)
         if(toSync.current === true) { // this gets set regardless
                     const currentStationObj = stationList.find((station) => station.title === currentStation.title)
                     const toUpdate = updateStationOnChange() // a copy of the currentStation BEFORE settign to the new station (KRPG -> KHRD, it copies KRPG)
-                    // toUpdate['current'] = false
+                    toUpdate['current'] = false
+
                     const updateIndex = stationList.indexOf(currentStationObj)
                     listCopy[updateIndex] = toUpdate
                     toSync.current = false
-                    // console.log("toUpdate", toUpdate.title, stationCopy.title)
-                    // stationCopy should be KHRD, where toUpdate should be KRPG
-
-
-        }
-
-        // console.log("Setting current to: ", stationCopy.title)
-        setCurrentStation(stationCopy) // setting to this?
+        } 
+        console.log('change to: ', stationCopy.title)
+        setCurrentStation(stationCopy) // currentStation should be KRPG, but change to KHRD here, the problem is if toSync, it stays on KRPG
         setStationList(listCopy)
     }
     
@@ -219,9 +214,9 @@ function Dashboard({code}) {
                         handleStationChange={handleStationChange}
                         station={station}
                         handleStationChanges={handleStationChanges}
-                        setCurrentStation={setCurrentStation}
                         timestampRef={timestampRef}
                         toSync={toSync}
+                        webplayerTimestamp={webplayerTimestamp}
                     />
                 })}
                 </>
@@ -236,12 +231,10 @@ function Dashboard({code}) {
 
 
     function updateStationOnChange() {
-        // eg if user listening to station for x amount of songs, the staitonList is actually not updating as of now.
-        // isntead, maybe on station change to a different station, record that station status (check the current song playing, log the progress, update the state list), then change to the new station, or include it as part of the stationlist update
-        // use currentTrackRef which is the song from the station that was last changed
         let toUpdate = {...currentStation}
         const currentTime = new Date().getTime()
-        const timeElapsed = currentTime - timestampRef.current
+        webplayerTimestamp.current = {title: toUpdate.title, timestamp: currentTime}
+        const timeElapsed = currentTime - timestampRef.current // this is being reset when a new song plays
         let track;
         try {
             track = toUpdate.trackList.find((track) => track.id === currentTrackRef.current.track.id)
@@ -261,7 +254,6 @@ function Dashboard({code}) {
         return toUpdate
     }
 
-
     useEffect(() => {
         if(accessToken) {
             // console.log("ACCESS TOKEN", accessToken)
@@ -270,6 +262,7 @@ function Dashboard({code}) {
         }
     }, [accessToken])
     
+
     return(
         <main className="dashboard">
             <header className="dashboard-header">
@@ -287,7 +280,6 @@ function Dashboard({code}) {
             {accessToken && currentStation ? <Webplayer 
                 accessToken={accessToken}
                 station={currentStation}
-                handleStationChanges={handleStationChanges}
                 currentTrackRef={currentTrackRef}
                 timestampRef={timestampRef}
                 toSync={toSync}
