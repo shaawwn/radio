@@ -43,8 +43,16 @@ let DEFAULT_STATIONS = [
             "desc": "Hard rock and metal",
             "trackList": [],
             "seeds": {
-                "genres": [],
-                "artists": ['2ye2Wgw4gimLv2eAKyk1NB,3qm84nBOXUEQ2vnTfUTTFC,1DFr97A9HnbV3SKTJFu62M,14pVkFUHDL207LzLHtSA18,5M52tdBnJaKSvOpJGz8mfZ'],
+                "genres": [
+                    'death-metal',
+                    'hard-rock',
+                    'heavy-metal'
+                ],
+                // "artists": ['2ye2Wgw4gimLv2eAKyk1NB,3qm84nBOXUEQ2vnTfUTTFC,1DFr97A9HnbV3SKTJFu62M,14pVkFUHDL207LzLHtSA18,5M52tdBnJaKSvOpJGz8mfZ'],
+                "artists": [
+                    '1DFr97A9HnbV3SKTJFu62M',
+                    '3qm84nBOXUEQ2vnTfUTTFC'
+                ],
                 "tracks": []
             },
             "current": false,
@@ -96,6 +104,25 @@ let DEFAULT_STATIONS = [
             "seeds": {
                 "genres": [],
                 "artists": ["1FClsNYBUoNFtGgzeG74dW,6kACVPfCOnqzgfEF5ryl0x,1RP2UpEaRzkF0Id3JigqD8,4xcYVPssil6vbG6tq3W43S,7wCjDgV6nqBsHguQXPAaIM"],
+                "tracks": []
+            },
+            "current": false,
+            "playing": {
+                "track": {
+                    "name": "radioStatic",
+                    "progress_ms": 0
+                }
+            }
+        },
+        {
+            "title": "KJZZ",
+            "desc": "Jazz",
+            "trackList": [],
+            "seeds": {
+                "genres": ["jazz"],
+                "artists": [
+                    "1VEzN9lxvG6KPR3QQGsebR,7AbWCUgC8aFlUYWSuiaQhK,0kbYTNQb4Pb1rPbbaF0pT4,4PDpGtF16XpqvXxsrFwQnN"
+                ],
                 "tracks": []
             },
             "current": false,
@@ -177,7 +204,7 @@ function Dashboard({code}) {
         // therefore, if tracks have been running via webplayer, on station change need to log the changes between when the stationList was last updated with what the track list and track currently are at, this is done in updateStationOnChange
         
         // but only updateStationOnChange for the previous station
-        // tuning.play() // uncomment when pushing live
+        tuning.play() // uncomment when pushing live
         let stationToUpdate = stationList.find((station) => station.title === title)
         let listCopy = [...stationList]
         let stationCopy = {...stationToUpdate}

@@ -177,8 +177,8 @@ function Station({accessToken, setStations, handleStationChange, station, setCur
     useEffect(() => {
         if(station.current === true) {
             if(station.trackList.length === 0) {
-                mockGetTrackList()
-                // getTrackList()
+                // mockGetTrackList()
+                getTrackList()
             }
         }
 
