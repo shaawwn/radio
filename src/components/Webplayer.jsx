@@ -1,7 +1,7 @@
 import {useState, useEffect, useRef} from 'react';
 import {getDeviceId} from '../utils/spotifyGetters'
 
-
+import Volume from './Volume';
 function Webplayer({accessToken, station, currentTrackRef, timestampRef, toSync}) {
     // console.log("WEBPLAYER", station.playing)
     const [is_paused, setPaused] = useState(false);
@@ -45,7 +45,7 @@ function Webplayer({accessToken, station, currentTrackRef, timestampRef, toSync}
                         <p>{currentTrack.name}</p>
                         <p style={{"fontSize": "1.75rem"}}>{currentTrack.artists[0].name}</p>
                     </div>
-                    {/* <p>{currentTrack.name} {currentTrack.artists[0].name} on {station.title}</p> */}
+
                     {currentTrack ?  // triple check for album image
                         <div className="flex-wrapper flex-wrapper--center">
                             <img className="current-station__track-details__image" src={currentTrack.album.images[0].url} alt={currentTrack.name} />
@@ -58,7 +58,7 @@ function Webplayer({accessToken, station, currentTrackRef, timestampRef, toSync}
                 </>
             :null
             }
-
+            {/* <audio src="../tuning.mp3"></audio> */}
         </section>
         )
     }
@@ -102,6 +102,7 @@ function Webplayer({accessToken, station, currentTrackRef, timestampRef, toSync}
         })
     }
 
+
     useEffect(() => {
         if(player.current) {
             // so the problem here is that player doesn't exist in react, but it still has a spotify isntance on the spotify servers
@@ -118,7 +119,7 @@ function Webplayer({accessToken, station, currentTrackRef, timestampRef, toSync}
             player.current = new window.Spotify.Player({
                 name: 'Web Playback SDK',
                 getOAuthToken: cb => { cb(accessToken); },
-                volume: 1
+                volume: 0.8
             });
 
             // setPlayer(player);
@@ -211,6 +212,7 @@ function Webplayer({accessToken, station, currentTrackRef, timestampRef, toSync}
 
             {/* {displayTrackDetails()} */}
             {station.playing.track.name === 'radioStatic' ? displaySkeleton() : displayTrackDetails()}
+            <Volume accessToken={accessToken} deviceId={deviceId}/>
         </article>
     )
 }

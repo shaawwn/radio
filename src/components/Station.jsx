@@ -5,6 +5,7 @@ import exampleRecs2 from '../rec_example2.json';
 import punk from '../punk.json';
 import rap from '../rap.json';
 
+
 function Station({accessToken, setStations, handleStationChange, station, setCurrentStation, handleStationChanges, timestampRef, webplayerTimestamp}) {
     const [timestamp, setTimestamp] = useState()
 
@@ -144,7 +145,7 @@ function Station({accessToken, setStations, handleStationChange, station, setCur
                 const progress = Math.floor(Math.random() * station.trackList[0].duration_ms)
                 console.log('setting progress', progress)
             }
-            console.log("prog", progress)
+            // console.log("prog", progress)
             let _currentTrack = {
                 track: station.trackList[index + 1],
                 progress_ms: progress!== undefined ? progress : timeLeft * -1 // abs of time left (if a REALLY long time has passed, this will set the next song to 0 I think)
@@ -176,8 +177,8 @@ function Station({accessToken, setStations, handleStationChange, station, setCur
     useEffect(() => {
         if(station.current === true) {
             if(station.trackList.length === 0) {
-                // mockGetTrackList()
-                getTrackList()
+                mockGetTrackList()
+                // getTrackList()
             }
         }
 

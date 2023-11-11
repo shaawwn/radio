@@ -2,7 +2,8 @@ import {useState, useEffect, useRef} from 'react';
 import PropTypes from 'prop-types';
 import useAuth from './hooks/useAuth';
 import useStations from './hooks/useStations';
-
+import audio from './tuning.mp3'
+const tuning = new Audio(audio)
 
 // Component apps
 import Station from './components/Station';
@@ -176,8 +177,7 @@ function Dashboard({code}) {
         // therefore, if tracks have been running via webplayer, on station change need to log the changes between when the stationList was last updated with what the track list and track currently are at, this is done in updateStationOnChange
         
         // but only updateStationOnChange for the previous station
-        // console.log("Changing to: ", title)
-
+        // tuning.play() // uncomment when pushing live
         let stationToUpdate = stationList.find((station) => station.title === title)
         let listCopy = [...stationList]
         let stationCopy = {...stationToUpdate}
@@ -193,9 +193,9 @@ function Dashboard({code}) {
             toUpdate['current'] = false
             const updateIndex = stationList.indexOf(currentStationObj)
             listCopy[updateIndex] = toUpdate
-            console.log("TO UPDATE", toUpdate)
+            // console.log("TO UPDATE", toUpdate)
             toSync.current = false
-            console.log("SETTING TO SYNC", toSync.current)
+            // console.log("SETTING TO SYNC", toSync.current)
         } 
         setCurrentStation(stationCopy) // currentStation should be KRPG, but change to KHRD here, the problem is if toSync, it stays on KRPG
         setStationList(listCopy)
@@ -242,7 +242,7 @@ function Dashboard({code}) {
             if(!track) {
                 track = toUpdate.trackList.find((track) => track.name === currentTrackRef.current.track.name)
             }
-            console.log("TRACK TO UPDATE", track.name)
+            // console.log("TRACK TO UPDATE", track.name)
         } catch {
             // do nothing
             return toUpdate
@@ -271,10 +271,6 @@ function Dashboard({code}) {
                 <p>Radio</p>
                 <p>Welcome {user ? ', ' + user.display_name : ''}</p>
             </header>
-            {/*  */}
-
-            {/* Station Container, for holding station component, as well as viewing currentStation */}
-
             {accessToken ? displayStations() : <p>Loading stations...</p>}
 
             {accessToken && currentStation ? <Webplayer 
