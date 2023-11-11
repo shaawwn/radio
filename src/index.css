@@ -27,6 +27,9 @@ h1, p {
   display: flex;
 }
 
+.flex-wrapper--center {
+  justify-content: center;
+}
 .dashboard {
   display: flex;
   flex-direction: column;
@@ -61,6 +64,13 @@ h1, p {
   font-size: 2rem;
   width: 30%;
 }
+
+.current-station__track-details__details {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
 
 .current-station__track-details__image {
   width: 300px;

@@ -95,6 +95,7 @@ function Station({accessToken, setStations, handleStationChange, station, setCur
             // change song
             const track = station.trackList.find((track) => track.id === station.playing.track.id)
             const index = station.trackList.indexOf(track);
+            console.log("TIME LEFT WEBPLAYER", timeLeft, track.name)
             let _currentTrack = {
                 track: station.trackList[index + 1],
                 progress_ms: timeLeft * -1 // abs of time left
@@ -121,7 +122,6 @@ function Station({accessToken, setStations, handleStationChange, station, setCur
 
         webplayerTimestamp.current.splice(index, 1)
         // console.log("UPDATED WBTS", webplayerTimestamp.current)
-        // webplayerTimestamp.current = undefined;
     }
 
 
@@ -135,11 +135,19 @@ function Station({accessToken, setStations, handleStationChange, station, setCur
 
         if(timeLeft < 0) {
             // change song
+
             const track = station.trackList.find((track) => track.id === station.playing.track.id)
             const index = station.trackList.indexOf(track);
+            // console.log("TIME LEFT", timeLeft, track.name)
+            let progress;
+            if(timeLeft * -1 > station.trackList[index + 1].duration_ms) {
+                const progress = Math.floor(Math.random() * station.trackList[0].duration_ms)
+                console.log('setting progress', progress)
+            }
+            console.log("prog", progress)
             let _currentTrack = {
                 track: station.trackList[index + 1],
-                progress_ms: timeLeft * -1 // abs of time left
+                progress_ms: progress!== undefined ? progress : timeLeft * -1 // abs of time left (if a REALLY long time has passed, this will set the next song to 0 I think)
             }
             let updatedTrackList = [...station.trackList]
             updatedTrackList = station.trackList.slice(index + 1, station.trackList.length)
@@ -199,7 +207,7 @@ function Station({accessToken, setStations, handleStationChange, station, setCur
         <div className="station">
             <button onClick={() => handleStationChange(station.title)} style={{'backgroundColor': 'green', 'padding': '1rem', 'borderRadius': '5px', 'fontSize': '1.5rem'}}>{station.title}</button>
 
-            {station.trackList.length > 0 ? <p>Here be tracks</p> : <p>No track.</p>}
+            {/* {station.trackList.length > 0 ? null: <p>No track.</p>} */}
         </div>
     )
 }

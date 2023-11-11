@@ -40,10 +40,16 @@ function Webplayer({accessToken, station, currentTrackRef, timestampRef, toSync}
         return(
             <section className="current-station__track-details">
             {currentTrack ? 
-                <>
-                    <p>Listening to {currentTrack.name} on {station.title}</p>
+                <>  
+                    <div className="current-station__track-details__details">
+                        <p>{currentTrack.name}</p>
+                        <p style={{"fontSize": "1.75rem"}}>{currentTrack.artists[0].name}</p>
+                    </div>
+                    {/* <p>{currentTrack.name} {currentTrack.artists[0].name} on {station.title}</p> */}
                     {currentTrack ?  // triple check for album image
-                        <img className="current-station__track-details__image" src={currentTrack.album.images[0].url} alt={currentTrack.name} />
+                        <div className="flex-wrapper flex-wrapper--center">
+                            <img className="current-station__track-details__image" src={currentTrack.album.images[0].url} alt={currentTrack.name} />
+                        </div>
                     :
                     <div className="no-image">
                         <img className="current-station__track-details__image" src="//:0" alt={currentTrack.track.name} />
@@ -163,13 +169,6 @@ function Webplayer({accessToken, station, currentTrackRef, timestampRef, toSync}
         // const timeLeft = station.playing.track.duration_ms - station.playing.progress_ms
         if(station && station.trackList.length > 0 && deviceId) {
             if(currentTrack) {
-                // if(station.playing.track.name === currentTrack.name) {
-                //     // do nothing because webpalyer is running
-
-                // } else {
-                //     console.log("Not the same station")
-                //     startPlayback()
-                // }
                 if(station.playing.track.name !== currentTrack.name) {
                     startPlayback()
                 }
