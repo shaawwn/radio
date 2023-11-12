@@ -115,6 +115,10 @@ h1, p {
   cursor: pointer;
 }
 
+.image-logo {
+  width: 100px;
+  height: 100px;
+}
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;

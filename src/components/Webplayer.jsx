@@ -1,7 +1,10 @@
 import {useState, useEffect, useRef} from 'react';
+// import lyricsFinder from 'lyrics-finder'
 import {getDeviceId} from '../utils/spotifyGetters'
 
 import Volume from './Volume';
+
+
 function Webplayer({accessToken, station, currentTrackRef, timestampRef, toSync}) {
     // console.log("WEBPLAYER", station.playing)
     const [is_paused, setPaused] = useState(false);
@@ -206,9 +209,13 @@ function Webplayer({accessToken, station, currentTrackRef, timestampRef, toSync}
             {/* Text Trivia or something */}
 
             {/* Sonng Title/Artist and Album */}
-            <section className="current-station__trivia">
+            {/* <section className="current-station__trivia">
                 <p>Pull random stuff from wikipedia about current artist, or just some quotes</p>
-            </section>
+            </section> */}
+            <LyricsContainer 
+                artist={station.playing.track.artists[0].name}
+                track={station.playing.track.name}
+            />
 
             {/* {displayTrackDetails()} */}
             {station.playing.track.name === 'radioStatic' ? displaySkeleton() : displayTrackDetails()}
@@ -217,4 +224,27 @@ function Webplayer({accessToken, station, currentTrackRef, timestampRef, toSync}
     )
 }
 
+function LyricsContainer({artist, track}) {
+
+    useEffect(() => {
+        if(artist && track) {
+            // (async function(artist, title) {
+            //     let lyrics = await lyricsFinder(artist, title) || "Not Found!";
+            //     console.log("LYRICS", lyrics);
+            // })(artist, track);
+            fetch(`http://localhost:3000/radio/lyrics?artist=${artist}&&track=${track}`)
+            .then((response) => response.json())
+            .then((data) => {
+                console.log("lyrics", data)
+            })
+        }
+    }, [artist])
+    return(
+        <section className="current-station__trivia">
+            {/* <p>Pull random stuff from wikipedia about current artist, or just some quotes</p> */}
+            {artist ? <p>{track} by{artist}</p> : <p>Pull random stuff from wikipedia about current artist, or just some quotes</p>}
+
+        </section>
+    )
+}
 export default Webplayer

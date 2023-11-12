@@ -5,10 +5,17 @@ import exampleRecs2 from '../rec_example2.json';
 import punk from '../punk.json';
 import rap from '../rap.json';
 
+import KRPG from '../images/krpg.png'
 
 function Station({accessToken, setStations, handleStationChange, station, setCurrentStation, handleStationChanges, timestampRef, webplayerTimestamp}) {
     const [timestamp, setTimestamp] = useState()
+    const [logo, setLogo] = useState()
 
+    function getStationLogo() {
+        if(station.title === 'KRPG') {
+            setLogo(KRPG)
+        }
+    }
     function mockGetTrackList() {
         // console.log("GETTING TRACKS", station.title)
         if(station.title === 'KRPG') {
@@ -200,13 +207,19 @@ function Station({accessToken, setStations, handleStationChange, station, setCur
             }
         } 
 
-
+        getStationLogo()
     }, [station.current])
 
 
     return(
         <div className="station">
-            <button onClick={() => handleStationChange(station.title)} style={{'backgroundColor': 'green', 'padding': '1rem', 'borderRadius': '5px', 'fontSize': '1.5rem'}}>{station.title}</button>
+            <button onClick={() => handleStationChange(station.title)} style={{'backgroundColor': 'green', 'padding': '1rem', 'borderRadius': '5px', 'fontSize': '1.5rem'}}>
+                {/* {station.title} */}
+            
+                {/* <img src={logo} /> */}
+                {logo ? <img className="image-logo" src={logo} /> : <p>{station.title}</p>}
+
+            </button>
 
             {/* {station.trackList.length > 0 ? null: <p>No track.</p>} */}
         </div>
