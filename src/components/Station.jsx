@@ -6,6 +6,11 @@ import punk from '../punk.json';
 import rap from '../rap.json';
 
 import KRPG from '../images/krpg.png'
+import KHRD from '../images/khrd.png'
+import KRAP from '../images/krap.png'
+import KJZZ from '../images/kjzz.png'
+import KPNK from '../images/kpnk.png'
+import KUNT from '../images/kunt.png'
 
 function Station({accessToken, setStations, handleStationChange, station, setCurrentStation, handleStationChanges, timestampRef, webplayerTimestamp}) {
     const [timestamp, setTimestamp] = useState()
@@ -14,8 +19,19 @@ function Station({accessToken, setStations, handleStationChange, station, setCur
     function getStationLogo() {
         if(station.title === 'KRPG') {
             setLogo(KRPG)
+        } else if(station.title === 'KHRD') {
+            setLogo(KHRD)
+        } else if(station.title === 'KRAP') {
+            setLogo(KRAP)
+        } else if(station.title === 'KJZZ') {
+            setLogo(KJZZ)
+        } else if(station.title === 'KPNK') {
+            setLogo(KPNK)
+        } else if(station.title === 'KUNT') {
+            setLogo(KUNT)
         }
     }
+
     function mockGetTrackList() {
         // console.log("GETTING TRACKS", station.title)
         if(station.title === 'KRPG') {
@@ -71,7 +87,6 @@ function Station({accessToken, setStations, handleStationChange, station, setCur
         }).then(res => res.json())
         .then((data) => {
             // console.log("RECOMMENDATIONS from Station", data.tracks, station)
-
             const _currentTrack = {
                 track: data.tracks[0],
                 progress_ms: Math.floor(Math.random() * data.tracks[0].duration_ms)
@@ -213,11 +228,11 @@ function Station({accessToken, setStations, handleStationChange, station, setCur
 
     return(
         <div className="station">
-            <button onClick={() => handleStationChange(station.title)} style={{'backgroundColor': 'green', 'padding': '1rem', 'borderRadius': '5px', 'fontSize': '1.5rem'}}>
+            <button onClick={() => handleStationChange(station.title)} className="station-btn">
                 {/* {station.title} */}
             
                 {/* <img src={logo} /> */}
-                {logo ? <img className="image-logo" src={logo} /> : <p>{station.title}</p>}
+                {logo ? <img className="image-logo" src={logo} /> : <div className="image-logo"><p>{station.title}</p></div>}
 
             </button>
 
