@@ -1,10 +1,12 @@
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useRef} from 'react';
 import PropTypes from 'prop-types';
 import exampleRecs from '../rec_example.json';
 import exampleRecs2 from '../rec_example2.json';
 import punk from '../punk.json';
 import rap from '../rap.json';
 
+import audio from '../static.mp3'
+const radioStatic = new Audio(audio)
 import KRPG from '../images/krpg.png'
 import KHRD from '../images/khrd.png'
 import KRAP from '../images/krap.png'
@@ -15,7 +17,8 @@ import KUNT from '../images/kunt.png'
 function Station({accessToken, setStations, handleStationChange, station, setCurrentStation, handleStationChanges, timestampRef, webplayerTimestamp}) {
     const [timestamp, setTimestamp] = useState()
     const [logo, setLogo] = useState()
-
+    const retry = useRef()
+    const playStatic = useRef(false)
     function getStationLogo() {
         if(station.title === 'KRPG') {
             setLogo(KRPG)
@@ -79,12 +82,37 @@ function Station({accessToken, setStations, handleStationChange, station, setCur
 
     function getTrackList() {
         // all initialization stuff when the station first loads
+        console.log('getting...')
         fetch(`https://api.spotify.com/v1/recommendations?seed_genres=${station.seeds.genres}&seed_artists=${station.seeds.artists}&seed_tracks=${station.seeds.tracks}
         `, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`
             }
-        }).then(res => res.json())
+        // }).then(res => res.json())
+        }).then(res => {
+            if(!res.ok) {
+                const headersObject = {};
+                res.headers.forEach((value, name) => {
+                  headersObject[name] = value;
+                });
+                
+                // headersObject['Retry-After'] = 10
+                if(Object.keys(headersObject).includes('Retry-After')) {
+                    // error handling here? it means there was trouble
+                    radioStatic.play()
+                    retry.current = headersObject['Retry-After']
+                    
+                    setTimeout(() => {
+                        console.log("retying request in", retry.current + 1)
+                        getTrackList()
+                    }, retry.current)
+                    throw new Error ('rate limit reached, trying after', headersObject['Retry-After'], 'seconds')
+    
+                }
+                throw new Error ("error getting tracks for playlist")
+            }
+            return res.json()
+        })
         .then((data) => {
             // console.log("RECOMMENDATIONS from Station", data.tracks, station)
             const _currentTrack = {
