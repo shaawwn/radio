@@ -3,7 +3,13 @@ import {useState, useEffect, useRef} from 'react';
 import {getDeviceId} from '../utils/spotifyGetters'
 
 import Volume from './Volume';
-
+import KRPG from '../images/krpg.png'
+import KHRD from '../images/khrd.png'
+import KRAP from '../images/krap.png'
+import KJZZ from '../images/kjzz.png'
+import KPNK from '../images/kpnk.png'
+import KUNT from '../images/kunt.png'
+import KPRG from '../images/kprg.png'
 
 function Webplayer({accessToken, station, currentTrackRef, timestampRef, toSync}) {
     // console.log("WEBPLAYER", station.playing)
@@ -11,6 +17,7 @@ function Webplayer({accessToken, station, currentTrackRef, timestampRef, toSync}
     const [is_active, setActive] = useState(false);
     const [deviceId, setDeviceId] = useState()
     const [currentTrack, setCurrentTrack] = useState()
+    const [logo, setLogo] = useState()
 
     const ct = useRef()
     const player = useRef(null)
@@ -23,6 +30,25 @@ function Webplayer({accessToken, station, currentTrackRef, timestampRef, toSync}
         )
     }
 
+    function getStationLogo() {
+        if(station.title === 'KRPG') {
+            setLogo(KRPG)
+        } else if(station.title === 'KHRD') {
+            setLogo(KHRD)
+        } else if(station.title === 'KRAP') {
+            setLogo(KRAP)
+        } else if(station.title === 'KJZZ') {
+            setLogo(KJZZ)
+        } else if(station.title === 'KPNK') {
+            setLogo(KPNK)
+        } else if(station.title === 'KUNT') {
+            setLogo(KUNT)
+        } else if(station.title === 'KPRG') {
+            setLogo(KPRG)
+        } else {
+            setLogo()
+        }
+    }
     function _displayTrackDetails() {
         return(
             <section className="current-station__track-details">
@@ -45,13 +71,17 @@ function Webplayer({accessToken, station, currentTrackRef, timestampRef, toSync}
             {currentTrack ? 
                 <>  
                     <div className="current-station__track-details__details">
-                        <p>{currentTrack.name}</p>
-                        <p style={{"fontSize": "1.75rem"}}>{currentTrack.artists[0].name}</p>
+                        <p className="current-station__track-details__details__track-name">{currentTrack.name}</p>
+                        <p className="current-station__track-details__details__artist-name">{currentTrack.artists[0].name}</p>
                     </div>
 
                     {currentTrack ?  // triple check for album image
                         <div className="flex-wrapper flex-wrapper--center">
-                            <img className="current-station__track-details__image" src={currentTrack.album.images[0].url} alt={currentTrack.name} />
+                            <div className="current-station__track-details__image__wrapper">
+                                <img className="current-station__track-details__image" src={currentTrack.album.images[0].url} alt={currentTrack.name} />
+                                {logo ?  <img src={logo} className="current-station__track-details__logo"/> : null}
+              
+                            </div>
                         </div>
                     :
                     <div className="no-image">
@@ -128,7 +158,7 @@ function Webplayer({accessToken, station, currentTrackRef, timestampRef, toSync}
             // setPlayer(player);
 
             player.current.addListener('ready', ({ device_id }) => {
-                console.log('Ready with Device ID', device_id);
+                // console.log('Ready with Device ID', device_id);
                 setDeviceId(device_id)
             });
 
@@ -172,6 +202,7 @@ function Webplayer({accessToken, station, currentTrackRef, timestampRef, toSync}
     useEffect(() => {
         // const timeLeft = station.playing.track.duration_ms - station.playing.progress_ms
         if(station && station.trackList.length > 0 && deviceId) {
+            getStationLogo()
             if(currentTrack) {
                 if(station.playing.track.name !== currentTrack.name) {
                     startPlayback()
@@ -204,20 +235,6 @@ function Webplayer({accessToken, station, currentTrackRef, timestampRef, toSync}
 
     return(
         <article className="current-station">
-            {/* Station name */}
-
-            {/* Text Trivia or something */}
-
-            {/* Sonng Title/Artist and Album */}
-            {/* <section className="current-station__trivia">
-                <p>Pull random stuff from wikipedia about current artist, or just some quotes</p>
-            </section> */}
-            <LyricsContainer 
-                artist={station.playing.track.artists[0].name}
-                track={station.playing.track.name}
-            />
-
-            {/* {displayTrackDetails()} */}
             {station.playing.track.name === 'radioStatic' ? displaySkeleton() : displayTrackDetails()}
             <Volume accessToken={accessToken} deviceId={deviceId}/>
         </article>
@@ -228,10 +245,10 @@ function LyricsContainer({artist, track}) {
 
     useEffect(() => {
         if(artist && track) {
-            // (async function(artist, title) {
-            //     let lyrics = await lyricsFinder(artist, title) || "Not Found!";
-            //     console.log("LYRICS", lyrics);
-            // })(artist, track);
+            (async function(artist, title) {
+                let lyrics = await lyricsFinder(artist, title) || "Not Found!";
+                console.log("LYRICS", lyrics);
+            })(artist, track);
             fetch(`http://localhost:3000/radio/lyrics?artist=${artist}&&track=${track}`)
             .then((response) => response.json())
             .then((data) => {
@@ -239,6 +256,7 @@ function LyricsContainer({artist, track}) {
             })
         }
     }, [artist])
+
     return(
         <section className="current-station__trivia">
             {/* <p>Pull random stuff from wikipedia about current artist, or just some quotes</p> */}

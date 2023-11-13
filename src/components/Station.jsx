@@ -13,12 +13,14 @@ import KRAP from '../images/krap.png'
 import KJZZ from '../images/kjzz.png'
 import KPNK from '../images/kpnk.png'
 import KUNT from '../images/kunt.png'
+import KPRG from '../images/kprg.png'
 
 function Station({accessToken, setStations, handleStationChange, station, setCurrentStation, handleStationChanges, timestampRef, webplayerTimestamp}) {
     const [timestamp, setTimestamp] = useState()
     const [logo, setLogo] = useState()
     const retry = useRef()
     const playStatic = useRef(false)
+
     function getStationLogo() {
         if(station.title === 'KRPG') {
             setLogo(KRPG)
@@ -32,6 +34,8 @@ function Station({accessToken, setStations, handleStationChange, station, setCur
             setLogo(KPNK)
         } else if(station.title === 'KUNT') {
             setLogo(KUNT)
+        } else if(station.title === 'KPRG') {
+            setLogo(KPRG)
         }
     }
 
@@ -82,7 +86,7 @@ function Station({accessToken, setStations, handleStationChange, station, setCur
 
     function getTrackList() {
         // all initialization stuff when the station first loads
-        console.log('getting...')
+        
         fetch(`https://api.spotify.com/v1/recommendations?seed_genres=${station.seeds.genres}&seed_artists=${station.seeds.artists}&seed_tracks=${station.seeds.tracks}
         `, {
             headers: {

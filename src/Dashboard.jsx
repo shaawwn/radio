@@ -27,7 +27,7 @@ let DEFAULT_STATIONS = [
             "trackList": [],
             "seeds": {
                 "genres": [],
-                "artists": ["3V79CTgRnsDdJSTqKitROv,7cGkvEcOOYVtNdfkf3s1tK,6dOnTTVTbQlFWF6yfD4Vw5,6RGKuqMApf175q5IulAD9z,63JXuvboeORZFlNVoivVLT"],
+                "artists": ["3V79CTgRnsDdJSTqKitROv,7cGkvEcOOYVtNdfkf3s1tK,6dOnTTVTbQlFWF6yfD4Vw5,1CRvJnCbPjgx0xmBdoex0c,0JuWnarwRTjiTfY5zOuOfH"],
                 "tracks": []
             },
             "current": true,
@@ -44,12 +44,11 @@ let DEFAULT_STATIONS = [
             "trackList": [],
             "seeds": {
                 "genres": [
-                    'death-metal',
                     'hard-rock',
                     'heavy-metal'
                 ],
-                // "artists": ['2ye2Wgw4gimLv2eAKyk1NB,3qm84nBOXUEQ2vnTfUTTFC,1DFr97A9HnbV3SKTJFu62M,14pVkFUHDL207LzLHtSA18,5M52tdBnJaKSvOpJGz8mfZ'],
                 "artists": [
+                    '5M52tdBnJaKSvOpJGz8mfZ',
                     '1DFr97A9HnbV3SKTJFu62M',
                     '3qm84nBOXUEQ2vnTfUTTFC'
                 ],
@@ -102,8 +101,8 @@ let DEFAULT_STATIONS = [
             "desc": "Classic Country",
             "trackList": [],
             "seeds": {
-                "genres": [],
-                "artists": ["1FClsNYBUoNFtGgzeG74dW,6kACVPfCOnqzgfEF5ryl0x,1RP2UpEaRzkF0Id3JigqD8,4xcYVPssil6vbG6tq3W43S,7wCjDgV6nqBsHguQXPAaIM"],
+                "genres": ['honky-tonk'],
+                "artists": ["1FClsNYBUoNFtGgzeG74dW,6kACVPfCOnqzgfEF5ryl0x,1RP2UpEaRzkF0Id3JigqD8,7wCjDgV6nqBsHguQXPAaIM"],
                 "tracks": []
             },
             "current": false,
@@ -122,6 +121,25 @@ let DEFAULT_STATIONS = [
                 "genres": ["jazz"],
                 "artists": [
                     "1VEzN9lxvG6KPR3QQGsebR,7AbWCUgC8aFlUYWSuiaQhK,0kbYTNQb4Pb1rPbbaF0pT4,4PDpGtF16XpqvXxsrFwQnN"
+                ],
+                "tracks": []
+            },
+            "current": false,
+            "playing": {
+                "track": {
+                    "name": "radioStatic",
+                    "progress_ms": 0
+                }
+            }
+        },
+        {
+            "title": "KPRG",
+            "desc": "Prog Rock",
+            "trackList": [],
+            "seeds": {
+                "genres": [],
+                "artists": [
+                    "2Hkut4rAAyrQxRdof7FVJq,64mPnRMMeudAet0E62ypkx,7AC976RDJzL2asmZuz7qil,7M1FPw29m5FbicYzS2xdpi"
                 ],
                 "tracks": []
             },
@@ -231,28 +249,32 @@ function Dashboard({code}) {
 
     function displayStations() {
         return(
-            <nav className="station-container">
-            {stationList.length > 0 ? 
-            <>
-                {stationList.map((station) => {
-                    return <Station 
-                        key={station.title}
-                        accessToken={accessToken}
-                        handleStationChange={handleStationChange}
-                        station={station}
-                        handleStationChanges={handleStationChanges}
-                        timestampRef={timestampRef}
-                        toSync={toSync}
-                        webplayerTimestamp={webplayerTimestamp}
-                    />
-                })}
-                </>
-            :<p>No stations</p>
-            }
-            {/* <div className="current-station">
-                {currentStation ?  <CurrentStation station={currentStation}/> : <p>No station set.</p>}
-            </div> */}
-        </nav>
+            <div className="station-container__wrapper">
+
+
+                <nav className="station-container">
+                {stationList.length > 0 ? 
+                <>
+                    {stationList.map((station) => {
+                        return <Station 
+                            key={station.title}
+                            accessToken={accessToken}
+                            handleStationChange={handleStationChange}
+                            station={station}
+                            handleStationChanges={handleStationChanges}
+                            timestampRef={timestampRef}
+                            toSync={toSync}
+                            webplayerTimestamp={webplayerTimestamp}
+                        />
+                    })}
+                    </>
+                :<p>No stations</p>
+                }
+                {/* <div className="current-station">
+                    {currentStation ?  <CurrentStation station={currentStation}/> : <p>No station set.</p>}
+                </div> */}
+            </nav>
+        </div>
         )
     }
 

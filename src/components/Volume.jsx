@@ -77,12 +77,21 @@ function Volume({accessToken, deviceId}) {
 
         return(
             <div className="volume__level" onMouseLeave={handleMouseLeave}>
-                {volume === 10 ? 
+                <MuteBtn 
+                    volume={volume}
+                    active={''} 
+                    adjustVolume={adjustVolume}
+                    level={0}
+                    volRef={volRef}
+                    setDummyVolume={setDummyVolume}
+                    dummyVolume={dummyVolume}
+                />
+                {volume === 2 ? 
                     <VolumeBar 
                         volume={volume}
                         active={active} 
                         adjustVolume={adjustVolume} 
-                        level={10}
+                        level={2}
                         volRef={volRef}
                         setDummyVolume={setDummyVolume}
                         dummyVolume={dummyVolume}
@@ -91,47 +100,7 @@ function Volume({accessToken, deviceId}) {
                         volume={volume}
                         active={''} 
                         adjustVolume={adjustVolume}
-                        level={10}
-                        volRef={volRef}
-                        setDummyVolume={setDummyVolume}
-                        dummyVolume={dummyVolume}
-                        />
-                }
-                {volume >= 8 ? 
-                    <VolumeBar 
-                        volume={volume}
-                        active={active} 
-                        adjustVolume={adjustVolume} 
-                        level={8}
-                        volRef={volRef}
-                        setDummyVolume={setDummyVolume}
-                        dummyVolume={dummyVolume}
-                    /> 
-                    :<VolumeBar 
-                        volume={volume}
-                        active={''} 
-                        adjustVolume={adjustVolume}
-                        level={8}
-                        volRef={volRef}
-                        setDummyVolume={setDummyVolume}
-                        dummyVolume={dummyVolume}
-                        />
-                }
-                {volume >= 6 ? 
-                    <VolumeBar 
-                        volume={volume}
-                        active={active} 
-                        adjustVolume={adjustVolume} 
-                        level={6}
-                        volRef={volRef}
-                        setDummyVolume={setDummyVolume}
-                        dummyVolume={dummyVolume}
-                    /> 
-                    :<VolumeBar 
-                        volume={volume}
-                        active={''} 
-                        adjustVolume={adjustVolume}
-                        level={6}
+                        level={2}
                         volRef={volRef}
                         setDummyVolume={setDummyVolume}
                         dummyVolume={dummyVolume}
@@ -157,12 +126,12 @@ function Volume({accessToken, deviceId}) {
                         dummyVolume={dummyVolume}
                         />
                 }
-                {volume >= 2 ? 
+                {volume >= 6 ? 
                     <VolumeBar 
                         volume={volume}
                         active={active} 
                         adjustVolume={adjustVolume} 
-                        level={2}
+                        level={6}
                         volRef={volRef}
                         setDummyVolume={setDummyVolume}
                         dummyVolume={dummyVolume}
@@ -171,13 +140,53 @@ function Volume({accessToken, deviceId}) {
                         volume={volume}
                         active={''} 
                         adjustVolume={adjustVolume}
-                        level={2}
+                        level={6}
                         volRef={volRef}
                         setDummyVolume={setDummyVolume}
                         dummyVolume={dummyVolume}
                         />
                 }
-                <MuteBtn 
+                {volume >= 8 ? 
+                    <VolumeBar 
+                        volume={volume}
+                        active={active} 
+                        adjustVolume={adjustVolume} 
+                        level={8}
+                        volRef={volRef}
+                        setDummyVolume={setDummyVolume}
+                        dummyVolume={dummyVolume}
+                    /> 
+                    :<VolumeBar 
+                        volume={volume}
+                        active={''} 
+                        adjustVolume={adjustVolume}
+                        level={8}
+                        volRef={volRef}
+                        setDummyVolume={setDummyVolume}
+                        dummyVolume={dummyVolume}
+                        />
+                }
+                {volume === 10 ? 
+                    <VolumeBar 
+                        volume={volume}
+                        active={active} 
+                        adjustVolume={adjustVolume} 
+                        level={10}
+                        volRef={volRef}
+                        setDummyVolume={setDummyVolume}
+                        dummyVolume={dummyVolume}
+                    /> 
+                    :<VolumeBar 
+                        volume={volume}
+                        active={''} 
+                        adjustVolume={adjustVolume}
+                        level={10}
+                        volRef={volRef}
+                        setDummyVolume={setDummyVolume}
+                        dummyVolume={dummyVolume}
+                        />
+                }
+                {/* <MuteBtn 
                     volume={volume}
                     active={''} 
                     adjustVolume={adjustVolume}
@@ -185,7 +194,7 @@ function Volume({accessToken, deviceId}) {
                     volRef={volRef}
                     setDummyVolume={setDummyVolume}
                     dummyVolume={dummyVolume}
-                />
+                /> */}
             </div>
         )
     }
@@ -212,37 +221,42 @@ function MuteBtn({volume, active, adjustVolume, level, dummyVolume, setDummyVolu
     function displayVolumeIcon() {
         if(volume >= 6) {
             return(
-                <FontAwesomeIcon 
-                icon={faVolumeHigh} 
-                size="2x" className="volume__icon" 
-                // name="vol-mute"
-                onClick={handleClick}
-                onMouseOver={handleHover}
-                color={active}
-            />
+                <div className="volume__icon__wrapper">
+                    <FontAwesomeIcon 
+                    icon={faVolumeHigh} 
+                    size="2x" className="volume__icon" 
+                    // name="vol-mute"
+                    onClick={handleClick}
+                    onMouseOver={handleHover}
+                    color={active}
+                    />
+                </div>
             )
         } else if(volume >= 2) {
             return(
-                <FontAwesomeIcon 
-                icon={faVolumeLow} 
-                size="2x" className="volume__icon" 
-                // name="vol-mute"
-                onClick={handleClick}
-                onMouseOver={handleHover}
-                color={active}
-            />
+                <div className="volume__icon__wrapper">
+                    <FontAwesomeIcon 
+                    icon={faVolumeLow} 
+                    size="2x" className="volume__icon" 
+                    // name="vol-mute"
+                    onClick={handleClick}
+                    onMouseOver={handleHover}
+                    color={active}
+                    />
+                </div>
             )
         } else if(volume === 0) {
             return(
-                <FontAwesomeIcon 
-                icon={faVolumeXmark} 
-                size="2x" 
-                className="volume__icon" 
-                // name="vol-mute"
-                onClick={handleClick}
-                onMouseOver={handleHover}
-                color={active}
-            />
+                <div className="volume__icon__wrapper">
+                    <FontAwesomeIcon 
+                    icon={faVolumeXmark} 
+                    size="2x" className="volume__icon" 
+                    // name="vol-mute"
+                    onClick={handleClick}
+                    onMouseOver={handleHover}
+                    color={active}
+                    />
+                </div>
             )
         }
     }
@@ -273,12 +287,12 @@ function VolumeBar({volume, active, adjustVolume, level, dummyVolume, setDummyVo
 
     return(
         // <div className={`volume__level__block ${active}`} onMouseOver={handleHover}></div>
-        <>
+        <div className="volume__level__block__wrapper">
             {dummyVolume >= level ? 
                 <div className={`volume__level__block ${active ? active : 'volume__level__block--active'}`} onClick={handleClick} onMouseOver={handleHover}></div>
                 :<div className={`volume__level__block ${''}`} onClick={handleClick} onMouseOver={handleHover}></div>
                 }
-        </>
+        </div>
     )
 }
 export default Volume;
