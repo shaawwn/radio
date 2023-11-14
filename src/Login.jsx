@@ -1,23 +1,176 @@
 
-import {useRef} from 'react';
+import {useRef, useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import ToggleSwitch from '../src/components/ToggleSwitch'
 
+import KRPG from './images/krpg.png'
+import KHRD from './images/khrd.png'
+import KRAP from './images/krap.png'
+import KJZZ from './images/kjzz.png'
+import KPNK from './images/kpnk.png'
+import KUNT from './images/kunt.png'
+import KPRG from './images/kprg.png'
+import gifDesc from './video/desc.gif'
+
+
 function Login({authUrl}) {
 
+    const [screenWidth, setScreenWidth] = useState()
+
+    function displayStations() {
+        return(
+        <article className="login__section">
+        {/* <h2>Current Stations</h2> */}
+        <section className="login__stations__station">
+            <h3>KRPG</h3>
+            <img src={KRPG} alt="krpg" className="login__stations__station__image"/>
+            <p className="station-description">A mix of class and new video game music with an emphasis on SNES era RPGs</p>
+        </section>
+        <section className="login__stations__station">
+            <h3>KHRD</h3>
+            <p className="station-description">A mix of class and new video game music with an emphasis on SNES era RPGs</p>
+            <img src={KHRD} alt="khrd" className="login__stations__station__image"/>
+
+        </section>
+        <section className="login__stations__station">
+            <h3>KRAP</h3>
+            <img src={KRAP} alt="krap" className="login__stations__station__image"/>
+            <p className="station-description">A mix of class and new video game music with an emphasis on SNES era RPGs</p>
+        </section>
+        <section className="login__stations__station">
+            <h3>KUNT</h3>
+            <img src={KUNT} alt="kunt" className="login__stations__station__image"/>
+            <p className="station-description">A mix of class and new video game music with an emphasis on SNES era RPGs</p>
+        </section>
+        <section className="login__stations__station">
+            <h3>KPNK</h3>
+            <p className="station-description">A mix of class and new video game music with an emphasis on SNES era RPGs</p>
+            <img src={KPNK} alt="KPNK" className="login__stations__station__image"/>
+        </section>
+        <section className="login__stations__station">
+                <h3>KJZZ</h3>
+                <img src={KJZZ} alt="kjzz" className="login__stations__station__image"/>
+                <p className="station-description">From timeless classics to contemporary grooves, experience the artistry of legendary musicians.</p>
+            </section>
+        <section className="login__stations__station">
+            <h3>KPRG</h3>
+            <img src={KPRG} alt="kprg" className="login__stations__station__image"/>
+            <p className="station-description">A mix of class and new video game music with an emphasis on SNES era RPGs</p>
+        </section>
+    </article>)
+    }
+
+    function displayStationsMobile() {
+
+        return(
+            <article className={"login__section login__section login__stations__wrapper"}>
+            <section className="login__stations__station">
+                <h3>KRPG</h3>
+                <img src={KRPG} alt="krpg" className="login__stations__station__image"/>
+                <p className="station-description">A mix of class and new video game music with an emphasis on SNES era RPGs</p>
+            </section>
+            <section className="login__stations__station">
+                <h3>KHRD</h3>
+                <img src={KHRD} alt="khrd" className="login__stations__station__image"/>
+                <p className="station-description">Raw riffs, relentless beats. Pure hard rock power.</p>
+            </section>
+            <section className="login__stations__station">
+                <h3>KRAP</h3>
+                <img src={KRAP} alt="krap" className="login__stations__station__image"/>
+                <p className="station-description">Sick beats, tight rhymes. Unleash rap's raw energy.</p>
+            </section>
+            <section className="login__stations__station">
+                <h3>KUNT</h3>
+                <img src={KUNT} alt="kunt" className="login__stations__station__image"/>
+                <p className="station-description">Saddle up for a journey through authentic stories and twangy tunes.</p>
+            </section>
+            <section className="login__stations__station">
+                <h3>KPNK</h3>
+                <img src={KPNK} alt="KPNK" className="login__stations__station__image"/>
+                <p className="station-description"> Brace yourself for anarchy and relentless sonic rebellion</p>
+            </section>
+            <section className="login__stations__station">
+                <h3>KJZZ</h3>
+                <img src={KJZZ} alt="kjzz" className="login__stations__station__image"/>
+                <p className="station-description">From timeless classics to contemporary grooves, experience the artistry of legendary musicians.</p>
+            </section>
+            <section className="login__stations__station">
+                <h3>KPRG</h3>
+                <img src={KPRG} alt="kprg" className="login__stations__station__image"/>
+                <p className="station-description">Embark on a musical odyssey through the intricate realms of progressive rock.</p>
+            </section>
+        </article>
+        )
+    }
+    useEffect(() => {
+
+        if(!screenWidth) {
+            let screenSize = window.innerWidth
+            setScreenWidth(screenSize)
+            window.addEventListener('resize', () => {
+                screenSize = window.innerWidth
+                setScreenWidth(screenSize)
+            })
+        }
+
+    }, [])
 
     return(
         <>
             <header className="dashboard-header">
-                <p></p>
-                <p></p>
-                <ToggleSwitch 
+                {/* <p></p> */}
+                {/* <h1>Online Radio</h1> */}
+                {screenWidth > 420 ? <h1>Online Radio</h1>: null}
+                <div className="flex-wrapper">
+                    <p style={{'marginTop': 'auto', 'marginBottom': 'auto'}}>Click me to listen</p>
+                    <ToggleSwitch 
                     authUrl={authUrl}
                     radioOn={false}
                     />
+                </div>
             </header>
             <main className="login">
-                <h1>Welcome to Radio!</h1>
+
+                <article className="introduction">
+                    {/* <h2>Welcome to Radio!</h2> */}
+                    <p className="radio-description">This is an app created to mimic a radio using the Spotify API.  When you turn it on, some default stations will load and then you can switch between stations. Each station will play songs based on genre and at varying times.  Like a real radio, songs do not pause when you change stations, instead, there is a real time counter to determine where a song has progressed to happening in the background.</p>
+                    {screenWidth > 420 ? <img className="gif" src={gifDesc}/>: null}
+     
+                </article>
+                {screenWidth > 420 ? displayStations(): displayStationsMobile()}
+                {/* <article className={screenWidth > 420 ? "login__section" : "login__section login__stations__wrapper"}>
+                    <section className="login__stations__station">
+                        <h3>KRPG</h3>
+                        <img src={KRPG} alt="krpg" className="login__stations__station__image"/>
+                        <p className="station-description">A mix of class and new video game music with an emphasis on SNES era RPGs</p>
+                    </section>
+                    <section className="login__stations__station">
+                        <h3>KHRD</h3>
+                        <p className="station-description">A mix of class and new video game music with an emphasis on SNES era RPGs</p>
+                        <img src={KHRD} alt="khrd" className="login__stations__station__image"/>
+
+                    </section>
+                    <section className="login__stations__station">
+                        <h3>KRAP</h3>
+                        <img src={KRAP} alt="krap" className="login__stations__station__image"/>
+                        <p className="station-description">A mix of class and new video game music with an emphasis on SNES era RPGs</p>
+                    </section>
+                    <section className="login__stations__station">
+                        <h3>KUNT</h3>
+                        <img src={KUNT} alt="kunt" className="login__stations__station__image"/>
+                        <p className="station-description">A mix of class and new video game music with an emphasis on SNES era RPGs</p>
+                    </section>
+                    <section className="login__stations__station">
+                        <h3>KPNK</h3>
+                        <p className="station-description">A mix of class and new video game music with an emphasis on SNES era RPGs</p>
+                        <img src={KPNK} alt="KPNK" className="login__stations__station__image"/>
+                    </section>
+                    <section className="login__stations__station">
+                        <h3>KPRG</h3>
+                        <img src={KPRG} alt="kprg" className="login__stations__station__image"/>
+                        <p className="station-description">A mix of class and new video game music with an emphasis on SNES era RPGs</p>
+                    </section>
+                </article> */}
             </main>
         </>
     )

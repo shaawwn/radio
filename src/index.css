@@ -25,7 +25,9 @@ h1, p {
   margin: 0;
 }
 
-
+.gif {
+  /* width: 300px; */
+}
 
 .flex-wrapper {
   display: flex;
@@ -33,6 +35,53 @@ h1, p {
 
 .flex-wrapper--center {
   justify-content: center;
+}
+
+.login {
+  display:flex;
+}
+
+.login__section {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.introduction {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.radio-description {
+  font-size: 1.3rem;
+}
+
+.login__stations__station {
+  display: flex;
+  flex-direction: column;
+  max-width: 200px;
+  /* background-color: rgb(53, 53, 53); */
+  border-radius: 5px;
+  padding: 2rem;
+}
+
+.login__stations__station > h3 {
+  text-align: center;
+  margin: 0px;
+}
+
+.login__stations__station__image {
+  width: 150px;
+  height: 150px;
+  /* border: 1px solid white; */
+  background-color: rgb(72, 81, 93);
+  margin: 0 auto;
+  border-radius: 5px;
+}
+
+.station-description {
+  
 }
 .dashboard {
   display: flex;
@@ -268,6 +317,39 @@ h1, p {
     display: flex;
     flex-direction: column;
     justify-content: center;
+  }
+
+  .login {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .login__section {
+
+  }
+
+  .login__stations__station {
+    max-width: 175px;
+  }
+
+  .login__stations__station > p {
+    /* font-size: 1rem; */
+  }
+
+  .login__stations__station__image {
+    width: 135px;
+    height: 135px;
+  }
+
+  .login__stations__wrapper {
+    display: flex;
+    /* background-color: red; */
+    padding: 0px;
+
+  }
+
+  .radio-description {
+
   }
 }
 
