@@ -5,31 +5,21 @@ import ToggleSwitch from '../src/components/ToggleSwitch'
 
 function Login({authUrl}) {
 
-    function redirectLogin() {
-        console.log("Logging in")
-        setTimeout(() => {
-            window.location.href=authUrl
-        }, 150)
-    }
 
-    function logOut() {
-        console.log("Logging out")
-    }
     return(
-        <main className="login">
+        <>
             <header className="dashboard-header">
-                <p>Radio</p>
-                <p>Welcome</p>
+                <p></p>
+                <p></p>
                 <ToggleSwitch 
                     authUrl={authUrl}
                     radioOn={false}
                     />
             </header>
-            {/* <ToggleSwitch 
-                authUrl={authUrl}
-                radioOn={false}
-            /> */}
-        </main>
+            <main className="login">
+                <h1>Welcome to Radio!</h1>
+            </main>
+        </>
     )
 }
 

@@ -318,8 +318,8 @@ function Dashboard({code}) {
     return(
         <main className="dashboard">
             <header className="dashboard-header">
-                <p>Radio</p>
                 <p>Welcome {user ? ', ' + user.display_name : ''}</p>
+                <p></p>
                 <ToggleSwitch 
                     accessToken={accessToken} 
                     radioOn={true}
