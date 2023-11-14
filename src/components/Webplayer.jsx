@@ -152,7 +152,7 @@ function Webplayer({accessToken, station, currentTrackRef, timestampRef, toSync}
             player.current = new window.Spotify.Player({
                 name: 'Web Playback SDK',
                 getOAuthToken: cb => { cb(accessToken); },
-                volume: 0.8
+                volume: 0.6
             });
 
             // setPlayer(player);

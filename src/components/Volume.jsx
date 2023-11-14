@@ -16,7 +16,7 @@ import { faVolumeOff, faVolumeLow, faVolumeHigh, faVolumeXmark } from '@fortawes
 function Volume({accessToken, deviceId}) {
 
     // volume on a scale 0-6 (0, 20, 40, 60, 80, 100)
-    const [volume, setVolume] = useState(8)
+    const [volume, setVolume] = useState(6)
     const [active, setActive] = useState('volume__level__block--active')
     const [dummyVolume, setDummyVolume] = useState(8)
     const [inactive, setInactive] = useState('')
