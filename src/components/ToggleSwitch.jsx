@@ -1,22 +1,38 @@
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useRef} from 'react';
 
-function ToggleSwitch({authUrl, accessToken}) {
+import radioStart from '../radiostart.mp3'
+const turnOnSound = new Audio(radioStart)
+function ToggleSwitch({authUrl, accessToken, radioOn}) {
+
+    const [on, setOn] = useState(radioOn)
 
     function turnOn() {
+        if(on === true) {
+            return false
+        }
+        turnOnSound.play()
         setTimeout(() => {
             window.location.href=authUrl
-        }, 150)
+        }, 300)
     }
 
     function turnOff() {
-
+        console.log("Turning off")
+        setOn(false)
+        setTimeout(() => {
+            window.location.href="http://localhost:3001/radio"
+        }, 150)
     }
+
+
+
     return(
         <>
             <label className="rocker rocker-small">
-            <input type="checkbox"/>
-            <span className="switch-left">O</span>
-            <span className="switch-right">|</span>
+            {/* <input type="checkbox"/> */}
+            {on ? <input type="checkbox" onChange={turnOff} checked /> : <input type="checkbox"/>}
+            <span className="switch-left" onClick={turnOn}>|</span>
+            <span className="switch-right" onClick={turnOff}>O</span>
             </label>
         </>
     )

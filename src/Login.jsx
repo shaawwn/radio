@@ -17,11 +17,18 @@ function Login({authUrl}) {
     }
     return(
         <main className="login">
-            <a href={authUrl}>
-                <p>Get Started</p>
-            </a>
-            <ToggleSwitch />
-
+            <header className="dashboard-header">
+                <p>Radio</p>
+                <p>Welcome</p>
+                <ToggleSwitch 
+                    authUrl={authUrl}
+                    radioOn={false}
+                    />
+            </header>
+            {/* <ToggleSwitch 
+                authUrl={authUrl}
+                radioOn={false}
+            /> */}
         </main>
     )
 }

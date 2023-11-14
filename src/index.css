@@ -356,7 +356,8 @@ h1, p {
   color: #fff;
 }
 
-.switch-left::before,
+/* For switch elevation */
+.switch-left::before, 
 .switch-right::before {
   content: "";
   position: absolute;
@@ -401,6 +402,8 @@ input:checked + .switch-left + .switch-right {
   width: 2.75em;
   transform: rotate(-15deg) skewX(-15deg);
 }
+
+
 
 input:checked + .switch-left + .switch-right::before {
   background-color: #ccc;

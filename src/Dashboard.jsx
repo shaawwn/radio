@@ -9,6 +9,7 @@ const tuning = new Audio(audio)
 import Station from './components/Station';
 import Webplayer from './components/Webplayer';
 import CurrentStation from './components/CurrentStation';
+import ToggleSwitch from './components/ToggleSwitch';
 
 // mocks
 import exampleRecs from './rec_example.json';
@@ -319,6 +320,10 @@ function Dashboard({code}) {
             <header className="dashboard-header">
                 <p>Radio</p>
                 <p>Welcome {user ? ', ' + user.display_name : ''}</p>
+                <ToggleSwitch 
+                    accessToken={accessToken} 
+                    radioOn={true}
+                    />
             </header>
             {accessToken ? displayStations() : <p>Loading stations...</p>}
 

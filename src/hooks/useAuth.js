@@ -16,8 +16,8 @@ function useAuth(code) {
         }
 
         // console.log("BEFORE FETCH", code)
-        fetch('https://wispy-bird-2586.fly.dev/radio/login', {
-        // fetch('http://localhost:3000/radio/login', {
+        // fetch('https://wispy-bird-2586.fly.dev/radio/login', {
+        fetch('http://localhost:3000/radio/login', {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
@@ -43,8 +43,8 @@ function useAuth(code) {
     useEffect(() => {
         if(!refreshToken || !expiresIn) return
         const interval = setInterval(() => {
-            fetch('https://wispy-bird-2586.fly.dev/radio/refresh', {
-            // fetch('http://localhost:3000/radio/refresh', {
+            // fetch('https://wispy-bird-2586.fly.dev/radio/refresh', {
+            fetch('http://localhost:3000/radio/refresh', {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json'
