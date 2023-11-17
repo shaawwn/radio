@@ -20,7 +20,8 @@ function ToggleSwitch({authUrl, accessToken, radioOn}) {
         console.log("Turning off")
         setOn(false)
         setTimeout(() => {
-            window.location.href="https://shaawwn.github.io/radio/"
+            // window.location.href="https://shaawwn.github.io/radio/"
+            window.location.href="http://localhost:3001/radio"
         }, 150)
     }
 

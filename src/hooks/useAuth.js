@@ -27,7 +27,7 @@ function useAuth(code) {
             })
         }).then((response) => response.json())
         .then((data) => {
-            // console.log("DATA", data)
+            // console.log("DATA", data.refreshToken)
             setAccessToken(data.accessToken)
             setRefreshToken(data.refreshToken)
             setExpiresIn(data.expiresIn)
@@ -54,6 +54,7 @@ function useAuth(code) {
                 })
             }).then((response) => response.json())
             .then((data) => {
+                // console.log("DATA", data.accessToken)
                 setAccessToken(data.accessToken)
                 setExpiresIn(data.expiresIn)
                 window.history.pushState({}, null, '/')
@@ -62,7 +63,7 @@ function useAuth(code) {
             .catch((err) => {
                 window.location = '/'
             })
-        }, (expiresIn - 60) * 1000)
+        }, 10000) // (expreisIn - 60) * 1000
         if(!refreshToken || !expiresIn) return
 
         return () => clearInterval(interval)

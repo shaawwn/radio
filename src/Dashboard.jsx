@@ -308,7 +308,7 @@ function Dashboard({code}) {
 
     useEffect(() => {
         if(accessToken) {
-            // console.log("ACCESS TOKEN", accessToken)
+            console.log("ACCESS TOKEN", accessToken)
             getUser(accessToken, setUser)
             // setCurrentStation(stationList[0]) 
         }
