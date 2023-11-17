@@ -48,7 +48,6 @@ let DEFAULT_STATIONS = [
             "trackList": [],
             "seeds": {
                 "genres": [
-                    'hard-rock',
                     'heavy-metal'
                 ],
                 "artists": [
@@ -56,7 +55,7 @@ let DEFAULT_STATIONS = [
                     '1DFr97A9HnbV3SKTJFu62M',
                     '3qm84nBOXUEQ2vnTfUTTFC'
                 ],
-                "tracks": []
+                "tracks": ["3CIOopLwvyMvXk97ZEksKO"]
             },
             "current": false,
             "playing": {
@@ -145,7 +144,7 @@ let DEFAULT_STATIONS = [
                 "artists": [
                     "2Hkut4rAAyrQxRdof7FVJq,64mPnRMMeudAet0E62ypkx,7AC976RDJzL2asmZuz7qil,7M1FPw29m5FbicYzS2xdpi"
                 ],
-                "tracks": []
+                "tracks": ["1bPUK3zBMK73QXmCLzqffn"]
             },
             "current": false,
             "playing": {
@@ -155,23 +154,23 @@ let DEFAULT_STATIONS = [
                 }
             }
         },
-        // {
-        //     "title": "KUST",
-        //     "desc": "Custom user created station",
-        //     "trackList": [],
-        //     "seeds": {
-        //         "genres": [],
-        //         "artists": [],
-        //         "tracks": []
-        //     },
-        //     "current": false,
-        //     "playing": {
-        //         "track": {
-        //             "name": "radioStatic",
-        //             "progress_ms": 0
-        //         }
-        //     }
-        // },
+        {
+            "title": "WKHP",
+            "desc": "Indie and Alternative",
+            "trackList": [],
+            "seeds": {
+                "genres": [],
+                "artists": ['4Z8W4fKeB5YxbusRsdQVPb,6olE6TJLqED3rqDCT0FyPh,6zvul52xwTWzilBZl6BUbT,5UqTO8smerMvxHYA5xsXb6'],
+                "tracks": ['5PntSbMHC1ud6Vvl8x56qd']
+            },
+            "current": false,
+            "playing": {
+                "track": {
+                    "name": "radioStatic",
+                    "progress_ms": 0
+                }
+            }
+        },
     ]
 
 function Dashboard({code}) {
@@ -369,14 +368,14 @@ function Dashboard({code}) {
 
     return(
         <main className="dashboard">
-            <header className="dashboard-header">
+            {/* <header className="dashboard-header">
                 <p>Welcome {user ? ', ' + user.display_name : ''}</p>
                 <p></p>
                 <ToggleSwitch 
                     accessToken={accessToken} 
                     radioOn={true}
                     />
-            </header>
+            </header> */}
             {/* {accessToken ? displayStations() : <p>Loading stations...</p>} */}
 
             {accessToken && currentStation ? <Webplayer 

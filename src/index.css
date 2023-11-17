@@ -86,8 +86,8 @@ h1, p {
 .dashboard {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   height: 99vh;
-  /* background-color: red; */
 }
 
 .no-image {
@@ -259,8 +259,10 @@ h1, p {
 
 @media (max-width: 420px) {
   .dashboard {
-    /* background-color: green; */
     max-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
   }
   .current-station {
     /* background-color: blue; */
@@ -278,12 +280,12 @@ h1, p {
     height: 100%;
     gap: 1px;
     padding: 1rem 0;
-    margin-left: 450px;
+    margin-left: 300px;
   }
 
   .station-btn {
-    width: 120px;
-    height: 120px;
+    width: 100px;
+    height: 100px;
     padding: 0px;
     font-size: 1rem;
   }
@@ -303,9 +305,15 @@ h1, p {
   .current-station__track-details__details__artist-name {
     font-size: 1.125rem;
   }
+
   .current-station__track-details__image {
-    width: 275px;
-    height: 275px;
+    width: 350px;
+    height: 350px;
+  }
+
+  .webplayer__skeleton__image {
+    width: 350px;
+    height: 350px;
   }
 
   .volume {

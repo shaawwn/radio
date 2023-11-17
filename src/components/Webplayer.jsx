@@ -14,6 +14,7 @@ import KJZZ from '../images/kjzz.png'
 import KPNK from '../images/kpnk.png'
 import KUNT from '../images/kunt.png'
 import KPRG from '../images/kprg.png'
+import WKHP from '../images/wkhp.png'
 
 function Webplayer({accessToken, station, currentTrackRef, timestampRef, toSync}) {
     // console.log("WEBPLAYER", station.playing)
@@ -49,6 +50,8 @@ function Webplayer({accessToken, station, currentTrackRef, timestampRef, toSync}
             setLogo(KUNT)
         } else if(station.title === 'KPRG') {
             setLogo(KPRG)
+        } else if(station.title === 'WKHP') {
+            setLogo(WKHP)
         } else {
             setLogo()
         }
@@ -75,11 +78,6 @@ function Webplayer({accessToken, station, currentTrackRef, timestampRef, toSync}
             <section className="current-station__track-details">
             {currentTrack ? 
                 <>  
-                    <div className="current-station__track-details__details">
-                        <p className="current-station__track-details__details__track-name">{currentTrack.name}</p>
-                        <p className="current-station__track-details__details__artist-name">{currentTrack.artists[0].name}</p>
-                    </div>
-
                     {currentTrack ?  // triple check for album image
                         <div className="flex-wrapper flex-wrapper--center">
                             <div className="current-station__track-details__image__wrapper">
@@ -99,6 +97,10 @@ function Webplayer({accessToken, station, currentTrackRef, timestampRef, toSync}
                     //     <img className="current-station__track-details__image" src="//:0" alt={currentTrack.track.name} />
                     // </div>
                     }
+                    <div className="current-station__track-details__details">
+                        <p className="current-station__track-details__details__track-name">{currentTrack.name}</p>
+                        <p className="current-station__track-details__details__artist-name">{currentTrack.artists[0].name}</p>
+                    </div>
                 </>
             :<div className="flex-wrapper flex-wrapper--center">
                 <div className="current-station__track-details__image__wrapper">
@@ -253,7 +255,7 @@ function Webplayer({accessToken, station, currentTrackRef, timestampRef, toSync}
     return(
         <article className="current-station">
             {station.playing.track.name === 'radioStatic' ? displaySkeleton() : displayTrackDetails()}
-            <Volume accessToken={accessToken} deviceId={deviceId}/>
+            {/* <Volume accessToken={accessToken} deviceId={deviceId}/> */}
         </article>
     )
 }

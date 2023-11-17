@@ -14,6 +14,7 @@ import KJZZ from '../images/kjzz.png'
 import KPNK from '../images/kpnk.png'
 import KUNT from '../images/kunt.png'
 import KPRG from '../images/kprg.png'
+import WKHP from '../images/wkhp.png'
 
 function Station({accessToken, setStations, handleStationChange, station, setCurrentStation, handleStationChanges, timestampRef, webplayerTimestamp}) {
     const [timestamp, setTimestamp] = useState()
@@ -36,6 +37,8 @@ function Station({accessToken, setStations, handleStationChange, station, setCur
             setLogo(KUNT)
         } else if(station.title === 'KPRG') {
             setLogo(KPRG)
+        } else if(station.title === 'WKHP') {
+            setLogo(WKHP)
         }
     }
 
