@@ -129,7 +129,7 @@ h1, p {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
-  height: 100%;
+  /* height: 100%; */
 }
 
 .current-station__track-details {
@@ -163,6 +163,12 @@ h1, p {
 .current-station__track-details__image {
   width: 400px;
   height: 400px;
+}
+
+.webplayer__skeleton__image {
+  width: 400px;
+  height: 400px;
+  color: rgb(100, 100, 140);
 }
 
 /* || Volume */

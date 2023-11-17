@@ -63,7 +63,7 @@ function useAuth(code) {
             .catch((err) => {
                 window.location = '/'
             })
-        }, 10000) // (expreisIn - 60) * 1000
+        }, (expiresIn - 60) * 1000) // set to refresh accessToken in 59 minutes
         if(!refreshToken || !expiresIn) return
 
         return () => clearInterval(interval)

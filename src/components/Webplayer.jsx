@@ -2,6 +2,10 @@ import {useState, useEffect, useRef} from 'react';
 // import lyricsFinder from 'lyrics-finder'
 import {getDeviceId} from '../utils/spotifyGetters'
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faRecordVinyl } from '@fortawesome/free-solid-svg-icons'
+
+
 import Volume from './Volume';
 import KRPG from '../images/krpg.png'
 import KHRD from '../images/khrd.png'
@@ -49,6 +53,7 @@ function Webplayer({accessToken, station, currentTrackRef, timestampRef, toSync}
             setLogo()
         }
     }
+
     function _displayTrackDetails() {
         return(
             <section className="current-station__track-details">
@@ -83,13 +88,24 @@ function Webplayer({accessToken, station, currentTrackRef, timestampRef, toSync}
               
                             </div>
                         </div>
-                    :
-                    <div className="no-image">
-                        <img className="current-station__track-details__image" src="//:0" alt={currentTrack.track.name} />
+                    :<div className="flex-wrapper flex-wrapper--center">
+                        <div className="current-station__track-details__image__wrapper">
+                            <FontAwesomeIcon icon={faRecordVinyl} className="webplayer__skeleton__image" alt={currentTrack.track.name}/>
+                            {logo ?  <img src={logo} className="current-station__track-details__logo"/> : null}
+                        </div>
                     </div>
+                    // <div className="no-image">
+                    //     <FontAwesomeIcon icon={faRecordVinyl} className="webplayer__skeleton__image" />
+                    //     <img className="current-station__track-details__image" src="//:0" alt={currentTrack.track.name} />
+                    // </div>
                     }
                 </>
-            :null
+            :<div className="flex-wrapper flex-wrapper--center">
+                <div className="current-station__track-details__image__wrapper">
+                    <FontAwesomeIcon icon={faRecordVinyl} className="webplayer__skeleton__image" />
+                    {logo ?  <img src={logo} className="current-station__track-details__logo"/> : null}
+                </div>
+            </div>
             }
             {/* <audio src="../tuning.mp3"></audio> */}
         </section>
@@ -112,6 +128,7 @@ function Webplayer({accessToken, station, currentTrackRef, timestampRef, toSync}
     }
     
     function startPlayback() {
+        console.log("STARTING PLAYBACK", accessToken)
         const uris = getTrackUris(station.trackList)
         fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
             method: "PUT",

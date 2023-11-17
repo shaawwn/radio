@@ -5,6 +5,9 @@ import useStations from './hooks/useStations';
 import audio from './tuning.mp3'
 const tuning = new Audio(audio)
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faRecordVinyl } from '@fortawesome/free-solid-svg-icons'
+
 // Component apps
 import Station from './components/Station';
 import Webplayer from './components/Webplayer';
@@ -175,7 +178,7 @@ function Dashboard({code}) {
     // console.log("Loading dashboard")
     const accessToken = useAuth(code)
     const [user, setUser] = useState()
-
+    const [screenWidth, setScreenWidth] = useState()
     // default stations
 
 
@@ -247,7 +250,6 @@ function Dashboard({code}) {
         setStationList(listCopy)
     }
     
-
     function displayStations() {
         return(
             <div className="station-container__wrapper">
@@ -306,11 +308,61 @@ function Dashboard({code}) {
         return toUpdate
     }
 
+    function mobileLayout() {
+        // track details at top
+
+        // station carousel at bottom
+        return(
+            <>
+
+                {accessToken && currentStation ? 
+                    <Webplayer 
+                    accessToken={accessToken}
+                    station={currentStation}
+                    currentTrackRef={currentTrackRef}
+                    timestampRef={timestampRef}
+                    toSync={toSync}
+                    />
+                :null}
+                {accessToken ? displayStations() : <p>Loading stations...</p>}
+            </>
+        )
+    }
+
+    function desktopLayout() {
+        console.log("DESKTOP")
+        return(
+            <>
+                {accessToken ? displayStations() : <p>Loading stations...</p>}
+                {accessToken && currentStation ? 
+                    <Webplayer 
+                    accessToken={accessToken}
+                    station={currentStation}
+                    currentTrackRef={currentTrackRef}
+                    timestampRef={timestampRef}
+                    toSync={toSync}
+                    />
+                :null}
+            </>
+        )
+    }
     useEffect(() => {
-        if(accessToken) {
-            console.log("ACCESS TOKEN", accessToken)
+        if(accessToken && !user) {
+            console.log("ACCESS TOKEN USER", user)
             getUser(accessToken, setUser)
             // setCurrentStation(stationList[0]) 
+        } else {
+            console.log("...", accessToken)
+        }
+
+        if(!screenWidth) {
+            let screenSize = window.innerWidth
+            setScreenWidth(screenSize)
+            window.addEventListener('resize', () => {
+                screenSize = window.innerWidth;
+                setScreenWidth(screenSize)
+                console.log("RESIZE", screenSize)
+            })
         }
     }, [accessToken])
     
@@ -325,7 +377,7 @@ function Dashboard({code}) {
                     radioOn={true}
                     />
             </header>
-            {accessToken ? displayStations() : <p>Loading stations...</p>}
+            {/* {accessToken ? displayStations() : <p>Loading stations...</p>} */}
 
             {accessToken && currentStation ? <Webplayer 
                 accessToken={accessToken}
@@ -334,7 +386,38 @@ function Dashboard({code}) {
                 timestampRef={timestampRef}
                 toSync={toSync}
             />
-            :null}
+            :<article className="current-station">
+                <div className="flex-wrapper flex-wrapper--center">
+                        <div className="current-station__track-details__image__wrapper">
+                            <FontAwesomeIcon icon={faRecordVinyl} className="webplayer__skeleton__image" />
+                        </div>
+                    </div>
+            </article>
+            }
+
+            {accessToken ? 
+            <div className="station-container__wrapper">
+                <nav className="station-container">
+                {stationList.length > 0 ? 
+                <>
+                    {stationList.map((station) => {
+                        return <Station 
+                            key={station.title}
+                            accessToken={accessToken}
+                            handleStationChange={handleStationChange}
+                            station={station}
+                            handleStationChanges={handleStationChanges}
+                            timestampRef={timestampRef}
+                            toSync={toSync}
+                            webplayerTimestamp={webplayerTimestamp}
+                        />
+                    })}
+                    </>
+                :<p>No stations</p>
+                }
+                </nav>
+            </div>
+            : <p>Loading stations...</p>}
         </main>
     )
 }
