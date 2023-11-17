@@ -244,7 +244,7 @@ h1, p {
   height: 100px;
 }
 
-@media (prefers-color-scheme: light) {
+/* @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
     background-color: #ffffff;
@@ -255,7 +255,7 @@ h1, p {
   button {
     background-color: #f9f9f9;
   }
-}
+} */
 
 @media (max-width: 420px) {
   .dashboard {
