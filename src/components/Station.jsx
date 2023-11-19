@@ -16,11 +16,11 @@ import KUNT from '../images/kunt.png'
 import KPRG from '../images/kprg.png'
 import WKHP from '../images/wkhp.png'
 
-function Station({accessToken, setStations, handleStationChange, station, setCurrentStation, handleStationChanges, timestampRef, webplayerTimestamp}) {
+function Station({accessToken, handleStationChange, station, handleStationChanges, webplayerTimestamp}) {
     const [timestamp, setTimestamp] = useState()
     const [logo, setLogo] = useState()
     const retry = useRef()
-    const playStatic = useRef(false)
+    // const playStatic = useRef(false)
 
     function getStationLogo() {
         if(station.title === 'KRPG') {
@@ -89,7 +89,6 @@ function Station({accessToken, setStations, handleStationChange, station, setCur
 
     function getTrackList() {
         // all initialization stuff when the station first loads
-        
         fetch(`https://api.spotify.com/v1/recommendations?seed_genres=${station.seeds.genres}&seed_artists=${station.seeds.artists}&seed_tracks=${station.seeds.tracks}
         `, {
             headers: {
@@ -126,14 +125,6 @@ function Station({accessToken, setStations, handleStationChange, station, setCur
             let ts = new Date().getTime()
             setTimestamp(ts) 
         })
-    }
-
-    function _printTimeDetails(currentTrack, ts) {
-        // console.log("CURRENT", currentTrack)
-        const currentTime = new Date().getTime()
-        const timeElapsed = currentTime - ts;
-        const timeLeft = currentTrack.track.duration_ms - (currentTrack.progress_ms + timeElapsed)
-        console.log(currentTrack.track.name, "progress: ", currentTrack.progress_ms, "should be left: ", timeLeft)
     }
 
     function checkWebplayerTimestamp() {
@@ -177,12 +168,16 @@ function Station({accessToken, setStations, handleStationChange, station, setCur
         // console.log("UPDATED WBTS", webplayerTimestamp.current)
     }
 
-    function checkTimestamp() {
-        // check the song timestamp against current UTC time to determing if the song would have ended
+    function _getTimeLeft() {
         const currentTime = new Date().getTime()
         const timeElapsed = currentTime - timestamp;
         const timeLeft = station.playing.track.duration_ms - (station.playing.progress_ms + timeElapsed)
 
+        return timeLeft
+    }
+    function checkTimestamp() {
+        // check the song timestamp against current UTC time to determing if the song would have ended
+        const timeLeft  = _getTimeLeft()
         if(timeLeft < 0) {
             // change song
             const track = station.trackList.find((track) => track.id === station.playing.track.id)
@@ -207,13 +202,11 @@ function Station({accessToken, setStations, handleStationChange, station, setCur
             // just set a new timestamp but dont change the song
             const track = station.trackList.find((track) => track.id === station.playing.track.id)
             const index = station.trackList.indexOf(track);
-            // console.log("PLAYING", station.playing.track.name, station.playing.progress_ms, 'elapsed: ', timeElapsed)
             // its using the previous station timestamp since it isn't being set
             let _currentTrack = {
                 track: station.trackList[index],
                 progress_ms: station.playing.progress_ms + timeElapsed,
             }
-
             let updatedTrackList = [...station.trackList] // because the tracklist is going to be the same
             handleStationChanges(station.title, updatedTrackList, _currentTrack)
             const ts = new Date().getTime()
@@ -271,6 +264,7 @@ Station.propTypes = {
             name: PropTypes.string.isRequired,
             id: PropTypes.string.isRequired,
             uri: PropTypes.string.isRequired,
+            duration_ms: PropTypes.number,
         })),
         seeds: PropTypes.shape({
             genres: PropTypes.arrayOf(PropTypes.string).isRequired,
@@ -278,7 +272,15 @@ Station.propTypes = {
             tracks: PropTypes.arrayOf(PropTypes.string).isRequired,
         }),
         current: PropTypes.bool.isRequired,
-    })
+        playing: PropTypes.shape({
+            track: PropTypes.object,
+            progress_ms: PropTypes.number
+        }),
+    }),
+    webplayerTimestamp: PropTypes.object,
+    accessToken: PropTypes.string.isRequired,
+    handleStationChanges: PropTypes.func,
+    handleStationChange: PropTypes.func,
 }
 
 export default Station;
