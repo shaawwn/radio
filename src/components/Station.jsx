@@ -130,11 +130,9 @@ function Station({accessToken, handleStationChange, station, handleStationChange
     function checkWebplayerTimestamp() {
         let found = webplayerTimestamp.current.find((webplayerStation) => webplayerStation.title === station.title)
         let index = webplayerTimestamp.current.indexOf(found)
-        // console.log("INDEX", index)
         const currentTime = new Date().getTime()
         const timeElapsed = currentTime - found.timestamp;
         const timeLeft = station.playing.track.duration_ms - (station.playing.progress_ms + timeElapsed)
-        // console.log("TIME ELAPSED FROM WEBPLAYER TIMESTAMP", timeElapsed)
         if(timeLeft < 0) {
             // change song
             const track = station.trackList.find((track) => track.id === station.playing.track.id)
@@ -173,45 +171,53 @@ function Station({accessToken, handleStationChange, station, handleStationChange
         const currentTime = new Date().getTime()
         const timeElapsed = currentTime - timestamp;
         const timeLeft = station.playing.track.duration_ms - (station.playing.progress_ms + timeElapsed)
-
-        return timeLeft
+        return [timeLeft, timeElapsed]
     }
+
+    function _updateToNewTrack(timeLeft) {
+        const track = station.trackList.find((track) => track.id === station.playing.track.id)
+        const index = station.trackList.indexOf(track);
+        let progress;
+
+        if(timeLeft * -1 > station.trackList[index + 1].duration_ms) {
+            // if timeLeft would exceed the even the duration of the next song in the list, just start the next song at a random time
+            // otherwise progress would be set to a negative number
+            progress = Math.floor(Math.random() * station.trackList[index + 1].duration_ms) 
+        }
+        let _currentTrack = {
+            track: station.trackList[index + 1],
+            progress_ms: progress!== undefined ? progress : timeLeft * -1 
+        }
+        let updatedTrackList = [...station.trackList]
+        updatedTrackList = station.trackList.slice(index + 1, station.trackList.length)
+        handleStationChanges(station.title, updatedTrackList, _currentTrack)
+        const ts = new Date().getTime()
+        setTimestamp(ts) 
+    }
+
+    function _updateProgressOfCurrentTrack(timeElapsed) {
+        const track = station.trackList.find((track) => track.id === station.playing.track.id)
+        const index = station.trackList.indexOf(track);
+        // its using the previous station timestamp since it isn't being set
+        let _currentTrack = {
+            track: station.trackList[index],
+            progress_ms: station.playing.progress_ms + timeElapsed,
+        }
+        let updatedTrackList = [...station.trackList] // because the tracklist is going to be the same
+        handleStationChanges(station.title, updatedTrackList, _currentTrack)
+        const ts = new Date().getTime()
+        setTimestamp(ts) 
+    }
+
     function checkTimestamp() {
         // check the song timestamp against current UTC time to determing if the song would have ended
-        const timeLeft  = _getTimeLeft()
+        const [timeLeft, timeElapsed] = _getTimeLeft()
         if(timeLeft < 0) {
             // change song
-            const track = station.trackList.find((track) => track.id === station.playing.track.id)
-            const index = station.trackList.indexOf(track);
-
-            let progress;
-
-            if(timeLeft * -1 > station.trackList[index + 1].duration_ms) {
-                progress = Math.floor(Math.random() * station.trackList[0].duration_ms)
-            }
-            let _currentTrack = {
-                track: station.trackList[index + 1],
-                progress_ms: progress!== undefined ? progress : timeLeft * -1 
-            }
-            let updatedTrackList = [...station.trackList]
-            updatedTrackList = station.trackList.slice(index + 1, station.trackList.length)
-            handleStationChanges(station.title, updatedTrackList, _currentTrack)
-            const ts = new Date().getTime()
-            setTimestamp(ts) 
-
+           _updateToNewTrack(timeLeft)
         } else {
             // just set a new timestamp but dont change the song
-            const track = station.trackList.find((track) => track.id === station.playing.track.id)
-            const index = station.trackList.indexOf(track);
-            // its using the previous station timestamp since it isn't being set
-            let _currentTrack = {
-                track: station.trackList[index],
-                progress_ms: station.playing.progress_ms + timeElapsed,
-            }
-            let updatedTrackList = [...station.trackList] // because the tracklist is going to be the same
-            handleStationChanges(station.title, updatedTrackList, _currentTrack)
-            const ts = new Date().getTime()
-            setTimestamp(ts) 
+            _updateProgressOfCurrentTrack(timeElapsed)
         }
     }
 
