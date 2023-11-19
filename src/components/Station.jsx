@@ -95,20 +95,15 @@ function Station({accessToken, setStations, handleStationChange, station, setCur
             headers: {
                 'Authorization': `Bearer ${accessToken}`
             }
-        // }).then(res => res.json())
         }).then(res => {
             if(!res.ok) {
                 const headersObject = {};
                 res.headers.forEach((value, name) => {
                   headersObject[name] = value;
                 });
-                
-                // headersObject['Retry-After'] = 10
                 if(Object.keys(headersObject).includes('Retry-After')) {
-                    // error handling here? it means there was trouble
                     radioStatic.play()
                     retry.current = headersObject['Retry-After']
-                    
                     setTimeout(() => {
                         console.log("retying request in", retry.current + 1)
                         getTrackList()
@@ -182,36 +177,32 @@ function Station({accessToken, setStations, handleStationChange, station, setCur
         // console.log("UPDATED WBTS", webplayerTimestamp.current)
     }
 
-
     function checkTimestamp() {
         // check the song timestamp against current UTC time to determing if the song would have ended
         const currentTime = new Date().getTime()
         const timeElapsed = currentTime - timestamp;
-        // const timeLeft = currentTrack.track.duration_ms - (currentTrack.progress_ms + timeElapsed)
         const timeLeft = station.playing.track.duration_ms - (station.playing.progress_ms + timeElapsed)
-
 
         if(timeLeft < 0) {
             // change song
-
             const track = station.trackList.find((track) => track.id === station.playing.track.id)
             const index = station.trackList.indexOf(track);
-            // console.log("TIME LEFT", timeLeft, track.name)
+
             let progress;
+
             if(timeLeft * -1 > station.trackList[index + 1].duration_ms) {
-                const progress = Math.floor(Math.random() * station.trackList[0].duration_ms)
-                console.log('setting progress', progress)
+                progress = Math.floor(Math.random() * station.trackList[0].duration_ms)
             }
-            // console.log("prog", progress)
             let _currentTrack = {
                 track: station.trackList[index + 1],
-                progress_ms: progress!== undefined ? progress : timeLeft * -1 // abs of time left (if a REALLY long time has passed, this will set the next song to 0 I think)
+                progress_ms: progress!== undefined ? progress : timeLeft * -1 
             }
             let updatedTrackList = [...station.trackList]
             updatedTrackList = station.trackList.slice(index + 1, station.trackList.length)
             handleStationChanges(station.title, updatedTrackList, _currentTrack)
             const ts = new Date().getTime()
             setTimestamp(ts) 
+
         } else {
             // just set a new timestamp but dont change the song
             const track = station.trackList.find((track) => track.id === station.playing.track.id)
@@ -226,7 +217,6 @@ function Station({accessToken, setStations, handleStationChange, station, setCur
             let updatedTrackList = [...station.trackList] // because the tracklist is going to be the same
             handleStationChanges(station.title, updatedTrackList, _currentTrack)
             const ts = new Date().getTime()
-            // console.log("SETTING TIMESAMPE", ts)
             setTimestamp(ts) 
         }
     }
@@ -239,12 +229,7 @@ function Station({accessToken, setStations, handleStationChange, station, setCur
             }
         }
 
-        // const timeStamp = new Date().getTime() // this will be used to check current track progress, and then set to the new timestamp
         if(station.playing.track.name !== 'radioStatic' && station.current === true) {
-            // if(webplayerTimestamp.current && (station.title === webplayerTimestamp.current.title)) { 
-            //     // there is always going to be a timestamp, but the condition is that if the timestamp matches current station, then it signals that the song change has happened via webplayer not station change
-       
-            //     checkWebplayerTimestamp()
             if(webplayerTimestamp.current.length > 0) {
                 let found = webplayerTimestamp.current.find((webplayerStation) => webplayerStation.title === station.title) 
                 if(found) {

@@ -174,18 +174,12 @@ let DEFAULT_STATIONS = [
     ]
 
 function Dashboard({code}) {
-    // console.log("Loading dashboard")
     const accessToken = useAuth(code)
     const [user, setUser] = useState()
     const [screenWidth, setScreenWidth] = useState()
-    // default stations
-
-
     const [stationList, setStationList] = useState(DEFAULT_STATIONS)
 
     const [currentStation, setCurrentStation] = useState()
-
-    // const [stationList, currentStation, handleStationChanges, currentTrackRef, changeStation] = useStations(accessToken)
     const currentStationRef = useRef()
     const currentTrackRef = useRef({track: null, progress_ms: null, timestamp: 0}) // used to webplayer track changes
     const stationRef = useRef({title: ''})
@@ -225,7 +219,7 @@ function Dashboard({code}) {
         // therefore, if tracks have been running via webplayer, on station change need to log the changes between when the stationList was last updated with what the track list and track currently are at, this is done in updateStationOnChange
         
         // but only updateStationOnChange for the previous station
-        tuning.play() // uncomment when pushing live
+        tuning.play() 
         let stationToUpdate = stationList.find((station) => station.title === title)
         let listCopy = [...stationList]
         let stationCopy = {...stationToUpdate}
@@ -241,19 +235,15 @@ function Dashboard({code}) {
             toUpdate['current'] = false
             const updateIndex = stationList.indexOf(currentStationObj)
             listCopy[updateIndex] = toUpdate
-            // console.log("TO UPDATE", toUpdate)
             toSync.current = false
-            // console.log("SETTING TO SYNC", toSync.current)
         } 
-        setCurrentStation(stationCopy) // currentStation should be KRPG, but change to KHRD here, the problem is if toSync, it stays on KRPG
+        setCurrentStation(stationCopy) 
         setStationList(listCopy)
     }
     
     function displayStations() {
         return(
             <div className="station-container__wrapper">
-
-
                 <nav className="station-container">
                 {stationList.length > 0 ? 
                 <>
@@ -272,9 +262,6 @@ function Dashboard({code}) {
                     </>
                 :<p>No stations</p>
                 }
-                {/* <div className="current-station">
-                    {currentStation ?  <CurrentStation station={currentStation}/> : <p>No station set.</p>}
-                </div> */}
             </nav>
         </div>
         )
@@ -307,49 +294,10 @@ function Dashboard({code}) {
         return toUpdate
     }
 
-    function mobileLayout() {
-        // track details at top
 
-        // station carousel at bottom
-        return(
-            <>
-
-                {accessToken && currentStation ? 
-                    <Webplayer 
-                    accessToken={accessToken}
-                    station={currentStation}
-                    currentTrackRef={currentTrackRef}
-                    timestampRef={timestampRef}
-                    toSync={toSync}
-                    />
-                :null}
-                {accessToken ? displayStations() : <p>Loading stations...</p>}
-            </>
-        )
-    }
-
-    function desktopLayout() {
-        console.log("DESKTOP")
-        return(
-            <>
-                {accessToken ? displayStations() : <p>Loading stations...</p>}
-                {accessToken && currentStation ? 
-                    <Webplayer 
-                    accessToken={accessToken}
-                    station={currentStation}
-                    currentTrackRef={currentTrackRef}
-                    timestampRef={timestampRef}
-                    toSync={toSync}
-                    />
-                :null}
-            </>
-        )
-    }
     useEffect(() => {
         if(accessToken && !user) {
-            console.log("ACCESS TOKEN USER", user)
             getUser(accessToken, setUser)
-            // setCurrentStation(stationList[0]) 
         } else {
             console.log("...", accessToken)
         }
@@ -360,7 +308,6 @@ function Dashboard({code}) {
             window.addEventListener('resize', () => {
                 screenSize = window.innerWidth;
                 setScreenWidth(screenSize)
-                console.log("RESIZE", screenSize)
             })
         }
     }, [accessToken])
@@ -368,16 +315,6 @@ function Dashboard({code}) {
 
     return(
         <main className="dashboard">
-            {/* <header className="dashboard-header">
-                <p>Welcome {user ? ', ' + user.display_name : ''}</p>
-                <p></p>
-                <ToggleSwitch 
-                    accessToken={accessToken} 
-                    radioOn={true}
-                    />
-            </header> */}
-            {/* {accessToken ? displayStations() : <p>Loading stations...</p>} */}
-
             {accessToken && currentStation ? <Webplayer 
                 accessToken={accessToken}
                 station={currentStation}
