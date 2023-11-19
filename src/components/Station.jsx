@@ -140,6 +140,7 @@ function Station({accessToken, handleStationChange, station, handleStationChange
             const track = station.trackList.find((track) => track.id === station.playing.track.id)
             const index = station.trackList.indexOf(track);
             console.log("TIME LEFT WEBPLAYER", timeLeft, track.name)
+            // TIME LEFT WEBPLAYER -236928 FFVII REMAKE: ジェシーのテーマ (Jessie's Theme)
             let _currentTrack = {
                 track: station.trackList[index + 1],
                 progress_ms: timeLeft * -1 // abs of time left

@@ -15,6 +15,7 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+  --spotify-green: #1DB954
 }
 
 
@@ -25,6 +26,9 @@ h1, p {
   margin: 0;
 }
 
+.font-title {
+  font-size: 3rem;
+}
 .gif {
   /* width: 300px; */
 }
@@ -39,14 +43,36 @@ h1, p {
 
 .login {
   display:flex;
+  justify-content: center;
+  width: 100%;
+  height: 100vh;
 }
 
+
 .login__section {
-  width: 100%;
+  position: absolute;
+  top: 30%;
   display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
+  flex-direction: column;
+  align-items: center;
+  gap: 50px;
 }
+
+.login__btn {
+  width: 200px;
+  height: 65px;
+  background-color: var(--spotify-green);
+  color: black;
+  padding: .5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-decoration: none;
+  text-align: center;
+  border-radius: 10px;
+  font-size: 1.3rem;
+}
+
 
 .introduction {
   width: 100%;
@@ -98,11 +124,9 @@ h1, p {
 
 .dashboard-header {
   display: flex;
-  justify-content: space-between;
-  /* padding: 1rem; */
+  justify-content: cen;
   font-size: 24px;
   font-weight: bold;
-  /* background-color: red; */
 }
 
 /* || STATION */
@@ -115,7 +139,7 @@ h1, p {
 .station-btn {
   background-color: rgba(185, 201, 205, 0.5);
   border: 0px;
-  padding: 1rem;
+  padding: .5rem;
   border-radius: 5px;
   font-size: 1.5rem;
   cursor: pointer;
@@ -137,10 +161,12 @@ h1, p {
   width: 100%;
   margin: auto;
   font-weight: bold;
+
 }
 
 .current-station__track-details__image__wrapper {
   position: relative;
+  box-shadow: 0px 0px 30px rgba(255, 255, 255, 0.2);
 }
 
 .current-station__track-details__logo {
@@ -240,8 +266,8 @@ h1, p {
 }
 
 .image-logo {
-  width: 100px;
-  height: 100px;
+  width: 60px;
+  height: 60px;
 }
 
 /* @media (prefers-color-scheme: light) {
@@ -257,13 +283,14 @@ h1, p {
   }
 } */
 
-@media (max-width: 420px) {
+@media (max-width: 430px) {
   .dashboard {
     max-height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
   }
+
   .current-station {
     /* background-color: blue; */
   }
@@ -339,7 +366,12 @@ h1, p {
   }
 
   .login__section {
+    position: absolute;
+    top: 25%;
+  }
 
+  .login__section > p {
+    text-align: center;
   }
 
   .login__stations__station {
