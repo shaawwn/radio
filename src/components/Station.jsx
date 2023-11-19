@@ -130,11 +130,9 @@ function Station({accessToken, handleStationChange, station, handleStationChange
     function checkWebplayerTimestamp() {
         let found = webplayerTimestamp.current.find((webplayerStation) => webplayerStation.title === station.title)
         let index = webplayerTimestamp.current.indexOf(found)
-        // console.log("INDEX", index)
         const currentTime = new Date().getTime()
         const timeElapsed = currentTime - found.timestamp;
         const timeLeft = station.playing.track.duration_ms - (station.playing.progress_ms + timeElapsed)
-        // console.log("TIME ELAPSED FROM WEBPLAYER TIMESTAMP", timeElapsed)
         if(timeLeft < 0) {
             // change song
             const track = station.trackList.find((track) => track.id === station.playing.track.id)
@@ -179,8 +177,11 @@ function Station({accessToken, handleStationChange, station, handleStationChange
         const track = station.trackList.find((track) => track.id === station.playing.track.id)
         const index = station.trackList.indexOf(track);
         let progress;
+
         if(timeLeft * -1 > station.trackList[index + 1].duration_ms) {
-            progress = Math.floor(Math.random() * station.trackList[0].duration_ms)
+            // if timeLeft would exceed the even the duration of the next song in the list, just start the next song at a random time
+            // otherwise progress would be set to a negative number
+            progress = Math.floor(Math.random() * station.trackList[index + 1].duration_ms) 
         }
         let _currentTrack = {
             track: station.trackList[index + 1],
