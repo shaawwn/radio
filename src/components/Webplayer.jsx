@@ -130,7 +130,6 @@ function Webplayer({accessToken, station, currentTrackRef, timestampRef, toSync}
     }
     
     function startPlayback() {
-        console.log("STARTING PLAYBACK", accessToken)
         const uris = getTrackUris(station.trackList)
         fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
             method: "PUT",
