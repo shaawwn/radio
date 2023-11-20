@@ -96,6 +96,9 @@ function Station({accessToken, handleStationChange, station, handleStationChange
             }
         }).then(res => {
             if(!res.ok) {
+                if(res.status === 401) {
+                    alert("Signed out of current session, refresh browser")
+                }
                 const headersObject = {};
                 res.headers.forEach((value, name) => {
                   headersObject[name] = value;
@@ -184,6 +187,7 @@ function Station({accessToken, handleStationChange, station, handleStationChange
             // otherwise progress would be set to a negative number
             progress = Math.floor(Math.random() * station.trackList[index + 1].duration_ms) 
         }
+        console.log("Udate to new track", timeLeft, progress, track.name)
         let _currentTrack = {
             track: station.trackList[index + 1],
             progress_ms: progress!== undefined ? progress : timeLeft * -1 
@@ -199,6 +203,7 @@ function Station({accessToken, handleStationChange, station, handleStationChange
         const track = station.trackList.find((track) => track.id === station.playing.track.id)
         const index = station.trackList.indexOf(track);
         // its using the previous station timestamp since it isn't being set
+        console.log("update progess", timeElapsed, track.name)
         let _currentTrack = {
             track: station.trackList[index],
             progress_ms: station.playing.progress_ms + timeElapsed,

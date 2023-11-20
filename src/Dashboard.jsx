@@ -48,14 +48,10 @@ let DEFAULT_STATIONS = [
             "trackList": [],
             "seeds": {
                 "genres": [
-                    'heavy-metal'
                 ],
                 "artists": [
-                    '5M52tdBnJaKSvOpJGz8mfZ',
-                    '1DFr97A9HnbV3SKTJFu62M',
-                    '3qm84nBOXUEQ2vnTfUTTFC'
                 ],
-                "tracks": ["3CIOopLwvyMvXk97ZEksKO"]
+                "tracks": ["3CIOopLwvyMvXk97ZEksKO,57fqmDaokbxZ3TaB0jp39q,0mgwfP6fcg3t0PPVoKXrF8,4f3RDq9nYPBeR1yMSgnmBm,2Cg5XzRsGO2VYbaUYN2j8i"]
             },
             "current": false,
             "playing": {
@@ -71,8 +67,8 @@ let DEFAULT_STATIONS = [
             "trackList": [],
             "seeds": {
                 "genres": [],
-                "artists": ["34EP7KEpOjXcM2TCat1ISk,20qISvAhX20dpIbOOzGK3q,5me0Irg2ANcsgc93uaYrpb,099tLNCZZvtjC7myKD0mFp,6Mo9PoU6svvhgEum7wh2Nd"],
-                "tracks": []
+                "artists": [],
+                "tracks": ["1Sgj10byiGzPpI2IrXSFEn,6904O7JrAxFybd4yu3Sz2V,0trHOzAhNpGCsGBEu7dOJo,4dmh3OPtAhbEybhGoOG9TE,7mYZUhCy77Aox1vIMTfuve"]
             },
             "current": false,
             "playing": {
@@ -104,7 +100,7 @@ let DEFAULT_STATIONS = [
             "desc": "Classic Country",
             "trackList": [],
             "seeds": {
-                "genres": ['honky-tonk'],
+                "genres": [],
                 "artists": ["1FClsNYBUoNFtGgzeG74dW,6kACVPfCOnqzgfEF5ryl0x,1RP2UpEaRzkF0Id3JigqD8,7wCjDgV6nqBsHguQXPAaIM"],
                 "tracks": []
             },

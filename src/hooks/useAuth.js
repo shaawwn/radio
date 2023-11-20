@@ -54,7 +54,7 @@ function useAuth(code) {
                 })
             }).then((response) => response.json())
             .then((data) => {
-                // console.log("DATA", data.accessToken)
+                console.log("REFRESHED TOKEN", data.accessToken)
                 setAccessToken(data.accessToken)
                 setExpiresIn(data.expiresIn)
                 window.history.pushState({}, null, '/')

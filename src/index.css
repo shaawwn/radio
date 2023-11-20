@@ -73,6 +73,9 @@ h1, p {
   font-size: 1.3rem;
 }
 
+.login__btn:hover {
+  background-color: rgb(71, 163, 71);
+}
 
 .introduction {
   width: 100%;
@@ -112,7 +115,8 @@ h1, p {
 .dashboard {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 10%;
   height: 99vh;
 }
 
@@ -167,6 +171,7 @@ h1, p {
 .current-station__track-details__image__wrapper {
   position: relative;
   box-shadow: 0px 0px 30px rgba(255, 255, 255, 0.2);
+  max-height: 400px;
 }
 
 .current-station__track-details__logo {
