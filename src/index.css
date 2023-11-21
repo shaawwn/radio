@@ -50,6 +50,7 @@ h1, p {
 .center-horizontal {
   display: flex;
   flex-direction: column;
+  /* background-color: red; */
   justify-content: center;
 }
 .flex-wrapper {
@@ -298,7 +299,7 @@ h1, p {
 /* Carousel */
 
 .carousel {
-
+  height: 50%;
 }
 /* @media (prefers-color-scheme: light) {
   :root {

@@ -111,48 +111,29 @@ function Carousel({stations, accessToken, handleStationChange, handleStationChan
     }
     useEffect(() => {
         if(stations) {
-            // toDisplay.current = stations.slice(0, 5)
 
-            // toDisplay.current = [0, 1, 2, 3, 4]
-            // setStationIndices([0, 1, 2, 3, 4])
             if(screenWidth < 431) {
-                setStationIndices([0, 1, 2, 3])
+                setStationIndices([0, 1, 2])
             } else {
                 setStationIndices([0, 1, 2, 3, 4]) // set wider for more stations, this just to test
             }
         }
     }, [])
 
-    // stationIndices[0] = easy, first in array
-    // stationIndices[stationIndices.length - 1] = last element
-    // this works until you get to 7, then if you + 1, you get 8 which causes an error
+
     return(
         <div className="carousel flex-row flex-gap-small">
             <div className="center-horizontal">
-                <FontAwesomeIcon icon={faChevronLeft} size="3x" className="center-horizontal" onClick={scrollLeft}/>
+                <FontAwesomeIcon icon={faChevronLeft} size={screenWidth < 431 ? '2x' : '3x'} className="center-horizontal" onClick={scrollLeft}/>
             </div>
             {stationIndices ? 
                 <>
                     {displayStations()}
                 </>
                 
-                // <>
-                //     {stations.slice(stationIndices[0], (stationIndices[stationIndices.length - 1] + 1) === 7 ? stationIndices[stationIndices.length - 1] : stationIndices[stationIndices.length - 1] + 1).map((station) => {
-                //         return <Station 
-                //         key={station.title}
-                //         accessToken={accessToken}
-                //         handleStationChange={handleStationChange}
-                //         station={station}
-                //         handleStationChanges={handleStationChanges}
-                //         timestampRef={timestampRef}
-                //         toSync={toSync}
-                //         webplayerTimestamp={webplayerTimestamp}
-                //     />
-                //     })}
-                // </>
             :null}
             <div className="center-horizontal">
-                <FontAwesomeIcon icon={faChevronRight} size="3x" className="center-horizontal" onClick={scrollRight}/>
+                <FontAwesomeIcon icon={faChevronRight} size={screenWidth < 431 ? '2x' : '3x'} className="center-horizontal" onClick={scrollRight}/>
             </div>
             
         </div>
