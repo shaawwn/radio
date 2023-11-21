@@ -142,6 +142,7 @@ function Webplayer({accessToken, station, currentTrackRef, timestampRef, toSync}
             })
         }).then((response) => {
             if(!response.ok) {
+                alert("There was an error playing back track")
                 throw new Error('error on playback start')
             }
         })

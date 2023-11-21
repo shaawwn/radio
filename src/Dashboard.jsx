@@ -13,6 +13,7 @@ import Station from './components/Station';
 import Webplayer from './components/Webplayer';
 import CurrentStation from './components/CurrentStation';
 import ToggleSwitch from './components/ToggleSwitch';
+import Carousel from './components/Carousel';
 
 // mocks
 import exampleRecs from './rec_example.json';
@@ -238,8 +239,11 @@ function Dashboard({code}) {
     }
     
     function displayStations() {
+
+        // Put carousel here, and stations inside
         return(
             <div className="station-container__wrapper">
+                <Carousel stations={stationList} />
                 <nav className="station-container">
                 {stationList.length > 0 ? 
                 <>
@@ -255,7 +259,8 @@ function Dashboard({code}) {
                             webplayerTimestamp={webplayerTimestamp}
                         />
                     })}
-                    </>
+                    
+                </>
                 :<p>No stations</p>
                 }
             </nav>
@@ -332,7 +337,7 @@ function Dashboard({code}) {
                 <nav className="station-container">
                 {stationList.length > 0 ? 
                 <>
-                    {stationList.map((station) => {
+                    {/* {stationList.map((station) => {
                         return <Station 
                             key={station.title}
                             accessToken={accessToken}
@@ -343,10 +348,21 @@ function Dashboard({code}) {
                             toSync={toSync}
                             webplayerTimestamp={webplayerTimestamp}
                         />
-                    })}
-                    </>
+                    })} */}
+                    <Carousel 
+                        stations={stationList}
+                        accessToken={accessToken}
+                        handleStationChange={handleStationChange}
+                        handleStationChanges={handleStationChanges}
+                        timestampRef={timestampRef}
+                        toSync={toSync}
+                        webplayerTimestamp={webplayerTimestamp}
+                        screenWidth={screenWidth}
+                    />
+                </>
                 :<p>No stations</p>
                 }
+                
                 </nav>
             </div>
             : <p>Loading stations...</p>}
