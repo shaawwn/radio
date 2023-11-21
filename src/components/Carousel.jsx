@@ -5,37 +5,47 @@ import { faChevronRight, faChevronLeft} from '@fortawesome/free-solid-svg-icons'
 import Station from './Station';
 
 function Carousel({stations, accessToken, handleStationChange, handleStationChanges, timestampRef, toSync, webplayerTimestamp, screenWidth}) {
-    console.log("Loading carousel")
+    // console.log("Loading carousel")
 
     const [stationIndices, setStationIndices] = useState()
     const toDisplay = useRef([]) // list of stations to be displayed in carousel at a given time
 
     function scrollLeft() {
-        console.log("Scrolling left...")
         let shifted = []
 
         if(_checkBoundaryLeft() === false) {
             console.log("Loop back over end of list")
+        } else {
+            stationIndices.forEach(el => {
+                shifted.push(el - 1)
+            })
+            setStationIndices(shifted)
         }
-        stationIndices.forEach(el => {
-            shifted.push(el - 1)
-        })
-
-        setStationIndices(shifted)
     }
 
     function scrollRight() {
-        console.log("Scrolling right")
         let shifted = []
         
         if(_checkBoundaryRight() === false) {
-            console.log("Loop to start of list")
-        }
-        stationIndices.forEach(el => {
-            shifted.push(el + 1)
-        })
+ 
+            const max = stations.length - 1
 
-        setStationIndices(shifted)
+            stationIndices.forEach(el => {
+                if(el >= max) {
+                    shifted.push(0)
+                    // console.log("max reached", el, max, shifted)
+                } else {
+                    // console.log('not max', el, max, shifted)
+                    shifted.push(el + 1)
+                }
+            })
+            setStationIndices(shifted)
+        } else {
+            stationIndices.forEach(el => {
+                shifted.push(el + 1)
+            })
+            setStationIndices(shifted)
+        }
     }
 
 
@@ -46,10 +56,48 @@ function Carousel({stations, accessToken, handleStationChange, handleStationChan
     }
 
     function _checkBoundaryRight() {
-        if(stationIndices[4] === stations.length - 1) {
-            console.log(stationIndices[4], stations.length - 1, stationIndices[4] === stations.length - 1)
+        // if(stationIndices[4] === stations.length - 1) {
+        //     return false
+        // }
+
+        if(stationIndices.includes(stations.length -1)) {
             return false
         }
+        console.log(stationIndices, stations.length - 1)
+    }
+
+    function displayStations() {
+
+        let max = stations.length - 1
+
+        // console.log("STATIONS MAX", max, stationIndices)
+        // so when it gets to 7 it adds + 1 which gives 8 which causes render error, so on 7 alone, do not increment + 1
+
+        toDisplay.current
+
+        toDisplay.current = []
+        stationIndices.forEach(index => {
+            toDisplay.current.push(stations[index])
+        })
+        // how to render [4, 5, 6, 7, 0] ? o here is stations[0]
+        return(
+            <>
+            {/* const wrappedIndices = stationIndices.map(index => (index + stations.length) % stations.length); */}
+
+                {toDisplay.current.map((station) => {
+                    return <Station 
+                    key={station.title}
+                    accessToken={accessToken}
+                    handleStationChange={handleStationChange}
+                    station={station}
+                    handleStationChanges={handleStationChanges}
+                    timestampRef={timestampRef}
+                    toSync={toSync}
+                    webplayerTimestamp={webplayerTimestamp}
+                />
+            })}
+        </>
+        )
     }
     useEffect(() => {
         if(stations) {
@@ -60,12 +108,14 @@ function Carousel({stations, accessToken, handleStationChange, handleStationChan
             if(screenWidth < 431) {
                 setStationIndices([0, 1, 2, 3])
             } else {
-                setStationIndices([0, 1, 2, 3, 4, 5, 6])
+                setStationIndices([0, 1, 2, 3, 4]) // set wider for more stations, this just to test
             }
         }
     }, [])
 
-
+    // stationIndices[0] = easy, first in array
+    // stationIndices[stationIndices.length - 1] = last element
+    // this works until you get to 7, then if you + 1, you get 8 which causes an error
     return(
         <div className="carousel flex-row flex-gap-small">
             <div className="center-horizontal">
@@ -73,19 +123,23 @@ function Carousel({stations, accessToken, handleStationChange, handleStationChan
             </div>
             {stationIndices ? 
                 <>
-                    {stations.slice(stationIndices[0], stationIndices[stationIndices.length - 1]).map((station) => {
-                        return <Station 
-                        key={station.title}
-                        accessToken={accessToken}
-                        handleStationChange={handleStationChange}
-                        station={station}
-                        handleStationChanges={handleStationChanges}
-                        timestampRef={timestampRef}
-                        toSync={toSync}
-                        webplayerTimestamp={webplayerTimestamp}
-                    />
-                    })}
+                    {displayStations()}
                 </>
+                
+                // <>
+                //     {stations.slice(stationIndices[0], (stationIndices[stationIndices.length - 1] + 1) === 7 ? stationIndices[stationIndices.length - 1] : stationIndices[stationIndices.length - 1] + 1).map((station) => {
+                //         return <Station 
+                //         key={station.title}
+                //         accessToken={accessToken}
+                //         handleStationChange={handleStationChange}
+                //         station={station}
+                //         handleStationChanges={handleStationChanges}
+                //         timestampRef={timestampRef}
+                //         toSync={toSync}
+                //         webplayerTimestamp={webplayerTimestamp}
+                //     />
+                //     })}
+                // </>
             :null}
             <div className="center-horizontal">
                 <FontAwesomeIcon icon={faChevronRight} size="3x" className="center-horizontal" onClick={scrollRight}/>
