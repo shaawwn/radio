@@ -13,8 +13,18 @@ function Carousel({stations, accessToken, handleStationChange, handleStationChan
     function scrollLeft() {
         let shifted = []
 
+        const min = 0
         if(_checkBoundaryLeft() === false) {
             console.log("Loop back over end of list")
+            stationIndices.forEach(el => {
+                if(el <= min) {
+                    shifted.push(7)
+                } else {
+                    shifted.push(el - 1)
+                }
+            })
+            console.log("SHIFTED LEFT", shifted)
+            setStationIndices(shifted)
         } else {
             stationIndices.forEach(el => {
                 shifted.push(el - 1)
@@ -50,7 +60,7 @@ function Carousel({stations, accessToken, handleStationChange, handleStationChan
 
 
     function _checkBoundaryLeft() {
-        if(stationIndices[0] === 0) {
+        if(stationIndices.includes(0)) {
             return false
         }
     }
@@ -63,7 +73,7 @@ function Carousel({stations, accessToken, handleStationChange, handleStationChan
         if(stationIndices.includes(stations.length -1)) {
             return false
         }
-        console.log(stationIndices, stations.length - 1)
+        // console.log(stationIndices, stations.length - 1)
     }
 
     function displayStations() {
