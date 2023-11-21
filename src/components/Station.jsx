@@ -232,7 +232,12 @@ function Station({accessToken, handleStationChange, station, handleStationChange
                 // mockGetTrackList()
                 getTrackList()
             }
+
+
         }
+        
+        // need to stop it from running these functions on scroll when station re-renders without changing the functionality of station changes
+
 
         if(station.playing.track.name !== 'radioStatic' && station.current === true) {
             if(webplayerTimestamp.current.length > 0) {
@@ -248,6 +253,8 @@ function Station({accessToken, handleStationChange, station, handleStationChange
         } 
 
         getStationLogo()
+
+        console.log("STATION CURRENT CHANGING")
     }, [station.current])
 
 

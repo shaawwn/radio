@@ -187,6 +187,7 @@ function Dashboard({code}) {
 
     function handleStationChange(title) {
         // this changes what the current station is nothing more
+        console.log("CALLING STATION CHANGE")
         if(title === currentStation.title) {
             return false // do nothing
         }
@@ -216,6 +217,7 @@ function Dashboard({code}) {
         // therefore, if tracks have been running via webplayer, on station change need to log the changes between when the stationList was last updated with what the track list and track currently are at, this is done in updateStationOnChange
         
         // but only updateStationOnChange for the previous station
+
         tuning.play() 
         let stationToUpdate = stationList.find((station) => station.title === title)
         let listCopy = [...stationList]

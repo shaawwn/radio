@@ -115,10 +115,10 @@ function Carousel({stations, accessToken, handleStationChange, handleStationChan
             if(screenWidth < 431) {
                 setStationIndices([0, 1, 2])
             } else {
-                setStationIndices([0, 1, 2, 3, 4]) // set wider for more stations, this just to test
+                setStationIndices([0, 1, 2, 3, 4, 5, 6, 7]) // set wider for more stations, this just to test
             }
         }
-    }, [])
+    }, [screenWidth])
 
 
     return(
