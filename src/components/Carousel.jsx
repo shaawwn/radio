@@ -151,9 +151,6 @@ function Carousel({stations, accessToken, handleStationChange, handleStationChan
 
         if(stationIndices) {
             // console.log("indices", stationIndices)
-            carouselRef.addEventListener('touchstart', () => {
-
-            })
             carouselRef.current.addEventListener('touchmove', (e) => handleMove(e))
 
 
