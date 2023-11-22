@@ -254,7 +254,7 @@ function Station({accessToken, handleStationChange, station, handleStationChange
 
         getStationLogo()
 
-        console.log("STATION CURRENT CHANGING")
+        // console.log("STATION CURRENT CHANGING")
     }, [station.current])
 
 
@@ -263,7 +263,7 @@ function Station({accessToken, handleStationChange, station, handleStationChange
             <button onClick={() => handleStationChange(station.title)} className="station-btn">
                 {/* {station.title} */}
             
-                {/* <img src={logo} /> */}
+
                 {logo ? <img className="image-logo" src={logo} /> : <div className="image-logo"><p>{station.title}</p></div>}
 
             </button>

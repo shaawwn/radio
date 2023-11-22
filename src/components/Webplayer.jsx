@@ -83,7 +83,6 @@ function Webplayer({accessToken, station, currentTrackRef, timestampRef, toSync}
                             <div className="current-station__track-details__image__wrapper">
                                 <img className="current-station__track-details__image" src={currentTrack.album.images[0].url} alt={currentTrack.name} />
                                 {logo ?  <img src={logo} className="current-station__track-details__logo"/> : null}
-              
                             </div>
                         </div>
                     :<div className="flex-wrapper flex-wrapper--center">
@@ -92,24 +91,24 @@ function Webplayer({accessToken, station, currentTrackRef, timestampRef, toSync}
                             {logo ?  <img src={logo} className="current-station__track-details__logo"/> : null}
                         </div>
                     </div>
-                    // <div className="no-image">
-                    //     <FontAwesomeIcon icon={faRecordVinyl} className="webplayer__skeleton__image" />
-                    //     <img className="current-station__track-details__image" src="//:0" alt={currentTrack.track.name} />
-                    // </div>
                     }
                     <div className="current-station__track-details__details">
                         <p className="current-station__track-details__details__track-name">{currentTrack.name}</p>
                         <p className="current-station__track-details__details__artist-name">{currentTrack.artists[0].name}</p>
                     </div>
                 </>
-            :<div className="flex-wrapper flex-wrapper--center">
-                <div className="current-station__track-details__image__wrapper">
-                    <FontAwesomeIcon icon={faRecordVinyl} className="webplayer__skeleton__image" />
-                    {logo ?  <img src={logo} className="current-station__track-details__logo"/> : null}
+            :<>
+                <div className="flex-wrapper flex-wrapper--center">
+                    <div className="current-station__track-details__image__wrapper">
+                        <FontAwesomeIcon icon={faRecordVinyl} className="webplayer__skeleton__image" />
+                        {logo ?  <img src={logo} className="current-station__track-details__logo"/> : null}
+                    </div>
                 </div>
-            </div>
+                <div className="current-station__track-details__details">
+                    <h1>Loading</h1>
+                </div>
+            </>
             }
-            {/* <audio src="../tuning.mp3"></audio> */}
         </section>
         )
     }
