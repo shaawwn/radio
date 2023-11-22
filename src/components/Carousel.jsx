@@ -39,7 +39,7 @@ function Carousel({stations, accessToken, handleStationChange, handleStationChan
     }
 
     function scrollRight() {
-        console.log("Scrolling right")
+        // console.log("Scrolling right")
         let shifted = []
         if(_checkBoundaryRight() === false) {
             const max = stations.length - 1
@@ -57,6 +57,7 @@ function Carousel({stations, accessToken, handleStationChange, handleStationChan
             stationIndices.forEach(el => {
                 shifted.push(el + 1)
             })
+            console.log("Scrolling right", shifted)
             setStationIndices(shifted)
         }
     }
@@ -126,33 +127,42 @@ function Carousel({stations, accessToken, handleStationChange, handleStationChan
 
 
     useEffect(() => {
+        
+        if(moveRef.current !== null) {
+            moveRef.current = null
+        }
+        const handleStart = (e) => {
+            e.preventDefault()
+            moveRef.current = Math.round(e.touches[0].clientX)
+        }
 
         const handleMove = (e) => {
             e.preventDefault()
-            console.log('moving')
             if(moveRef.current) {
                 // check left or right
-                if(e.touches[0].clientX > moveRef.current - 100) {
-                    console.log("Swiping left", Math.round(e.touches[0].clientX), moveRef.current + 100)
-                    // moveRef.current = Math.round(e.touches[0].clientX)
-                    // scrollRight()
-                } else if (e.touches[0].clientX < moveRef.current + 100) {
-                    console.log("Swiping right", Math.round(e.touches[0].clientX), moveRef.current - 100)
-                    // moveRef.current = Math.round(e.touches[0].clientX)
-                    // scrollLeft()
+                if(e.touches[0].clientX < moveRef.current - 100) {
+                    scrollRight()
+                } else if (e.touches[0].clientX > moveRef.current + 100) {
+                    scrollLeft()
                 }
-                moveRef.current = Math.round(e.touches[0].clientX)
-            } else {
-                moveRef.current = Math.round(e.touches[0].clientX)
-            }
+            }  
+            // removed else here to set moveRef, moved to touchStart
+        }
+
+        const handleEnd = (e) => {
+            e.preventDefault()
+            moveRef.current = null
         }
 
         if(stationIndices) {
-            carouselRef.current.addEventListener('touchmove', (e) => handleMove(e))
+            carouselRef.current.addEventListener('touchstart', handleStart)
+            carouselRef.current.addEventListener('touchmove', handleMove)
+            carouselRef.current.addEventListener('touchend', handleEnd)
 
             return () => {
-                moveRef.current = null
                 carouselRef.current.removeEventListener('touchmove', handleMove)
+                carouselRef.current.removeEventListener('touchstart', handleStart)
+                carouselRef.current.removeEventListener('touchend', handleEnd)
             }
         }
     }, [stationIndices])
