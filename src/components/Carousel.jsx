@@ -9,13 +9,17 @@ function Carousel({stations, accessToken, handleStationChange, handleStationChan
 
     const [stationIndices, setStationIndices] = useState()
     const toDisplay = useRef([]) // list of stations to be displayed in carousel at a given time
+    const carouselRef = useRef()
+    const touchstartRef = useRef()
+    const touchEndRef = useRef()
+    const moveRef = useRef()
 
     function scrollLeft() {
         let shifted = []
 
         const min = 0
         if(_checkBoundaryLeft() === false) {
-            console.log("Loop back over end of list")
+            // console.log("Loop back over end of list")
             stationIndices.forEach(el => {
                 if(el <= min) {
                     shifted.push(7)
@@ -23,7 +27,7 @@ function Carousel({stations, accessToken, handleStationChange, handleStationChan
                     shifted.push(el - 1)
                 }
             })
-            console.log("SHIFTED LEFT", shifted)
+            // console.log("SHIFTED LEFT", shifted)
             setStationIndices(shifted)
         } else {
             stationIndices.forEach(el => {
@@ -34,12 +38,10 @@ function Carousel({stations, accessToken, handleStationChange, handleStationChan
     }
 
     function scrollRight() {
+        // console.log("Scrolling right")
         let shifted = []
-        
         if(_checkBoundaryRight() === false) {
- 
             const max = stations.length - 1
-
             stationIndices.forEach(el => {
                 if(el >= max) {
                     shifted.push(0)
@@ -109,9 +111,15 @@ function Carousel({stations, accessToken, handleStationChange, handleStationChan
         </>
         )
     }
+
+    function handleTouches() {
+
+    }
+
+
+
     useEffect(() => {
         if(stations) {
-
             if(screenWidth < 431) {
                 setStationIndices([0, 1, 2])
             } else {
@@ -121,8 +129,46 @@ function Carousel({stations, accessToken, handleStationChange, handleStationChan
     }, [screenWidth])
 
 
+    useEffect(() => {
+
+        const handleMove = (e) => {
+            e.preventDefault()
+            if(moveRef.current) {
+                // check left or right
+                if(e.touches[0].clientX > moveRef.current - 100) {
+                    // console.log("Swiping left", Math.round(e.touches[0].clientX), moveRef.current + 100)
+                    moveRef.current = Math.round(e.touches[0].clientX)
+                    scrollLeft()
+                } else if (e.touches[0].clientX < moveRef.current + 100) {
+                    // console.log("Swiping right", Math.round(e.touches[0].clientX), moveRef.current - 100)
+                    moveRef.current = Math.round(e.touches[0].clientX)
+                    scrollRight()
+                }
+            } else {
+                moveRef.current = Math.round(e.touches[0].clientX)
+            }
+        }
+
+        if(stationIndices) {
+            // console.log("indices", stationIndices)
+            carouselRef.current.addEventListener('touchmove', (e) => handleMove(e))
+
+
+            return () => {
+                // console.log('removing listener')
+                carouselRef.current.removeEventListener('touchmove', handleMove)
+            }
+        }
+        // carouselRef.current.addEventListener('touchmove', (e) => handleMove(e))
+        // console.log('ref', carouselRef)
+        // return () => {
+        //     carouselRef.current.removeListener('touchmove', handleMove)
+        // }
+
+    }, [stationIndices])
+
     return(
-        <div className="carousel flex-row flex-gap-small">
+        <div className="carousel flex-row flex-gap-small" ref={carouselRef}>
             <div className="center-horizontal">
                 <FontAwesomeIcon icon={faChevronLeft} size={screenWidth < 431 ? '2x' : '3x'} className="center-horizontal" onClick={scrollLeft}/>
             </div>
@@ -130,7 +176,7 @@ function Carousel({stations, accessToken, handleStationChange, handleStationChan
                 <>
                     {displayStations()}
                 </>
-                
+        
             :null}
             <div className="center-horizontal">
                 <FontAwesomeIcon icon={faChevronRight} size={screenWidth < 431 ? '2x' : '3x'} className="center-horizontal" onClick={scrollRight}/>
