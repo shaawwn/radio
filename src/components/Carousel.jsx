@@ -135,11 +135,11 @@ function Carousel({stations, accessToken, handleStationChange, handleStationChan
             e.preventDefault()
             if(moveRef.current) {
                 // check left or right
-                if(e.touches[0].clientX > moveRef.current - 100) {
+                if(e.touches[0].clientX > moveRef.current + 100) {
                     // console.log("Swiping left", Math.round(e.touches[0].clientX), moveRef.current + 100)
                     moveRef.current = Math.round(e.touches[0].clientX)
                     scrollLeft()
-                } else if (e.touches[0].clientX < moveRef.current + 100) {
+                } else if (e.touches[0].clientX < moveRef.current - 100) {
                     // console.log("Swiping right", Math.round(e.touches[0].clientX), moveRef.current - 100)
                     moveRef.current = Math.round(e.touches[0].clientX)
                     scrollRight()
