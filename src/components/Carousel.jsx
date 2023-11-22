@@ -15,6 +15,7 @@ function Carousel({stations, accessToken, handleStationChange, handleStationChan
     const moveRef = useRef()
 
     function scrollLeft() {
+        console.log("scrolling left")
         let shifted = []
 
         const min = 0
@@ -38,7 +39,7 @@ function Carousel({stations, accessToken, handleStationChange, handleStationChan
     }
 
     function scrollRight() {
-        // console.log("Scrolling right")
+        console.log("Scrolling right")
         let shifted = []
         if(_checkBoundaryRight() === false) {
             const max = stations.length - 1
@@ -111,11 +112,6 @@ function Carousel({stations, accessToken, handleStationChange, handleStationChan
         </>
         )
     }
-
-    function handleTouches() {
-
-    }
-
 
 
     useEffect(() => {
