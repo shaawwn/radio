@@ -325,13 +325,18 @@ function Dashboard({code}) {
                 timestampRef={timestampRef}
                 toSync={toSync}
             />
-            :<article className="current-station">
-                <div className="flex-wrapper flex-wrapper--center">
-                        <div className="current-station__track-details__image__wrapper">
-                            <FontAwesomeIcon icon={faRecordVinyl} className="webplayer__skeleton__image" />
+            :<>
+                <article className="current-station">
+                    <div className="flex-wrapper flex-wrapper--center">
+                            <div className="current-station__track-details__image__wrapper">
+                                <FontAwesomeIcon icon={faRecordVinyl} className="webplayer__skeleton__image" />
+                            </div>
                         </div>
-                    </div>
-            </article>
+                        <div className="current-station__track-details__details">
+                                <div style={{"height": '100px', "width": "100%"}}></div>
+                        </div>
+                </article>
+            </>
             }
 
             {accessToken ? 
@@ -339,18 +344,6 @@ function Dashboard({code}) {
                 <nav className="station-container">
                 {stationList.length > 0 ? 
                 <>
-                    {/* {stationList.map((station) => {
-                        return <Station 
-                            key={station.title}
-                            accessToken={accessToken}
-                            handleStationChange={handleStationChange}
-                            station={station}
-                            handleStationChanges={handleStationChanges}
-                            timestampRef={timestampRef}
-                            toSync={toSync}
-                            webplayerTimestamp={webplayerTimestamp}
-                        />
-                    })} */}
                     <Carousel 
                         stations={stationList}
                         accessToken={accessToken}
@@ -362,12 +355,13 @@ function Dashboard({code}) {
                         screenWidth={screenWidth}
                     />
                 </>
-                :<p>No stations</p>
-                }
+                :null}
                 
                 </nav>
             </div>
-            : <p>Loading stations...</p>}
+            :
+            <div style={{"width": "100%", "height": "80px"}}></div>
+            }
         </main>
     )
 }

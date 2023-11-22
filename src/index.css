@@ -209,7 +209,6 @@ h1, p {
   display: flex;
   flex-direction: column;
   text-align: center;
-  background-color: red;
 }
 
 
@@ -318,17 +317,19 @@ h1, p {
 @media (max-width: 430px) {
   .dashboard {
     max-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    gap: 5%;
   }
 
   .current-station {
-    /* background-color: blue; */
+
   }
 
+  .carousel {
+
+  }
+  
   .station-container__wrapper {
-    max-width: 90vw;
+    width: 100%;
     height: 30%;
     margin: 0 auto;
     overflow-x: scroll;
@@ -343,21 +344,28 @@ h1, p {
   }
 
   .station-btn {
-    width: 100px;
-    height: 100px;
+    width: 90px;
+    height: 90px;
     padding: 0px;
     font-size: 1rem;
   }
 
   .image-logo {
-    width: 100px;
-    height: 100px;
+    width: 90px;
+    height: 90px;
   }
 
   .current-station__track-details {
-    height: 100%;
+    /* height: 100%; */
   }
 
+  .current-station__track-details__details {
+    max-height: 100px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  
   .current-station__track-details__details__track-name {
     font-size: 1.5rem;
   }

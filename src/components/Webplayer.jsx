@@ -27,13 +27,13 @@ function Webplayer({accessToken, station, currentTrackRef, timestampRef, toSync}
     const ct = useRef()
     const player = useRef(null)
 
-    function displaySkeleton() {
-        return(
-            <section>
-                <p>radioStatic</p>
-            </section>
-        )
-    }
+    // function displaySkeleton() {
+    //     return(
+    //         <section>
+    //             <p>radioStatic</p>
+    //         </section>
+    //     )
+    // }
 
     function getStationLogo() {
         if(station.title === 'KRPG') {
@@ -57,21 +57,21 @@ function Webplayer({accessToken, station, currentTrackRef, timestampRef, toSync}
         }
     }
 
-    function _displayTrackDetails() {
-        return(
-            <section className="current-station__track-details">
-            <p>Listening to {station.playing.track.name} on {station.title}</p>
-            {station.playing ?  // triple check for album image
-                <img className="current-station__track-details__image" src={station.playing.track.album.images[1].url} alt={station.playing.track.name} />
-            :
-            <div className="no-image">
-                <img className="current-station__track-details__image" src="//:0" alt={station.playing.track.name} />
-            </div>
-            }
+    // function _displayTrackDetails() {
+    //     return(
+    //         <section className="current-station__track-details">
+    //         <p>Listening to {station.playing.track.name} on {station.title}</p>
+    //         {station.playing ?  // triple check for album image
+    //             <img className="current-station__track-details__image" src={station.playing.track.album.images[1].url} alt={station.playing.track.name} />
+    //         :
+    //         <div className="no-image">
+    //             <img className="current-station__track-details__image" src="//:0" alt={station.playing.track.name} />
+    //         </div>
+    //         }
 
-        </section>
-        )
-    }
+    //     </section>
+    //     )
+    // }
 
     function displayTrackDetails() {
         return(
@@ -101,11 +101,11 @@ function Webplayer({accessToken, station, currentTrackRef, timestampRef, toSync}
                 <div className="flex-wrapper flex-wrapper--center">
                     <div className="current-station__track-details__image__wrapper">
                         <FontAwesomeIcon icon={faRecordVinyl} className="webplayer__skeleton__image" />
-                        {logo ?  <img src={logo} className="current-station__track-details__logo"/> : null}
+                        {logo ? <img src={logo} className="current-station__track-details__logo"/> : null}
                     </div>
                 </div>
                 <div className="current-station__track-details__details">
-                    <h1>Loading</h1>
+                    <div style={{"height": '100px', "width": "100%"}}></div>
                 </div>
             </>
             }
@@ -253,8 +253,9 @@ function Webplayer({accessToken, station, currentTrackRef, timestampRef, toSync}
 
     return(
         <article className="current-station">
-            {station.playing.track.name === 'radioStatic' ? displaySkeleton() : displayTrackDetails()}
+            {/* {station.playing.track.name === 'radioStatic' ? displaySkeleton() : displayTrackDetails()} */}
             {/* <Volume accessToken={accessToken} deviceId={deviceId}/> */}
+            {displayTrackDetails()}
         </article>
     )
 }
