@@ -136,12 +136,10 @@ function Carousel({stations, accessToken, handleStationChange, handleStationChan
                     // console.log("Swiping left", Math.round(e.touches[0].clientX), moveRef.current + 100)
                     // moveRef.current = Math.round(e.touches[0].clientX)
                     scrollRight()
-                    return
                 } else if (e.touches[0].clientX < moveRef.current + 100) {
                     // console.log("Swiping right", Math.round(e.touches[0].clientX), moveRef.current - 100)
                     // moveRef.current = Math.round(e.touches[0].clientX)
                     scrollLeft()
-                    return
                 }
                 moveRef.current = Math.round(e.touches[0].clientX)
             } else {
@@ -150,21 +148,13 @@ function Carousel({stations, accessToken, handleStationChange, handleStationChan
         }
 
         if(stationIndices) {
-            // console.log("indices", stationIndices)
             carouselRef.current.addEventListener('touchmove', (e) => handleMove(e))
 
-
             return () => {
-                // console.log('removing listener')
+                moveRef.current = null
                 carouselRef.current.removeEventListener('touchmove', handleMove)
             }
         }
-        // carouselRef.current.addEventListener('touchmove', (e) => handleMove(e))
-        // console.log('ref', carouselRef)
-        // return () => {
-        //     carouselRef.current.removeListener('touchmove', handleMove)
-        // }
-
     }, [stationIndices])
 
     return(
