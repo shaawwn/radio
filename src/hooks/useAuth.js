@@ -17,7 +17,8 @@ function useAuth(code) {
 
         // console.log("BEFORE FETCH", code)
         fetch('https://wispy-bird-2586.fly.dev/radio/login', {
-        // fetch('http://localhost:3000/radio/login', {
+        // fetch('https://wispy-bird-2586.fly.dev/radio/devlogin', {
+        // fetch('http://localhost:3000/radio/devlogin', {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
