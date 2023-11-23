@@ -16,6 +16,7 @@ import gifDesc from './video/desc.gif'
 function Login({authUrl}) {
 
     const [screenWidth, setScreenWidth] = useState()
+    const divRef = useRef()
 
     function displayStations() {
         return(
@@ -103,6 +104,10 @@ function Login({authUrl}) {
         )
     }
 
+    function handleClick() {
+        console.log("Clicked")
+    }
+
     useEffect(() => {
 
         if(!screenWidth) {
@@ -114,7 +119,13 @@ function Login({authUrl}) {
             })
         }
 
+        const handleTouch = (e) => {
+            // e.preventDefault()
+            console.log("Touchend")
+        }
+        
     }, [])
+
 
     return(
         <>
@@ -126,7 +137,10 @@ function Login({authUrl}) {
                     <p className="font-title">Online Radio with Spotify</p>
                     <a href={authUrl} className="login__btn">Start Listening</a>
                 </section>
+
+
             </main>
+
             <footer>
 
             </footer>
