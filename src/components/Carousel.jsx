@@ -151,20 +151,21 @@ function Carousel({stations, accessToken, handleStationChange, handleStationChan
 
         const handleEnd = (e) => {
             // e.preventDefault() this will allow the click to go through?
+            console.log("touch end")
             moveRef.current = null
         }
 
-        // if(stationIndices) {
-        //     carouselRef.current.addEventListener('touchstart', handleStart)
-        //     carouselRef.current.addEventListener('touchmove', handleMove)
-        //     carouselRef.current.addEventListener('touchend', handleEnd)
+        if(stationIndices) {
+            // carouselRef.current.addEventListener('touchstart', handleStart)
+            // carouselRef.current.addEventListener('touchmove', handleMove)
+            carouselRef.current.addEventListener('touchend', handleEnd)
 
-        //     return () => {
-        //         carouselRef.current.removeEventListener('touchmove', handleMove)
-        //         carouselRef.current.removeEventListener('touchstart', handleStart)
-        //         carouselRef.current.removeEventListener('touchend', handleEnd)
-        //     }
-        // }
+            return () => {
+                // carouselRef.current.removeEventListener('touchmove', handleMove)
+                // carouselRef.current.removeEventListener('touchstart', handleStart)
+                carouselRef.current.removeEventListener('touchend', handleEnd)
+            }
+        }
     }, [stationIndices])
 
     return(
