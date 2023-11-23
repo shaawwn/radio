@@ -132,6 +132,7 @@ function Carousel({stations, accessToken, handleStationChange, handleStationChan
             moveRef.current = null
         }
         const handleStart = (e) => {
+            console.log('touch start')
             e.preventDefault()
             moveRef.current = Math.round(e.touches[0].clientX)
         }
