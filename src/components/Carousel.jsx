@@ -146,7 +146,9 @@ function Carousel({stations, accessToken, handleStationChange, handleStationChan
                 } else if (e.touches[0].clientX > moveRef.current + 100) {
                     scrollLeft()
                 }
-            }  
+            }  else {
+                moveRef.current = Math.round(e.touches[0].clientX)
+            }
             // removed else here to set moveRef, moved to touchStart
         }
 
