@@ -132,7 +132,6 @@ function Carousel({stations, accessToken, handleStationChange, handleStationChan
             moveRef.current = null
         }
         const handleStart = (e) => {
-            console.log("touch start", e)
             e.preventDefault()
             moveRef.current = Math.round(e.touches[0].clientX)
         }
@@ -151,7 +150,7 @@ function Carousel({stations, accessToken, handleStationChange, handleStationChan
         }
 
         const handleEnd = (e) => {
-            e.preventDefault()
+            // e.preventDefault() this will allow the click to go through?
             moveRef.current = null
         }
 
