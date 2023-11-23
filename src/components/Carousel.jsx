@@ -159,13 +159,13 @@ function Carousel({stations, accessToken, handleStationChange, handleStationChan
         }
 
         if(stationIndices) {
-            carouselRef.current.addEventListener('touchstart', handleStart)
-            // carouselRef.current.addEventListener('touchmove', handleMove)
+            // carouselRef.current.addEventListener('touchstart', handleStart)
+            carouselRef.current.addEventListener('touchmove', handleMove)
             carouselRef.current.addEventListener('touchend', handleEnd)
 
             return () => {
-                // carouselRef.current.removeEventListener('touchmove', handleMove)
-                carouselRef.current.removeEventListener('touchstart', handleStart)
+                carouselRef.current.removeEventListener('touchmove', handleMove)
+                // carouselRef.current.removeEventListener('touchstart', handleStart)
                 carouselRef.current.removeEventListener('touchend', handleEnd)
             }
         }
