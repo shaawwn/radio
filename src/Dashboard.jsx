@@ -168,6 +168,23 @@ let DEFAULT_STATIONS = [
                 }
             }
         },
+        {
+            "title": "Radio Ghibli",
+            "desc": "Peaceful Vibes of Joe Hisaishi",
+            "trackList": [],
+            "seeds": {
+                "genres": [],
+                "artists": [],
+                "tracks": ['2ZJ28Rm7OXMYJshLtp5uff,3MPUvSjRBBnU2nLOyv2Viv,6hoGuPbmWRl5uw6DD1Nbbq,1zZQCz81Mr1XiiQ7SkRanG,04T8DbhEzlo0gXZXLk46i1']
+            },
+            "current": false,
+            "playing": {
+                "track": {
+                    "name": "radioStatic",
+                    "progress_ms": 0
+                }
+            }
+        },
     ]
 
 function Dashboard({code}) {

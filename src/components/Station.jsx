@@ -15,6 +15,7 @@ import KPNK from '../images/kpnk.png'
 import KUNT from '../images/kunt.png'
 import KPRG from '../images/kprg.png'
 import WKHP from '../images/wkhp.png'
+import ghibli from '../images/ghibli.png'
 
 function Station({accessToken, handleStationChange, station, handleStationChanges, webplayerTimestamp}) {
     const [timestamp, setTimestamp] = useState()
@@ -39,6 +40,8 @@ function Station({accessToken, handleStationChange, station, handleStationChange
             setLogo(KPRG)
         } else if(station.title === 'WKHP') {
             setLogo(WKHP)
+        } else if(station.title === 'ghibli') {
+            setLogo(ghibli)
         }
     }
 

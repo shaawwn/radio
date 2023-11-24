@@ -15,6 +15,7 @@ import KPNK from '../images/kpnk.png'
 import KUNT from '../images/kunt.png'
 import KPRG from '../images/kprg.png'
 import WKHP from '../images/wkhp.png'
+import ghibli from '../images/ghibli.png';
 
 function Webplayer({accessToken, station, currentTrackRef, timestampRef, toSync}) {
     // console.log("WEBPLAYER", station.playing)
@@ -52,6 +53,8 @@ function Webplayer({accessToken, station, currentTrackRef, timestampRef, toSync}
             setLogo(KPRG)
         } else if(station.title === 'WKHP') {
             setLogo(WKHP)
+        } else if(station.title === 'Radio Ghibli') {
+            setLogo(ghibli)
         } else {
             setLogo()
         }

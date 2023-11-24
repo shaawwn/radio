@@ -23,7 +23,7 @@ function Carousel({stations, accessToken, handleStationChange, handleStationChan
             // console.log("Loop back over end of list")
             stationIndices.forEach(el => {
                 if(el <= min) {
-                    shifted.push(7)
+                    shifted.push(8)
                 } else {
                     shifted.push(el - 1)
                 }
@@ -120,7 +120,7 @@ function Carousel({stations, accessToken, handleStationChange, handleStationChan
             if(screenWidth < 431) {
                 setStationIndices([0, 1, 2])
             } else {
-                setStationIndices([0, 1, 2, 3, 4, 5, 6, 7]) // set wider for more stations, this just to test
+                setStationIndices([0, 1, 2, 3, 4, 5, 6, 7, 8]) // set wider for more stations, this just to test
             }
         }
     }, [screenWidth])
