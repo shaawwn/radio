@@ -40,7 +40,7 @@ function Station({accessToken, handleStationChange, station, handleStationChange
             setLogo(KPRG)
         } else if(station.title === 'WKHP') {
             setLogo(WKHP)
-        } else if(station.title === 'ghibli') {
+        } else if(station.title === 'Radio Ghibli') {
             setLogo(ghibli)
         }
     }
