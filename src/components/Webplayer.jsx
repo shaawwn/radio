@@ -197,6 +197,7 @@ function Webplayer({accessToken, station, currentTrackRef, timestampRef, toSync}
                 currentTrackRef.current.progress_ms = 0
                 timestampRef.current = new Date().getTime()
                 // console.log("playback change", station.title, state.track_window.current_track.name) // when you change from webplayer, that station is not changing
+                console.log("ACCESSTOKEN", accessToken)
                 setPaused(state.paused);
                 player.current.getCurrentState().then( state => { 
                     // (!state)? setActive(false) : setActive(true)
