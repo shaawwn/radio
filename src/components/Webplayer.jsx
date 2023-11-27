@@ -25,6 +25,7 @@ function Webplayer({accessToken, station, currentTrackRef, timestampRef, toSync}
     const [currentTrack, setCurrentTrack] = useState()
     const [logo, setLogo] = useState()
 
+    const refreshAccess = useRef()
     const ct = useRef()
     const player = useRef(null)
 
@@ -118,9 +119,11 @@ function Webplayer({accessToken, station, currentTrackRef, timestampRef, toSync}
 
 
     function disconnectPlayer() {
-        player.current.removeListener('ready', player._eventListeners.ready[0])
-        player.current.removeListener('not_ready', player._eventListeners.not_ready[0])
+        player.current.removeListener('ready', player.current._eventListeners.ready[0])
+        player.current.removeListener('not_ready', player.current._eventListeners.not_ready[0])
+        player.current.removeListener('player_state_changed', player.current._eventListeners.player_state_changed[0])
         player.current.disconnect()
+        player.current = null
     }
 
     function getTrackUris(tracks) {
@@ -156,8 +159,8 @@ function Webplayer({accessToken, station, currentTrackRef, timestampRef, toSync}
         })
     }
 
-
     useEffect(() => {
+        console.log('...')
         if(player.current) {
             // so the problem here is that player doesn't exist in react, but it still has a spotify isntance on the spotify servers
             disconnectPlayer()
@@ -169,10 +172,18 @@ function Webplayer({accessToken, station, currentTrackRef, timestampRef, toSync}
         document.body.appendChild(script);
 
         window.onSpotifyWebPlaybackSDKReady = () => {
-
+            console.log("player current", player.current)
             player.current = new window.Spotify.Player({
                 name: 'Web Playback SDK',
-                getOAuthToken: cb => { cb(accessToken); },
+                getOAuthToken: cb => { 
+                    if(refreshAccess.current) {
+                        console.log("There is an instance already", refreshAccess.current)
+                    } else {
+                        console.log('setting access')
+                        refreshAccess.current = true
+                    }
+                    cb(accessToken)
+                },
                 volume: 0.6
             });
 
@@ -196,8 +207,6 @@ function Webplayer({accessToken, station, currentTrackRef, timestampRef, toSync}
                 currentTrackRef.current.track = state.track_window.current_track
                 currentTrackRef.current.progress_ms = 0
                 timestampRef.current = new Date().getTime()
-                // console.log("playback change", station.title, state.track_window.current_track.name) // when you change from webplayer, that station is not changing
-                console.log("ACCESSTOKEN", accessToken)
                 setPaused(state.paused);
                 player.current.getCurrentState().then( state => { 
                     // (!state)? setActive(false) : setActive(true)
@@ -209,9 +218,12 @@ function Webplayer({accessToken, station, currentTrackRef, timestampRef, toSync}
                 });
             
             }));
+
             player.current.connect();
+            // refreshAccess.current = true
         };
 
+        // resume playback after webplayer has been inited with new accessTOken
         return () => {
             if(player.current) {
                 player.current.disconnect().then(() => console.log("Disconnected"))
@@ -219,7 +231,8 @@ function Webplayer({accessToken, station, currentTrackRef, timestampRef, toSync}
                 console.log("There is no player instance.", player)
             }
         }    
-    }, []);
+
+    }, [accessToken]);
 
     useEffect(() => {
         // const timeLeft = station.playing.track.duration_ms - station.playing.progress_ms
@@ -236,6 +249,7 @@ function Webplayer({accessToken, station, currentTrackRef, timestampRef, toSync}
           }
 
     }, [deviceId, station])
+
 
     useEffect(() => {
         // when currentTrack changes, updated

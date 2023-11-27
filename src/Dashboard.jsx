@@ -319,7 +319,7 @@ function Dashboard({code}) {
         if(accessToken && !user) {
             getUser(accessToken, setUser)
         } else {
-            console.log("...", accessToken)
+            // console.log("...", accessToken)
         }
 
         if(!screenWidth) {

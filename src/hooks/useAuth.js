@@ -16,9 +16,9 @@ function useAuth(code) {
         }
 
         // console.log("BEFORE FETCH", code)
-        fetch('https://wispy-bird-2586.fly.dev/radio/login', {
-        // fetch('https://wispy-bird-2586.fly.dev/radio/devlogin', {
-        // fetch('http://localhost:3000/radio/devlogin', {
+        // fetch('https://wispy-bird-2586.fly.dev/radio/login', {
+        fetch('https://wispy-bird-2586.fly.dev/radio/devlogin', {
+        // fetch('http://localhost:3001/radio/devlogin', {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
@@ -55,7 +55,7 @@ function useAuth(code) {
                 })
             }).then((response) => response.json())
             .then((data) => {
-                console.log("REFRESHED TOKEN", data.accessToken)
+                // console.log("REFRESHED TOKEN", data.accessToken)
                 setAccessToken(data.accessToken)
                 setExpiresIn(data.expiresIn)
                 window.history.pushState({}, null, '/')
@@ -65,7 +65,7 @@ function useAuth(code) {
                 window.location = '/'
             })
         // }, (expiresIn - 60) * 1000) // set to refresh accessToken in 59 minutes
-    }   , 10000)
+        }, 10000)
         if(!refreshToken || !expiresIn) return
 
         return () => clearInterval(interval)
