@@ -234,7 +234,9 @@ function Dashboard({code}) {
         // therefore, if tracks have been running via webplayer, on station change need to log the changes between when the stationList was last updated with what the track list and track currently are at, this is done in updateStationOnChange
         
         // but only updateStationOnChange for the previous station
-
+        if(trackList.length < 2) {
+            console.log("Last track, get new list", trackList)
+        }
         tuning.play() 
         let stationToUpdate = stationList.find((station) => station.title === title)
         let listCopy = [...stationList]
@@ -245,6 +247,7 @@ function Dashboard({code}) {
         stationCopy['current'] = true
         const index = stationList.indexOf(stationToUpdate)
         listCopy[index] = stationCopy
+
         if(toSync.current === true) { // this gets set regardless, if there are two sync stations
             const currentStationObj = stationList.find((station) => station.title === currentStation.title)
             const toUpdate = updateStationOnChange() 

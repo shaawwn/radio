@@ -127,7 +127,7 @@ function Station({accessToken, handleStationChange, station, handleStationChange
                 progress_ms: Math.floor(Math.random() * data.tracks[0].duration_ms)
             }
             // setCurrentTrack(_currentTrack)
-            handleStationChanges(station.title, data.tracks, _currentTrack)
+            handleStationChanges(station.title, data.tracks.slice(0,1), _currentTrack)
             let ts = new Date().getTime()
             setTimestamp(ts) 
         })

@@ -26,6 +26,7 @@ function Webplayer({accessToken, station, currentTrackRef, timestampRef, toSync}
     const [logo, setLogo] = useState()
 
     const refreshAccess = useRef()
+    const tokenRef = useRef(accessToken)
     const ct = useRef()
     const player = useRef(null)
 
@@ -119,11 +120,11 @@ function Webplayer({accessToken, station, currentTrackRef, timestampRef, toSync}
 
 
     function disconnectPlayer() {
-        player.current.removeListener('ready', player.current._eventListeners.ready[0])
-        player.current.removeListener('not_ready', player.current._eventListeners.not_ready[0])
-        player.current.removeListener('player_state_changed', player.current._eventListeners.player_state_changed[0])
+        player.current.removeListener('ready')
+        player.current.removeListener('not_ready')
+        player.current.removeListener('player_state_changed') // player.current._eventListeners.player_state_changed[0] dont need to specipfy it does it on its own
         player.current.disconnect()
-        player.current = null
+        // player.current = null
     }
 
     function getTrackUris(tracks) {
@@ -176,13 +177,8 @@ function Webplayer({accessToken, station, currentTrackRef, timestampRef, toSync}
             player.current = new window.Spotify.Player({
                 name: 'Web Playback SDK',
                 getOAuthToken: cb => { 
-                    if(refreshAccess.current) {
-                        console.log("There is an instance already", refreshAccess.current)
-                    } else {
-                        console.log('setting access')
-                        refreshAccess.current = true
-                    }
-                    cb(accessToken)
+                    console.log('init webplayer', tokenRef)
+                    cb(tokenRef.current)
                 },
                 volume: 0.6
             });
@@ -232,7 +228,7 @@ function Webplayer({accessToken, station, currentTrackRef, timestampRef, toSync}
             }
         }    
 
-    }, [accessToken]);
+    }, []);
 
     useEffect(() => {
         // const timeLeft = station.playing.track.duration_ms - station.playing.progress_ms
@@ -266,6 +262,17 @@ function Webplayer({accessToken, station, currentTrackRef, timestampRef, toSync}
         }
         
     }, [currentTrack])
+
+    useEffect(() => {
+        tokenRef.current = accessToken
+        if(player.current) {
+            // disconnectPlayer()
+            console.log("..", player.current)
+            player.current.connect()
+            // player.connect()
+        }
+        console.log("tokenref", tokenRef.current)
+    }, [accessToken])
 
 
 
