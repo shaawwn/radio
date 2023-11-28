@@ -121,12 +121,10 @@ function Station({accessToken, handleStationChange, station, handleStationChange
             return res.json()
         })
         .then((data) => {
-            // console.log("RECOMMENDATIONS from Station", data.tracks, station)
             const _currentTrack = {
                 track: data.tracks[0],
                 progress_ms: Math.floor(Math.random() * data.tracks[0].duration_ms)
             }
-            // setCurrentTrack(_currentTrack)
             handleStationChanges(station.title, data.tracks.slice(0,1), _currentTrack)
             let ts = new Date().getTime()
             setTimestamp(ts) 
@@ -235,8 +233,6 @@ function Station({accessToken, handleStationChange, station, handleStationChange
                 // mockGetTrackList()
                 getTrackList()
             }
-
-
         }
         
         // need to stop it from running these functions on scroll when station re-renders without changing the functionality of station changes

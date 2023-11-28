@@ -227,6 +227,11 @@ function Dashboard({code}) {
         setStationList(stationListCopy)
     }
 
+    function refreshStationTrackList(callback) {
+        // refresh with callback
+        console.log("Refreshing track list")
+    }
+
     function handleStationChanges(title, trackList, playing) {
         // when station changes song, update the track list and playing attribntues
         // this only runs when station is changed, not on track change
@@ -235,7 +240,8 @@ function Dashboard({code}) {
         
         // but only updateStationOnChange for the previous station
         if(trackList.length < 2) {
-            console.log("Last track, get new list", trackList)
+            // console.log("Last track, get new list", trackList)
+            refreshStationTrackList()
         }
         tuning.play() 
         let stationToUpdate = stationList.find((station) => station.title === title)
@@ -317,6 +323,47 @@ function Dashboard({code}) {
         return toUpdate
     }
 
+    function getTrackList() {
+        // all initialization stuff when the station first loads
+        fetch(`https://api.spotify.com/v1/recommendations?seed_genres=${station.seeds.genres}&seed_artists=${station.seeds.artists}&seed_tracks=${station.seeds.tracks}
+        `, {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
+            }
+        }).then(res => {
+            if(!res.ok) {
+                if(res.status === 401) {
+                    alert("Signed out of current session, refresh browser")
+                }
+                const headersObject = {};
+                res.headers.forEach((value, name) => {
+                  headersObject[name] = value;
+                });
+                if(Object.keys(headersObject).includes('Retry-After')) {
+                    radioStatic.play()
+                    retry.current = headersObject['Retry-After']
+                    setTimeout(() => {
+                        console.log("retying request in", retry.current + 1)
+                        getTrackList()
+                    }, retry.current)
+                    throw new Error ('rate limit reached, trying after', headersObject['Retry-After'], 'seconds')
+    
+                }
+                throw new Error ("error getting tracks for playlist")
+            }
+            return res.json()
+        })
+        .then((data) => {
+            const _currentTrack = {
+                track: data.tracks[0],
+                progress_ms: Math.floor(Math.random() * data.tracks[0].duration_ms)
+            }
+            handleStationChanges(station.title, data.tracks.slice(0,1), _currentTrack)
+            let ts = new Date().getTime()
+            setTimestamp(ts) 
+        })
+    }
+
 
     useEffect(() => {
         if(accessToken && !user) {
@@ -392,3 +439,4 @@ Dashboard.propTypes = {
 }
 
 export default Dashboard;
+
