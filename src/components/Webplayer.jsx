@@ -173,11 +173,11 @@ function Webplayer({accessToken, station, currentTrackRef, timestampRef, toSync}
         document.body.appendChild(script);
 
         window.onSpotifyWebPlaybackSDKReady = () => {
-            console.log("player current", player.current)
+            // console.log("player current", player.current)
             player.current = new window.Spotify.Player({
                 name: 'Web Playback SDK',
                 getOAuthToken: cb => { 
-                    console.log('init webplayer', tokenRef)
+                    // console.log('init webplayer', tokenRef)
                     cb(tokenRef.current)
                 },
                 volume: 0.6
@@ -260,18 +260,16 @@ function Webplayer({accessToken, station, currentTrackRef, timestampRef, toSync}
                 // console.log(currentTrack.id, station.playing.id)
             }
         }
-        
+
     }, [currentTrack])
 
     useEffect(() => {
         tokenRef.current = accessToken
         if(player.current) {
             // disconnectPlayer()
-            console.log("..", player.current)
             player.current.connect()
-            // player.connect()
         }
-        console.log("tokenref", tokenRef.current)
+        // console.log("tokenref", tokenRef.current)
     }, [accessToken])
 
 

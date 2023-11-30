@@ -15,7 +15,7 @@ function Carousel({stations, accessToken, handleStationChange, handleStationChan
     const moveRef = useRef()
 
     function scrollLeft() {
-        console.log("scrolling left")
+        // console.log("scrolling left")
         let shifted = []
 
         const min = 0
@@ -57,7 +57,7 @@ function Carousel({stations, accessToken, handleStationChange, handleStationChan
             stationIndices.forEach(el => {
                 shifted.push(el + 1)
             })
-            console.log("Scrolling right", shifted)
+            // console.log("Scrolling right", shifted)
             setStationIndices(shifted)
         }
     }

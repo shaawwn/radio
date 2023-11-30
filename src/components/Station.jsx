@@ -92,7 +92,7 @@ function Station({accessToken, handleStationChange, station, handleStationChange
 
     function getTrackList() {
         // all initialization stuff when the station first loads
-        fetch(`https://api.spotify.com/v1/recommendations?seed_genres=${station.seeds.genres}&seed_artists=${station.seeds.artists}&seed_tracks=${station.seeds.tracks}
+        fetch(`https://api.spotify.com/v1/recommendations?limit=100&seed_genres=${station.seeds.genres}&seed_artists=${station.seeds.artists}&seed_tracks=${station.seeds.tracks}
         `, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`
@@ -125,7 +125,8 @@ function Station({accessToken, handleStationChange, station, handleStationChange
                 track: data.tracks[0],
                 progress_ms: Math.floor(Math.random() * data.tracks[0].duration_ms)
             }
-            handleStationChanges(station.title, data.tracks.slice(0,1), _currentTrack)
+            // console.log("TRACKS", data.tracks)
+            handleStationChanges(station.title, data.tracks, _currentTrack)
             let ts = new Date().getTime()
             setTimestamp(ts) 
         })
